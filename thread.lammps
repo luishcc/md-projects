@@ -31,7 +31,7 @@ velocity            all create 1.0 38497 loop local dist gaussian
 comm_modify vel yes
 fix         mvv     all mvv/dpd
 
-dump        mydump  all atom 100 atom.lammpstrj
+dump        mydump  all atom 100 thread.lammpstrj
 
 
 timestep            0.01
