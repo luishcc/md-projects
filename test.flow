@@ -1,0 +1,51 @@
+# 2-d LJ flow simulation
+
+units 		lj	
+dimension       3	
+boundary	p p p
+
+atom_style	mdpd
+neighbor	0.3 bin
+neigh_modify	delay 10
+
+# create geometry
+
+region		box block 0 20 0 20 0 20 units box
+create_box	1 box
+
+lattice 	fcc 6
+region		box2 block 8 12 8 12 8 12 units box
+create_atoms	1 region box2
+
+# mDPD potentials
+
+pair_style	hybrid/overlay mdpd/rhosum mdpd 1 1  31415
+pair_coeff  	1 1 mdpd/rhosum 0.75
+pair_coeff	1 1 mdpd -70 25 18 1 0.75
+
+mass		1 1.0
+
+# initial velocities
+
+compute	     mobile all temp
+thermo 		100
+thermo_modify   temp mobile
+thermo_modify   flush yes
+ 
+velocity     all create 1.0 482748 loop local dist gaussian
+fix	     2 all mvv/dpd
+
+comm_modify vel yes
+
+
+# Run
+
+timestep	0.001
+thermo		500
+thermo_modify	temp mobile
+
+dump		1 all atom 100 dump.flow-test
+
+
+
+run		50000
