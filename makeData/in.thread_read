@@ -29,6 +29,6 @@ dump        mydump  all atom 100 thread.min.lammpstrj
 
 timestep            0.01
 
-minimize 0.0 1.0e-8 10000 100000
+#minimize 0.0 1.0e-8 10000 100000
 
 run 20000
