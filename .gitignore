@@ -1,3 +1,4 @@
 *.lammpstrj
 log.*
 *.data
+*/__pycache__/
