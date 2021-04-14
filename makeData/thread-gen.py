@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
     wave_number_r = 0.56
     wave_length = (2*np.pi*r0)/wave_number_r
-    perturbation_amp = 0.1*r_0
+    perturbation_amp = 0.1*r0
 
     box = Box(6*r0, 6*r0, wave_length)
 
