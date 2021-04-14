@@ -11,15 +11,15 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 variable Radius equal 6.0
-variable WaveNumber equal 0.55
+variable WaveNumber equal 0.64
 variable WaveLength equal 2*PI*v_Radius/v_WaveNumber
 print ${WaveLength}
 
 
-region     mdpd     block -25 25 -25 25 0 ${WaveLength} units box
+region     mdpd     block -18 18 -18 18 0 ${WaveLength} units box
 create_box          1 mdpd
 
-lattice             fcc 2
+lattice             fcc 6
 region     tube     cylinder z 0 0 v_Radius INF INF
 create_atoms        1 region tube
 
@@ -37,8 +37,8 @@ velocity            all create 1.0 38497 loop local dist gaussian
 comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 
-dump        mydump  all atom 100 thread.lammpstrj
+dump        mydump  all atom 100 thread-t.lammpstrj
 
 
 timestep            0.01
-run                 20000
+run                 2000

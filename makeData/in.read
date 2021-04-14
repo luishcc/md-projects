@@ -1,0 +1,18 @@
+# Script modified from mDPD example folder
+#
+# Break up of fluid thread
+
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.3 bin
+
+read_data           read_ex.data
+
+#mass      1   1
+#mass      2   1.5
+
+dump        mydump  all atom 1 read.lammpstrj
+
+timestep            0.01
+run                 2
