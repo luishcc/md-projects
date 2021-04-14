@@ -47,17 +47,17 @@ def perturbation_radius(amp, length, z):
 
 if __name__ == '__main__':
 
-    density = 10
+    density = 7
     r0 = 6.0
 
     wave_number_r = 0.56
     wave_length = (2*np.pi*r0)/wave_number_r
-    perturbation_amp = 0.1*r0
+    perturbation_amp = 0.01*r0
 
     box = Box(6*r0, 6*r0, wave_length)
 
     num_circles = 100
-    num_point = 300
+    num_point = 600
     dist_circle = wave_length/num_circles
     circles_zcoord = np.linspace(0, wave_length, num_circles)
 
