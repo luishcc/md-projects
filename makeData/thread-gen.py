@@ -57,7 +57,7 @@ if __name__ == '__main__':
     box = Box(6*r0, 6*r0, wave_length)
 
     num_circles = 100
-    num_point = 600
+    num_point = 300
     dist_circle = wave_length/num_circles
     circles_zcoord = np.linspace(0, wave_length, num_circles)
 
