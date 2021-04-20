@@ -1,0 +1,42 @@
+# 2-d LJ flow simulation
+
+dimension       3
+boundary	p p p
+
+atom_style	atomic
+neighbor	0.3 bin
+neigh_modify	delay 10
+
+# create geometry
+
+lattice 	fcc 0.2
+region		box block 0 20 0 20 0 100
+region 	tube cylinder z 10 10 4 0 100
+create_box	1 box
+create_atoms	1 region tube
+
+mass		1 1.0
+
+
+python factorial &
+       input 1 v_n &
+       return v_fact &
+       format ii &
+       here """
+def factorial(n):
+  if n==1 : return 1
+  return n*factorial(n-1)
+"""
+
+variable fact python factorial
+
+variable n string 3
+print "factorial of $n = ${fact}"
+
+
+python foo here """
+def foo():
+  print("Test Foo")
+"""
+
+python foo invoke
