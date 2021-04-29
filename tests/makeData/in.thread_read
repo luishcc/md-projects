@@ -10,7 +10,7 @@ neigh_modify        every 1 check yes
 
 atom_style	        mdpd
 
-read_data           test80.data
+read_data           test.data
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
@@ -29,6 +29,6 @@ dump        mydump  all atom 100 thread.lammpstrj
 
 timestep            0.01
 
-minimize 0.0 1.0e-6 10000 100000
+#minimize 0.0 1.0e-6 10000 100000
 
 run 40000
