@@ -10,11 +10,23 @@ neigh_modify        every 1 check yes
 
 atom_style	        mdpd
 
-read_data           perturbed.data
+variable Radius equal 7.5
+variable WaveNumber equal 0.6
+variable WaveLength equal 2*PI*v_Radius/v_WaveNumber
+print ${WaveLength}
+
+
+region     mdpd     block -18 18 -18 18 0 ${WaveLength} units box
+create_box          1 mdpd
+
+lattice             fcc 6.9
+region     tube     cylinder z 0 0 v_Radius INF INF
+create_atoms        1 region tube
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
 pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
+mass                1 1.0
 
 compute             mythermo all temp
 thermo              100
@@ -25,10 +37,11 @@ velocity            all create 1.0 38497 loop local dist gaussian
 comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 
-write_dump all atom dump.perturbed modify scale no
-dump        mydump  all atom 100 thread.lammpstrj
+write_dump all atom dump.atom modify scale no
+
+
+dump        mydump  all atom 100 og.lammpstrj
+
 
 timestep            0.01
-
-
-run 20000
+run                 1000

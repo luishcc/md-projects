@@ -2,7 +2,13 @@ import numpy as np
 import os
 
 from write import DataFile
+from readLammps import DumpReader
 
+class Point:
+    def __init__(self, pos):
+        self.x = pos[0]
+        self.y = pos[1]
+        self.z = pos[2]
 
 class Atoms:
     def __init__(self, points, density):
@@ -20,72 +26,43 @@ class Box:
         self.zlo = 0
         self.zhi = lz
 
-class Point:
-    def __init__(self, x, y, z=None):
-        self.x = x
-        self.y = y
-        self.z = z
-
-    def set_z(self, value):
-        self.z = value
-        return
-
-class Circle:
-    def __init__(self, radius):
-        self.radius = radius
-        self.area = np.pi * self.radius**2
-
-    def get_random_point(self):
-        p = np.random.random() * 2 * np.pi
-        r = self.radius * np.sqrt(np.random.random())
-        x = np.cos(p) * r
-        y = np.sin(p) * r
-        return Point(x, y)
-
 def perturbation_radius(amp, length, z):
-    return 1 + amp * np.cos(2 * np.pi * z / length)
-
-if __name__ == '__main__':
-
-    density = 7
-    r0 = 6.0
-
-    wave_number_r = 0.55
-    wave_length = (2*np.pi*r0)/wave_number_r
-    perturbation_amp = 0.03*r0
-
-    box = Box(6*r0, 6*r0, wave_length)
-
-    num_circles = 100
-    num_point = 500
-    dist_circle = wave_length/num_circles
-    circles_zcoord = np.linspace(0, wave_length, num_circles)
+    return 1 + amp * np.cos((2 * np.pi * z) / length)
 
 
-    positions = []
+def remove_atoms(list, a, wl):
+    i = 0
+    id_to_remove = []
+    for atom in list:
+        i+=1
+        print(i, len(list))
+        x, y, z = atom.x
+        max_dist = radius*perturbation_radius(a, wl, z)
+        current_dist = np.sqrt(x**2 + y**2)
+        print(current_dist, max_dist)
+        if current_dist > max_dist:
+            id_to_remove.append(atom.id)
 
-    rad = r0 * perturbation_radius(perturbation_amp, wave_length, 0)
-    circle = Circle(rad)
-    for i in range(num_point):
-        p_rand = circle.get_random_point()
-        p_rand.set_z(0.5 * dist_circle*np.random.random())
-        positions.append(p_rand)
-    for z in circles_zcoord[1:-1]:
-        rad = r0 * perturbation_radius(perturbation_amp, wave_length, z)
-        circle = Circle(rad)
-        for i in range(0, num_point):
-            p_rand = circle.get_random_point()
-            p_rand.set_z(z - 0.5 * dist_circle + dist_circle*np.random.random())
-            positions.append(p_rand)
-    rad = r0 * perturbation_radius(perturbation_amp, wave_length, circles_zcoord[-1])
-    circle = Circle(rad)
-    for i in range(num_point):
-        p_rand = circle.get_random_point()
-        p_rand.set_z(circles_zcoord[-1] - 0.5 * dist_circle*np.random.random())
-        positions.append(p_rand)
+    for i in sorted(id_to_remove, reverse=True):
+        del list[i]
 
 
-    atoms = Atoms(positions, density)
+density = 6.9
+radius = 6.0
+wave_number = 0.7
+wave_length = (2 * np.pi * radius) / wave_number
+perturbation_amp = 0.03 * radius
 
-    data = DataFile(box, atoms)
-    data.write_file('test', os.getcwd())
+box = Box(6*radius, 6*radius, wave_length)
+
+data = DumpReader('dump.atom')
+remove_atoms(data.atoms, perturbation_amp, wave_length)
+
+positions = []
+for atom in data.atoms:
+    positions.append(Point(atom.x))
+
+atoms_list = Atoms(positions, density)
+
+data = DataFile(box, atoms_list)
+data.write_file('perturbed', os.getcwd())
