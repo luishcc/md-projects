@@ -48,8 +48,8 @@ lmp.commands_list(create_commands)
 lmp.commands_list(pair_commands)
 lmp.commands_list(sim_commands)
 
+lmp.command("minimize 0.0 1.0e-8 10000 100000")
 lmp.command("run 400")
-lmp.command("minimize 0.0 1.0e-6 10000 100000")
 lmp.command("write_dump all atom dump.atom modify scale no")
 
 MPI.Finalize()
