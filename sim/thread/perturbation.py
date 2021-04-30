@@ -49,7 +49,7 @@ def remove_atoms(list, a, wl):
 
 density = 6.9
 radius = 6.0
-wave_number = 0.7
+wave_number = 0.3
 wave_length = (2 * np.pi * radius) / wave_number
 perturbation_amp = 0.03 * radius
 
@@ -62,7 +62,7 @@ positions = []
 for atom in data.atoms:
     positions.append(Point(atom.x))
 
-atoms_list = Atoms(positions, density)
+atoms_list = Atoms(positions, 1.)
 
 data = DataFile(box, atoms_list)
 data.write_file('perturbed', os.getcwd())

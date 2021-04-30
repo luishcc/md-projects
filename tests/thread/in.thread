@@ -11,7 +11,7 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 variable Radius equal 6.0
-variable WaveNumber equal 0.35
+variable WaveNumber equal 0.3
 variable WaveLength equal 2*PI*v_Radius/v_WaveNumber
 print ${WaveLength}
 

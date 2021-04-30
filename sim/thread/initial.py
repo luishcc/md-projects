@@ -4,8 +4,9 @@ import numpy as np
 
 
 density = 6.9
-radius = 7.5
-wave_number = 0.7
+radius_cyl = 7.5
+radius = 6.
+wave_number = 0.3
 wave_length = (2 * np.pi * radius) / wave_number
 perturbation_amp = 0.03 * radius
 
@@ -24,7 +25,7 @@ create_commands = [
     f"region  mdpd  block -18 18 -18 18 0 {wave_length} units box",
     "create_box 1 mdpd",
     f"lattice  fcc {density}",
-    f"region tube cylinder z 0 0 {radius} INF INF",
+    f"region tube cylinder z 0 0 {radius_cyl} INF INF",
     "create_atoms  1 region tube",
     "mass 1 1.0"
 ]
@@ -51,5 +52,6 @@ lmp.commands_list(sim_commands)
 lmp.command("minimize 0.0 1.0e-8 10000 100000")
 lmp.command("run 400")
 lmp.command("write_dump all atom dump.atom modify scale no")
+lmp.command("write_data dump.data nofix nocoeff")
 
 MPI.Finalize()
