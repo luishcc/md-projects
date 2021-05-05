@@ -29,14 +29,16 @@ r = np.linspace(0,1.5,1000)
 f_a = np.zeros(len(r))
 f_b = np.zeros(len(r))
 f = np.zeros(len(r))
+w_p = np.zeros(len(r))
 
 A = -50
 B = 25
 
 for i in range(len(r)):
-    f_a[i] = -1*attractive(A) * weight(r[i])
-    f_b[i] = -1*repulsive(r[i], B) * weight(r[i], cutoff=0.75)
+    f_a[i] = 1*attractive(A) * weight(r[i])
+    f_b[i] = 1*repulsive(r[i], B) * weight(r[i], cutoff=0.75)
     f[i] = f_a[i]+f_b[i]
+    w_p[i] = local_density(r[i])
 
 plt.figure()
 plt.plot(r, f_a, 'r--', markersize=0.4, label=f'Attractive term A={A}')
@@ -45,6 +47,15 @@ plt.plot(r, f, 'k-', label=f'Total Force')
 plt.title('Conservative Force')
 plt.xlabel('r_ij')
 plt.ylabel('F')
-plt.legend(loc='lower right')
+plt.legend(loc='upper right')
 plt.grid('on')
+
+
+# plt.figure(2)
+# plt.plot(r, w_p, 'r--', markersize=0.4)
+# plt.title('Local Density Weight Function')
+# plt.xlabel('r_ij')
+# plt.ylabel('W_\rho')
+# plt.grid('on')
+
 plt.show()

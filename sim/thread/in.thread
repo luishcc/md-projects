@@ -21,12 +21,15 @@ thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-velocity            all create 1.0 38497 loop local dist gaussian
+#velocity            all create 1.0 38497 loop local dist gaussian
+#velocity            all create 1.0 20794 loop local dist gaussian
+velocity            all create 1.0 15996 loop local dist gaussian
+
 comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 
 write_dump all atom dump.perturbed modify scale no
-dump        mydump  all atom 100 thread.lammpstrj
+dump        mydump  all atom 100 v3-0.3-forced.lammpstrj
 
 #minimize 0.0 1.0e-6 10000 100000
 
