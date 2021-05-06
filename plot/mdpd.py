@@ -40,7 +40,7 @@ for i in range(len(r)):
     f[i] = f_a[i]+f_b[i]
     w_p[i] = local_density(r[i])
 
-plt.figure()
+fig = plt.figure()
 plt.plot(r, f_a, 'r--', markersize=0.4, label=f'Attractive term A={A}')
 plt.plot(r, f_b, 'b--', markersize=0.4, label=f'Repulsive term B={B}')
 plt.plot(r, f, 'k-', label=f'Total Force')
@@ -49,6 +49,7 @@ plt.xlabel('r_ij')
 plt.ylabel('F')
 plt.legend(loc='upper right')
 plt.grid('on')
+fig.savefig('temp.png', transparent=True)
 
 
 # plt.figure(2)
