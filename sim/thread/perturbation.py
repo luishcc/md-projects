@@ -29,8 +29,8 @@ class Box:
 def perturbation_radius(amp, length, z):
     return 1 + amp * np.cos((2 * np.pi * z) / length)
 
-def perturbation_radius_satellite(amp, length, z, eps=0.2):
-    sum =  1  + amp * np.cos((2 * np.pi * z) / length)
+def perturbation_radius_satellite(amp, length, z, eps=0.3):
+    sum =  1 - 0.03 + amp * np.cos((2 * np.pi * z) / length)
     print('\n')
     return sum + eps*np.exp(-(2*np.pi - (4 * np.pi * z) / length)**2)
 
@@ -60,7 +60,7 @@ density = 6.9
 radius = 6.0
 wave_number = 0.4
 wave_length = (2 * np.pi * radius) / wave_number
-perturbation_amp = 0.03 * radius
+perturbation_amp = 0.05 * radius
 
 box = Box(6*radius, 6*radius, wave_length)
 
