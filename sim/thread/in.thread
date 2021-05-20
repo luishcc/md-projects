@@ -10,7 +10,7 @@ neigh_modify        every 1 check yes
 
 atom_style	        mdpd
 
-read_data           perturbedN.data
+read_data           perturbed.data
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
@@ -29,10 +29,10 @@ comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 
 write_dump all atom dump.perturbed modify scale no
-dump        mydump  all atom 100 threadN.lammpstrj
+dump        mydump  all atom 100 thread-big.lammpstrj
 
 #minimize 0.0 1.0e-6 10000 100000
 
 timestep            0.01
 
-run 20000
+run 80000

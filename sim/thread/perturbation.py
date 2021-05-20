@@ -30,7 +30,7 @@ def perturbation_radius(amp, length, z):
     return 1 + amp * np.cos((2 * np.pi * z) / length)
 
 def perturbation_radius_satellite(amp, length, z, eps=0.3):
-    sum =  1 - 0.03 + amp * np.cos((2 * np.pi * z) / length)
+    sum =  1 - 0.1*eps + amp * np.cos((2 * np.pi * z) / length)
     print('\n')
     return sum + eps*np.exp(-(2*np.pi - (4 * np.pi * z) / length)**2)
 
@@ -58,16 +58,16 @@ def remove_atoms(list, a, wl, type='simple'):
 
 density = 6.9
 radius = 6.0
-wave_number = 0.4
+wave_number = 1.2
 wave_length = (2 * np.pi * radius) / wave_number
-perturbation_amp = 0.05 * radius
+perturbation_amp = 0.04 * radius
 
 box = Box(6*radius, 6*radius, wave_length)
 
 data = DumpReader('dump.atom')
 
-#remove_atoms(data.atoms, perturbation_amp, wave_length)
-remove_atoms(data.atoms, perturbation_amp, wave_length, type='satellite')
+remove_atoms(data.atoms, perturbation_amp, wave_length)
+#remove_atoms(data.atoms, perturbation_amp, wave_length, type='satellite')
 
 positions = []
 for atom in data.atoms:
