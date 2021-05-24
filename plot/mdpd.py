@@ -18,7 +18,7 @@ def attractive(a):
     return a
 
 def local_density(x, cutoff=0.75):
-    rho = (15/(2*np.pi*cutoff)) * (weight(x,cutoff))**2
+    rho = (15/(2*np.pi*cutoff**3)) * (weight(x,cutoff))**2
     return rho
 
 def repulsive(x, b):
@@ -33,10 +33,13 @@ w_p = np.zeros(len(r))
 
 A = -50
 B = 25
+pp = 1
+
 
 for i in range(len(r)):
     f_a[i] = 1*attractive(A) * weight(r[i])
-    f_b[i] = 1*repulsive(r[i], B) * weight(r[i], cutoff=0.75)
+    # f_b[i] = 1*repulsive(r[i], B) * weight(r[i], cutoff=0.75)
+    f_b[i] = 1*2*B*pp * weight(r[i], cutoff=0.75)
     f[i] = f_a[i]+f_b[i]
     w_p[i] = local_density(r[i])
 
@@ -49,14 +52,14 @@ plt.xlabel('r_ij')
 plt.ylabel('F')
 plt.legend(loc='upper right')
 plt.grid('on')
-fig.savefig('temp.png', transparent=True)
+#fig.savefig('temp.png', transparent=True)
 
 
-# plt.figure(2)
-# plt.plot(r, w_p, 'r--', markersize=0.4)
-# plt.title('Local Density Weight Function')
-# plt.xlabel('r_ij')
-# plt.ylabel('W_\rho')
-# plt.grid('on')
+plt.figure(2)
+plt.plot(r, w_p, 'r--', markersize=0.4)
+plt.title('Local Density Weight Function')
+plt.xlabel('r_ij')
+plt.ylabel('W_\rho')
+plt.grid('on')
 
 plt.show()
