@@ -4,16 +4,20 @@ import os
 from readLammps import DumpReader
 from write import DataFile
 
+from perturbation import Atoms, Point, Box
+
 from readLammps import Voronoi as voro_read
 
 from scipy.spatial import Voronoi
 
 import matplotlib.pyplot as plt
 
-from mpl_toolkits.mplot3d.axes3d import Axes3D
-from mpl_toolkits.mplot3d import proj3d
-import matplotlib as mpl
 
+
+def cart2pol(x, y):
+    rho = np.sqrt(x**2 + y**2)
+    phi = np.arctan2(y, x)
+    return rho, phi
 
 def readVor(file_name):
     pos = []
@@ -66,29 +70,10 @@ sx = [sub[0] for sub in surf]
 sy = [sub[1] for sub in surf]
 sz = [sub[2] for sub in surf]
 
-
-class Point:
-    def __init__(self, pos):
-        self.x = pos[0]
-        self.y = pos[1]
-        self.z = pos[2]
-
-class Atoms:
-    def __init__(self, points, density):
-        self.number = len(points)
-        self.positions = points
-        self.density = density
-        return
-
-class Box:
-    def __init__(self, lx, ly, lz):
-        self.xlo = -lx/2.
-        self.xhi = lx/2.
-        self.ylo = -ly/2.
-        self.yhi = ly/2.
-        self.zlo = 0
-        self.zhi = lz
-
+sr = np.zeros(len(sx))
+st = np.zeros(len(sx))
+for i in range(len(sx)):
+    sr[i], st[i] = cart2pol(sx[i], sy[i])
 
 radius = 6.0
 wave_number = 0.6
@@ -102,21 +87,17 @@ for i in range(len(sx)):
 
 atoms_list = Atoms(positions, 1.)
 
-print('111')
 data = DataFile(box, atoms_list)
-print('222')
 data.write_file('surf', os.getcwd())
-print('333')
 
-exit()
-fig = plt.figure()
-ax = fig.gca(projection='3d')
 
-ax.grid(False)
-plt.axis('off')
-ax.set_xticks([])
-ax.set_yticks([])
-ax.set_zticks([])
-#ax.plot(px, py, pz, 'k.')
-ax.plot(sx, sy, sz, 'b.')
-plt.show()
+box = Box((max(sr)-min(sr))*2, 2*np.pi*radius, wave_length)
+
+positions = []
+for i in range(len(sx)):
+    positions.append(Point([ sr[i]-radius, st[i]*radius, sz[i] ]))
+
+atoms_list = Atoms(positions, 1.)
+
+data = DataFile(box, atoms_list)
+data.write_file('surf-pol', os.getcwd())
