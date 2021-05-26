@@ -35,4 +35,6 @@ dump        mydump  all atom 100 thread-big.lammpstrj
 
 timestep            0.01
 
-run 80000
+run 5000
+
+write_dump         all atom last.lammpstrj modify scale no

@@ -1,0 +1,55 @@
+units 		          lj
+dimension	          3
+boundary	          f f p
+
+atom_style	        mdpd
+
+read_data           test.data
+
+pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+pair_coeff          1 1 mdpd/rhosum  0.75
+pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
+comm_modify         vel yes
+
+
+neighbor	1.0 nsq
+
+#
+# TEST 1:
+#
+
+# This compute voronoi generates all three
+# types of quantity: per-atom, local, and global
+
+compute 	v1 all voronoi/atom neighbors yes edge_histo 6
+
+# write voronoi per-atom quantities to a file
+
+dump    	dperatom all custom 1 dump.voro id type x y z c_v1[1] c_v1[2]
+
+# writing voronoi local quantities to a file
+
+dump            dlocal all local  1 dump.neighbors index c_v1[1] c_v1[2] c_v1[3]
+
+run  		0
+
+uncompute       v1
+undump          dperatom
+undump          dlocal
+
+#
+# TEST 2:
+#
+
+# This compute voronoi generates
+# local and global quantities, but
+# not per-atom quantities
+
+compute 	v2 all voronoi/atom neighbors yes edge_histo 6 peratom no
+
+# write voronoi local quantities to a file
+
+dump            d2 all local  1 dump.neighbors2 index c_v2[1] c_v2[2] c_v2[3]
+
+
+run  		0
