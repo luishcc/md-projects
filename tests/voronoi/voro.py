@@ -13,6 +13,30 @@ from scipy.spatial import Voronoi
 import matplotlib.pyplot as plt
 
 
+def plot_volume_distribution(v):
+    import scipy.stats as stats
+
+    mu = stats.tmean(v)
+    sigma = stats.tstd(v)
+    x = np.linspace(mu - 5*sigma, mu + 5*sigma, 100)
+
+    plt.figure(1)
+    plt.subplot(131)
+    plt.plot(np.linspace(0, max(v), len(v)), v, 'k.')
+
+    plt.subplot(132)
+    plt.plot(x, stats.norm.pdf(x, mu, sigma))
+    plt.xlim(0,30)
+
+    plt.subplot(133)
+    mu = stats.tmean(v, (0,1))
+    sigma = stats.tstd(v, (0,1))
+    x = np.linspace(mu - 5*sigma, mu + 5*sigma, 100)
+    plt.plot(x, stats.norm.pdf(x, mu, sigma))
+    plt.xlim(0,0.7)
+    plt.show()
+
+
 
 def cart2pol(x, y):
     rho = np.sqrt(x**2 + y**2)
@@ -22,6 +46,7 @@ def cart2pol(x, y):
 def readVor(file_name):
     pos = []
     surf = []
+    vol = []
     file = open(file_name, 'r')
     reading_entry = False
 
@@ -35,9 +60,10 @@ def readVor(file_name):
             l = line.split()
             coo = [float(l[2]), float(l[3]), float(l[4])]
             pos.append(coo)
+            vol.append(float(l[5]))
             if float(l[5]) > .3:
                 surf.append(coo)
-    return pos, surf
+    return pos, surf, vol
 
 data = DumpReader('test.dump')
 
@@ -60,7 +86,10 @@ vor2 = Voronoi(p2)
 vor3 = voro_read('dump.neighbors')
 
 
-pos, surf = readVor('dump.voro')
+pos, surf, volumes = readVor('dump.voro')
+
+plot_volume_distribution(volumes)
+exit()
 
 px = [sub[0] for sub in pos]
 py = [sub[1] for sub in pos]
