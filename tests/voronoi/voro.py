@@ -29,13 +29,31 @@ def plot_volume_distribution(v):
     plt.xlim(0,30)
 
     plt.subplot(133)
-    mu = stats.tmean(v, (0,1))
-    sigma = stats.tstd(v, (0,1))
+    mu = stats.tmean(v, (0.1,0.2))
+    sigma = stats.tstd(v, (0.1,0.2))
     x = np.linspace(mu - 5*sigma, mu + 5*sigma, 100)
     plt.plot(x, stats.norm.pdf(x, mu, sigma))
-    plt.xlim(0,0.7)
+    plt.xlim(0,0.3)
     plt.show()
 
+
+def plot_volume_distribution2(v):
+    import scipy.stats as stats
+    #import seaborn as sns
+
+    #sns.set(color_codes=True)
+    #sns.set(rc={'figure.figsize':(5,5)})
+    fig, ax = plt.subplots(1, 1)
+
+    dat = stats.gamma.fit(v)
+    #ax = sns.distplot(dat,
+                  # kde=True,
+                  # bins=100,
+                  # color='skyblue',
+                  # hist_kws={"linewidth": 15,'alpha':1})
+    ax.hist(v,density=True, histtype='bar', alpha=0.3, bins =10000)
+    ax.set_xlim(0,4)
+    plt.show()
 
 
 def cart2pol(x, y):
@@ -65,7 +83,7 @@ def readVor(file_name):
                 surf.append(coo)
     return pos, surf, vol
 
-data = DumpReader('test.dump')
+# data = DumpReader('test.dump')
 
 
 p2 = np.array([[0, 0], [0, 0.5], [0, 1],
@@ -73,22 +91,22 @@ p2 = np.array([[0, 0], [0, 0.5], [0, 1],
                [1, 0], [1, 0.5], [1, 1]])
 
 
-points = np.zeros((len(data.atoms), 3))
+# points = np.zeros((len(data.atoms), 3))
 
-for atom in data.atoms:
-    points[atom.id, 0] = atom.x[0]
-    points[atom.id, 1] = atom.x[1]
-    points[atom.id, 2] = atom.x[2]
+# for atom in data.atoms:
+#     points[atom.id, 0] = atom.x[0]
+#     points[atom.id, 1] = atom.x[1]
+#     points[atom.id, 2] = atom.x[2]
 
-vor = Voronoi(points)
-vor2 = Voronoi(p2)
+#vor = Voronoi(points)
+#vor2 = Voronoi(p2)
 
-vor3 = voro_read('dump.neighbors')
+#vor3 = voro_read('dump.neighbors')
 
 
 pos, surf, volumes = readVor('dump.voro')
 
-plot_volume_distribution(volumes)
+plot_volume_distribution2(volumes)
 exit()
 
 px = [sub[0] for sub in pos]
