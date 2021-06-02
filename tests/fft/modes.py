@@ -55,31 +55,31 @@ z = []
 for i in range(len(sx)):
     sr[i], st[i] = cart2pol(sx[i], sy[i])
     if -0.4 < st[i]*radius < 0.4:
-        sig.append(sr[i])
+        sig.append(sr[i]-radius)
         z.append(sz[i])
 
 
 
-from scipy.fft import fft, fftfreq, fftshift
+from scipy.fft import fft, fftfreq, fftshift, rfft, rfftfreq
 
 # f = fftshift(fft(sig))
 # freq = fftshift(fftfreq(len(z)))
 
-f = fft(sig)
-freq = fftfreq(len(z))
+f = rfft(sig) / len(sig)
+freq = rfftfreq(len(z))
 
 
 plt.figure(1)
-plt.subplot(131)
+plt.subplot(121)
 plt.plot(z, sig, 'k.')
 
-plt.subplot(132)
+plt.subplot(122)
 plt.plot(freq, f.real, 'k.')
 # plt.plot(freq, f.imag, 'b-')
 
-spec = np.abs(f)**2
+# spec = np.abs(f)**2
 
-plt.subplot(133)
-plt.plot(freq, spec/max(spec), 'b-')
+# plt.subplot(133)
+# plt.plot(freq, spec/max(spec), 'b-')
 
 plt.show()
