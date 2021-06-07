@@ -11,7 +11,7 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 variable Radius equal 6.0
-variable WaveNumber equal 1.2
+variable WaveNumber equal 0.57
 variable WaveLength equal 2*PI*v_Radius/v_WaveNumber
 print ${WaveLength}
 
@@ -41,10 +41,10 @@ fix         mvv     all mvv/dpd 0.65
 
 #compute     clt      all aggregate/atom 1.
 
-dump        mydump  all atom 100 thread-big2.lammpstrj
+dump        mydump  all atom 100 threads.lammpstrj
 
 #dump cluster       all custom 2500 dump.cl c_clt
 
 
 timestep            0.01
-run                 80000
+run                 20000

@@ -60,7 +60,7 @@ density = 6.9
 radius = 6.0
 wave_number = 0.6
 wave_length = (2 * np.pi * radius) / wave_number
-perturbation_amp = 0.04 * radius
+perturbation_amp = 0.02 * radius
 
 box = Box(6*radius, 6*radius, wave_length)
 
