@@ -51,11 +51,13 @@ radius = 6
 sr = np.zeros(len(sx))
 st = np.zeros(len(sx))
 sig = []
+sig2 = []
 z = []
 for i in range(len(sx)):
     sr[i], st[i] = cart2pol(sx[i], sy[i])
     if -0.4 < st[i]*radius < 0.4:
         sig.append(sr[i]-radius)
+        sig2.append(sr[i])
         z.append(sz[i])
 
 
@@ -71,10 +73,13 @@ freq = rfftfreq(len(z))
 
 plt.figure(1)
 plt.subplot(121)
-plt.plot(z, sig, 'k.')
+plt.plot(z, sig2, 'k.')
+plt.plot([0,60], [6, 6], 'k--')
+plt.ylim(0,9)
+
 
 plt.subplot(122)
-plt.plot(freq, f.real, 'k.')
+plt.plot(freq, f.real, 'k-')
 # plt.plot(freq, f.imag, 'b-')
 
 # spec = np.abs(f)**2
