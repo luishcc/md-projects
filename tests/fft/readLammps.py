@@ -65,6 +65,90 @@ class DumpReader:
     def delete_atom(self, id):
         pass
 
+
+class DumpReaderTime:
+
+    def __init__(self, file, type='atom', step=0):
+        self.file_name = str(file)
+        self.atoms = []
+        #self.box = None
+        #self.timestep = None
+        self.timestep = step
+
+        self.parse(type)
+
+
+
+    def parse(self, type):
+        if type == 'atom':
+            self.parse_atom_style()
+            return
+        elif type == 'xyz':
+            self.parse_xyz_style()
+            return
+        else:
+            print('Style not supported')
+            return
+
+
+    def parse_atom_style(self):
+        list = []
+
+        file = open(self.file_name, 'r')
+
+        linenumber = 0
+        reading_atoms = False
+        reading_step = False
+        skip = False
+        id = 0
+        num = 0
+        done = False
+        for line in file:
+
+            if line.find('ITEM: TIMESTEP') >= 0:
+                reading_step = True
+                continue
+
+            if reading_step and done:
+                print('aa')
+                break
+
+            if reading_step:
+                print(line)
+                if int(line) != self.timestep:
+                    print(line)
+                    reading_step = False
+                    continue
+                else:
+                    # print(line)
+                    reading_step = False
+                    skip = True
+                    continue
+
+            if skip:
+                if line.find('ITEM: ATOMS') >= 0:
+                    skip  = False
+                    reading_atoms = True
+                continue
+
+            if reading_atoms:
+                done  = True
+                print('reading')
+                l = line.split()
+                #id = int(l[0])
+                t = l[1]
+                p = [float(l[2]), float(l[3]), float(l[4])]
+                self.atoms.append(Atom(id, p, type=t))
+                id+=1
+
+
+    def parse_xyz_style(self):
+        print('Implementation Incomplete / Not working')
+        return None
+
+    def delete_atom(self, id):
+        pass
+
 class Voronoi:
 
     def __init__(self, file):

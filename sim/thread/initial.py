@@ -6,7 +6,7 @@ import numpy as np
 density = 6.9
 radius_cyl = 10
 radius = 6.
-wave_number = 0.6
+wave_number = 0.55
 wave_length = (2 * np.pi * radius) / wave_number
 
 lmp = lammps()
