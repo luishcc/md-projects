@@ -9,7 +9,7 @@ from struc import Atoms, Point, Box
 
 filename = 'thread.lammpstrj'
 
-step = 11100
+step = 19100
 
 data = DumpReaderTime(filename, step=step)
 
