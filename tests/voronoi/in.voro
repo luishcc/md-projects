@@ -4,7 +4,7 @@ boundary	          f f p
 
 atom_style	        mdpd
 
-read_data           test.data
+read_data           reading_test_11100.data
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
@@ -25,7 +25,7 @@ compute 	v1 all voronoi/atom neighbors yes edge_histo 6
 
 # write voronoi per-atom quantities to a file
 
-dump    	dperatom all custom 1 dump.voro id type x y z c_v1[1] c_v1[2]
+dump    	dperatom all custom 1 dump.voro-1 id type x y z c_v1[1] c_v1[2]
 
 # writing voronoi local quantities to a file
 

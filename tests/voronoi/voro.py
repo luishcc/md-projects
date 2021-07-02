@@ -106,8 +106,8 @@ p2 = np.array([[0, 0], [0, 0.5], [0, 1],
 
 pos, surf, volumes = readVor('dump.voro')
 
-plot_volume_distribution2(volumes)
-exit()
+plot_volume_distribution(volumes)
+#exit()
 
 px = [sub[0] for sub in pos]
 py = [sub[1] for sub in pos]
@@ -135,9 +135,9 @@ for i in range(len(sx)):
 atoms_list = Atoms(positions, 1.)
 
 data = DataFile(box, atoms_list)
-data.write_file('surf', os.getcwd())
+data.write_file('surf-5', os.getcwd())
 
-
+exit()
 box = Box((max(sr)-min(sr))*2, 2*np.pi*radius, wave_length)
 
 positions = []
