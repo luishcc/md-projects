@@ -3,7 +3,7 @@ from lammps import lammps
 import numpy as np
 
 
-radius = 10
+radius = 1
 radius_init = 1.5*radius
 wave_number = 0.55
 wave_length = (2 * np.pi * radius) / wave_number
@@ -56,7 +56,7 @@ lmp.commands_list(sim_commands)
 
 lmp.command("run 500")
 lmp.command("minimize 0.0 1.0e-8 10000 100000")
-lmp.command("write_dump all atom dump.atom modify scale no")
+lmp.command("write_dump all atom testtt.dump modify scale no")
 
 MPI.Finalize()
 

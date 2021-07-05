@@ -107,7 +107,8 @@ plt.ylim(0,10)
 
 
 plt.subplot(212)
-plt.plot(freq[1:10], f.real[1:10], 'k-')
+plt.plot(freq[1:10], f.real[1:10], 'k-', marker='o')
+plt.plot([min(freq[1:10]), max(freq[1:10])], [0,0], 'r-.')
 plt.ylim(-0.6,3)
 # plt.plot(freq, f.imag, 'b-')
 
