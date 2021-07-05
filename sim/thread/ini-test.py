@@ -55,9 +55,8 @@ lmp.commands_list(pair_commands)
 lmp.commands_list(sim_commands)
 
 lmp.command("run 500")
-lmp.command("minimize 0.0 1.0e-8 10000 100000")
-lmp.command("write_dump all atom testtt.dump modify scale no")
-
-MPI.Finalize()
 
 print('testing')
+
+
+# MPI.Finalize()

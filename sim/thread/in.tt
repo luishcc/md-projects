@@ -1,0 +1,42 @@
+# Script modified from mDPD example folder
+#
+# Break up of fluid thread
+
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.3 bin
+neigh_modify        every 1 check yes
+
+atom_style	        mdpd
+
+read_data           perturbed.data
+
+pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+pair_coeff          1 1 mdpd/rhosum  0.75
+pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+#velocity            all create 1.0 38497 loop local dist gaussian
+velocity            all create 1.0 20794 loop local dist gaussian
+#velocity            all create 1.0 15996 loop local dist gaussian
+
+comm_modify         vel yes
+fix         mvv     all mvv/dpd 0.65
+
+write_dump all atom dump.perturbed modify scale no
+
+dump        mydump  all atom 100 thread-r2.lammpstrj
+dump_modify mydump scale no
+
+#minimize 0.0 1.0e-6 10000 100000
+
+timestep            0.01
+
+run 30000
+
+#write_dump         all atom last.lammpstrj modify scale no
