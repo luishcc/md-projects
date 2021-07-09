@@ -4,18 +4,18 @@ import numpy as np
 import sys
 
 
-radius = int(sys.argv[1])
-ratio = int(sys.argv[2])
-
+radius = int(sys.argv[1])       # Add as sys.input
+ratio = int(sys.argv[2])        # Add as sys.input , linear instability when > 1 (Continuum Theory)
+                 # instability above 0.8 (MDPD Simulation)
 
 length = radius * ratio * 2 * np.pi
 box_sides = radius * np.cbrt(1.5*ratio*np.pi) + 2
 
-seed = int(sys.argv[3])
+seed = int(sys.argv[3])      # Add as sys.input
 
-A = int(sys.argv[4])
+A = int(sys.argv[4])           # Add as sys.input
 B = 25
-density = float(sys.argv[5])
+density = float(sys.argv[5])     # Add as sys.input
 
 
 lmp = lammps()
@@ -64,17 +64,17 @@ lmp.commands_list(pair_commands)
 lmp.commands_list(thermo_commands)
 lmp.commands_list(sim_commands)
 
+lmp.command("run 1000")
 
-lmp.command("run 10000")
 
-lmp.command(f"dump mydump all atom 100 {sys.argv[6]}/thread.lammpstrj")
+lmp.command(f"dump mydump all atom 100 {sys.argv[6]}/test.lammpstrj")
 lmp.command("dump_modify mydump scale no")
 
 lmp.command(f"dump force all custom 100 {sys.argv[6]}/dump.force id fx fy fz")
 lmp.command(f"dump vels all custom 100 {sys.argv[6]}/dump.velocity id vx vy vz")
 
 
-lmp.command("run 20000")
+lmp.command("run 1000")
 lmp.command(f"write_restart {sys.argv[6]}/restart.thread")
 
 
