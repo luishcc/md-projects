@@ -8,10 +8,10 @@ sys.path.insert(0, os.path.expanduser('~')+'/md-projects/lampy/io')
 import resultsdir as rdir
 
 num_runs = int(sys.argv[1])
-num_proc = 2
+num_proc = 8
 
 radius = 6
-ratio = 12  # L / 2 Pi R
+ratio = 16  # L / 2 Pi R
 # linear instability when ratio > 1 (Continuum Theory)
 # instability above 0.8 (MDPD Simulation)
 
