@@ -8,10 +8,10 @@ sys.path.insert(0, os.path.expanduser('~')+'/md-projects/lampy/io')
 import resultsdir as rdir
 
 num_runs = int(sys.argv[1])
-num_proc = 8
+num_proc = 2
 
 radius = 6
-ratio = 10  # L / 2 Pi R
+ratio = 12  # L / 2 Pi R
 # linear instability when ratio > 1 (Continuum Theory)
 # instability above 0.8 (MDPD Simulation)
 
@@ -26,7 +26,7 @@ density = 7.0
 
 for i in range(num_runs):
     seed = np.random.randint(1000, 4000)
-    save_dir = f'/R[{radius}]ratio[{ratio}]'
+    save_dir = f'/R{radius}_ratio{ratio}_A{np.abs(A)}'
     parameters = {'radius':radius,
                   'ratio':ratio,
                   'length':length,
@@ -34,6 +34,6 @@ for i in range(num_runs):
                   'A':A,
                   'density':density}
     save_dir = rdir.sim_info_files(save_dir, parameters)
-    subprocess.run(['mpirun', '-np', f'{num_proc}', 'python3', 'inital.py',
+    subprocess.run(['mpirun', '-np', f'{num_proc}', 'python3', 'initial.py',
                     f'{radius}', f'{ratio}', f'{seed}', f'{A}', f'{density}',
                     f'{save_dir}'])

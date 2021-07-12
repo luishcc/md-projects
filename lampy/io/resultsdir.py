@@ -8,7 +8,7 @@ cwd = os.getcwd()
 
 
 def make_dir(_name):
-    dir = '/' + _name + '-0'
+    dir = '/' + _name + '-1'
     i = 1
     while os.path.isdir(cwd + dir):
       dir = dir.split('-')[0] + '-'+str(i)
