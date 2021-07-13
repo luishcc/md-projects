@@ -15,8 +15,8 @@ except:
 
 num_proc = 8
 
-radius = 6
-ratio = 16  # L / 2 Pi R
+radius = 8
+ratio = 6  # L / 2 Pi R
 # linear instability when ratio > 1 (Continuum Theory)
 # instability above 0.8 (MDPD Simulation)
 

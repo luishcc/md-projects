@@ -66,7 +66,7 @@ lmp.commands_list(thermo_commands)
 lmp.commands_list(sim_commands)
 
 
-lmp.command("run 10000")
+lmp.command("run 15000")
 
 lmp.command(f"dump mydump all atom 100 {save_dir}/thread.lammpstrj")
 lmp.command("dump_modify mydump scale no")
@@ -75,7 +75,7 @@ lmp.command(f"dump force all custom 100 {save_dir}/dump.force id fx fy fz")
 lmp.command(f"dump vels all custom 100 {save_dir}/dump.velocity id vx vy vz")
 
 
-lmp.command("run 20000")
+lmp.command("run 25000")
 lmp.command(f"write_restart {save_dir}/restart.thread")
 
 
