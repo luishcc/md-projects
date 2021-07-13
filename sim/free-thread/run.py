@@ -33,7 +33,7 @@ for i in range(num_runs):
                   'seed':seed,
                   'A':A,
                   'density':density}
-    save_dir = rdir.sim_info_files(save_dir, parameters)
+    save_dir = rdir.save_files(save_dir, parameters)
     subprocess.run(['mpirun', '-np', f'{num_proc}', 'python3', 'initial.py',
                     f'{radius}', f'{ratio}', f'{seed}', f'{A}', f'{density}',
                     f'{save_dir}'])

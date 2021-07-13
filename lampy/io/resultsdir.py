@@ -18,7 +18,7 @@ def make_dir(_name):
     os.mkdir(results_path)
     return results_path
 
-def sim_info_files(_name, _info):
+def save_files(_name, _info):
 
     _path = make_dir(_name)
 
