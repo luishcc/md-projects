@@ -17,6 +17,7 @@ A = int(sys.argv[4])
 B = 25
 density = float(sys.argv[5])
 
+save_dir = sys.argv[6]
 
 lmp = lammps()
 
@@ -67,15 +68,15 @@ lmp.commands_list(sim_commands)
 
 lmp.command("run 10000")
 
-lmp.command(f"dump mydump all atom 100 {sys.argv[6]}/thread.lammpstrj")
+lmp.command(f"dump mydump all atom 100 {save_dir}/thread.lammpstrj")
 lmp.command("dump_modify mydump scale no")
 
-lmp.command(f"dump force all custom 100 {sys.argv[6]}/dump.force id fx fy fz")
-lmp.command(f"dump vels all custom 100 {sys.argv[6]}/dump.velocity id vx vy vz")
+lmp.command(f"dump force all custom 100 {save_dir}/dump.force id fx fy fz")
+lmp.command(f"dump vels all custom 100 {save_dir}/dump.velocity id vx vy vz")
 
 
 lmp.command("run 20000")
-lmp.command(f"write_restart {sys.argv[6]}/restart.thread")
+lmp.command(f"write_restart {save_dir}/restart.thread")
 
 
 # MPI.Finalize()

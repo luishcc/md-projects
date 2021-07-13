@@ -7,7 +7,12 @@ import subprocess
 sys.path.insert(0, os.path.expanduser('~')+'/md-projects/lampy/io')
 import resultsdir as rdir
 
-num_runs = int(sys.argv[1])
+try:
+    num_runs = int(sys.argv[1])
+except:
+    print("Number of runs not specified, setting num_runs=1")
+    num_runs = 1
+
 num_proc = 8
 
 radius = 6
