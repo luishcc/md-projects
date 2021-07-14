@@ -71,7 +71,7 @@ lmp.command("run 15000")
 lmp.command(f"dump mydump all atom 100 {save_dir}/thread.lammpstrj")
 lmp.command("dump_modify mydump scale no")
 
-lmp.command(f"dump force all custom 100 {save_dir}/dump.force id fx fy fz")
+#lmp.command(f"dump force all custom 100 {save_dir}/dump.force id fx fy fz")
 lmp.command(f"dump vels all custom 100 {save_dir}/dump.velocity id vx vy vz")
 
 
