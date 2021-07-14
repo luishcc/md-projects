@@ -40,3 +40,11 @@ class Cell:
 
     def add_atom(self, atom):
         self.atoms.append(atom)
+
+
+if __name__=='__main__':
+    sys.path.insert(0, os.path.expanduser('~')+'/md-projects/lampy')
+    from readLammps import DumpReader
+
+    data = DumpReader(dump.test)
+    
