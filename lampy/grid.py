@@ -7,16 +7,18 @@ class Grid:
     def __init__(self, atoms, size=2):
         self.cells = {}
         self.size = size
-        self.ncells = len(self.cells)
 
         for atom in atoms:
-            idr, idp = get_idpolar(atom.position)
-            idz = get_idz(atom.position)
+            idr, idp = self.get_idpolar(atom.position)
+            idz = self.get_idz(atom.position)
             try:
                 self.cells[(idr, idp,  idz)].add_atom(atom)
             except:
                 self.cells[(idr, idp,  idz)] = Cell(idr, idp,  idz)
                 self.cells[(idr, idp,  idz)].add_atom(atom)
+
+        self.ncells = len(self.cells)
+
 
 
     def get_idpolar(self, pos):
@@ -43,8 +45,12 @@ class Cell:
 
 
 if __name__=='__main__':
+
+    import sys
+    import os
     sys.path.insert(0, os.path.expanduser('~')+'/md-projects/lampy')
     from readLammps import DumpReader
 
-    data = DumpReader(dump.test)
-    
+    data = DumpReader('dump.test')
+
+    grd = Grid(data.atoms)

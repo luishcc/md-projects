@@ -4,8 +4,8 @@ import numpy as np
 class Atom:
     def __init__(self, id, p, v=None, type=None):
         self.id = id
-        self.x = p
-        self.v = v
+        self.position = p
+        self.velocity = v
         self.type = type
         self.properties = {}
 

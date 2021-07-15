@@ -19,7 +19,7 @@ print ${WaveLength}
 region     mdpd     block -18 18 -18 18 0 ${WaveLength} units box
 create_box          1 mdpd
 
-lattice             fcc 6.9
+lattice             fcc 7
 region     tube     cylinder z 0 0 v_Radius INF INF
 create_atoms        1 region tube
 
@@ -41,10 +41,11 @@ fix         mvv     all mvv/dpd 0.65
 
 #compute     clt      all aggregate/atom 1.
 
-dump        mydump  all atom 100 threads.lammpstrj
+#dump        mydump  all atom 100 threads.lammpstrj
 
 #dump cluster       all custom 2500 dump.cl c_clt
 
 
 timestep            0.01
-run                 20000
+run                 100
+#write_dump all atom dump.atom modify scale no
