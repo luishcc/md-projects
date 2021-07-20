@@ -104,6 +104,12 @@ if __name__=='__main__':
     import matplotlib.pyplot as plt
 
 
+    #plt.figure(1)
+    #plt.tricontourf(idr,idz,d)
+    #plt.colorbar()
+    #plt.show()
+    #exit()
+
     fig, ax = plt.subplots(1,1)
     im = ax.imshow(coo)
     fig.colorbar(im)
