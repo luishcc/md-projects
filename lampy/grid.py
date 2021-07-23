@@ -4,9 +4,13 @@ from math import floor
 
 class Grid:
 
-    def __init__(self, atoms, size=2):
+    def __init__(self, atoms, length, size=2):
         self.cells = {}
         self.size = size
+
+        self.length_z = length
+        self.size_z = self.length_z / (round(self.length_z / self.size)+1)
+
 
         for atom in atoms:
             idr, idp = self.get_idpolar(atom.position)
@@ -51,7 +55,7 @@ class Grid:
 
 
     def get_idz(self, pos):
-        return floor(pos[2] / self.size)
+        return floor(pos[2] / self.size_z)
 
     def compute_density_correlation(self):
         pass
@@ -86,7 +90,11 @@ if __name__=='__main__':
 
     data = DumpReader(sys.argv[1])
 
-    grd = Grid(data.atoms, size = float(sys.argv[2])*0.75)
+    zz = []
+    for atom in data.atoms:
+        zz.append(atom.position[2])
+
+    grd = Grid(data.atoms, max(zz), size = float(sys.argv[2])*0.75)
 
     idr = []
     idz = []
