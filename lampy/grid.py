@@ -5,11 +5,12 @@ from math import floor
 class Grid:
 
     def __init__(self, atoms, length, size=2):
-        self.cells = {}
+        self.cell = {}
         self.size = size
 
         self.length_z = length
-        self.size_z = self.length_z / (round(self.length_z / self.size)+1)
+        self.num_z = round(self.length_z / self.size)
+        self.size_z = self.length_z / (self.num_z)
 
 
         for atom in atoms:
@@ -17,13 +18,13 @@ class Grid:
             # idr, idp = self.get_idpolar2(atom.position, 4)
             idz = self.get_idz(atom.position)
             try:
-                self.cells[(idr, idp,  idz)].add_atom(atom)
+                self.cell[(idr, idp,  idz)].add_atom(atom)
             except:
-                self.cells[(idr, idp,  idz)] = Cell(idr, idp,  idz)
-                self.cells[(idr, idp,  idz)].compute_volume(self.size)
-                self.cells[(idr, idp,  idz)].add_atom(atom)
+                self.cell[(idr, idp,  idz)] = Cell(idr, idp,  idz)
+                self.cell[(idr, idp,  idz)].compute_volume(self.size)
+                self.cell[(idr, idp,  idz)].add_atom(atom)
 
-        self.ncells = len(self.cells)
+        self.ncells = len(self.cell)
 
 
     def get_idpolar(self, pos):
@@ -57,7 +58,10 @@ class Grid:
     def get_idz(self, pos):
         return floor(pos[2] / self.size_z)
 
-    def compute_density_correlation(self):
+    def get_numphi(self, idr):
+        return round(np.pi*(idr+1))
+
+    def compute_density_correlation(self, r):
         pass
 
 
@@ -99,7 +103,7 @@ if __name__=='__main__':
     idr = []
     idz = []
     d = []
-    for key, cell in grd.cells.items():
+    for key, cell in grd.cell.items():
         idr.append(cell.id[0])
         idz.append(cell.id[2])
         d.append(cell.get_density()/cell.nangle)
