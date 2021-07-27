@@ -1,0 +1,24 @@
+
+read_restart restart.thread2
+
+pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+pair_coeff          1 1 mdpd/rhosum  0.75
+pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
+mass                1 1.0
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+velocity            all create 1.0 2093 loop local dist gaussian
+comm_modify         vel yes
+fix         mvv     all mvv/dpd 0.65
+
+#dump        mydump  all atom 100 threads.lammpstrj
+
+timestep            0.01
+run 500
+
+write_restart restart.thread2
+write_dump all atom dump.atom2 modify scale no
