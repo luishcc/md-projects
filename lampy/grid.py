@@ -4,16 +4,16 @@ from math import floor
 
 class Grid:
 
-    def __init__(self, atoms, length, size=2):
+    def __init__(self, data, size=2):
         self.cell = {}
         self.size = size
 
-        self.length_z = length
+        self.length_z = data.box.get_length_z()
         self.num_z = round(self.length_z / self.size)
         self.size_z = self.length_z / (self.num_z)
 
 
-        for atom in atoms:
+        for atom in data.atoms:
             idr, idp = self.get_idpolar(atom.position)
             # idr, idp = self.get_idpolar2(atom.position, 4)
             idz = self.get_idz(atom.position)
@@ -94,11 +94,9 @@ if __name__=='__main__':
 
     data = DumpReader(sys.argv[1])
 
-    zz = []
-    for atom in data.atoms:
-        zz.append(atom.position[2])
 
-    grd = Grid(data.atoms, max(zz), size = float(sys.argv[2])*0.75)
+
+    grd = Grid(data, size = float(sys.argv[2])*0.75)
 
     idr = []
     idz = []
@@ -123,7 +121,7 @@ if __name__=='__main__':
     #exit()
 
     fig, ax = plt.subplots(1,1)
-    im = ax.imshow(coo)
+    im = ax.imshow(coo, extent=[0, 1, 0, 1], aspect=10)
     fig.colorbar(im)
     ax.set_xlabel('Radius')
     ax.set_ylabel('Length')
