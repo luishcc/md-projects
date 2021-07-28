@@ -12,13 +12,36 @@ class Atom:
     def set_property(self, name, vale):
         self.properties[name] = value
 
+class Box:
+
+    def __init__(self, list):
+        self.xlo = list[0]
+        self.xhi = list[1]
+        self.ylo = list[2]
+        self.yhi = list[3]
+        try:
+            self.zlo = list[4]
+            self.zhi = list[5]
+        except:
+            self.zlo = None
+            self.zhi = None
+
+    def get_length_x(self):
+        return self.xhi - self.xlo
+
+    def get_length_y(self):
+        return self.yhi - self.ylo
+
+    def get_length_z(self):
+        return self.zhi - self.zlo
+
 
 class DumpReader:
 
     def __init__(self, file, type='atom'):
         self.file_name = str(file)
         self.atoms = []
-        #self.box = None
+        self.box = None
         #self.timestep = None
         self.parse(type)
 
@@ -42,12 +65,29 @@ class DumpReader:
 
         linenumber = 0
         reading_atoms = False
+        reading_box = False
         id = 0
+        box_dim = []
         for line in file:
 
             if line.find('ITEM: ATOMS') >= 0:
                 reading_atoms = True
                 continue
+
+            if line.find('ITEM: BOX BOUNDS ') >= 0:
+                reading_box = True
+                dim_id = 0
+                continue
+
+            if reading_box:
+                l = line.split()
+                box_dim.append(float(l[0]))
+                box_dim.append(float(l[1]))
+                dim_id += 1
+                if dim_id >= 3:
+                    reading_box = False
+                continue
+
 
             if reading_atoms:
                 l = line.split()
@@ -56,14 +96,15 @@ class DumpReader:
                 p = [float(l[2]), float(l[3]), float(l[4])]
                 self.atoms.append(Atom(id, p, type=t))
                 id+=1
+        self.box = Box(box_dim)       
+        return
 
 
     def parse_xyz_style(self):
         print('Implementation Incomplete / Not working')
         return None
 
-    def delete_atom(self, id):
-        pass
+
 
 
 class DataReader:
