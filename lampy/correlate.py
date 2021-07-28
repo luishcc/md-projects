@@ -28,7 +28,7 @@ def correlate(grid, r, dz, rho):
     nn2 = (grid.num_z) * num_phi
 
     try:
-        corr2 = corr/ nn  #* rho**2
+        # corr2 = corr/ nn  #* rho**2
         corr /= (sumsq / nn2) * nn
 
     except ZeroDivisionError:
@@ -36,7 +36,7 @@ def correlate(grid, r, dz, rho):
 
 
 
-    return corr - 1 , corr2
+    return corr - 1 #, corr2
 
 
 import sys
@@ -59,16 +59,16 @@ def run(r):
     rho = np.zeros(num)
 
     for dz in range(num):
-        cor[dz], rho[dz] = correlate(grd, r, dz, 7)
-    return cor, rho
+        cor[dz] = correlate(grd, r, dz, 7)
+    return cor
 
 res = []
-rho = []
-rrange = 5
+# rho = []
+rrange = 10
 for r in range(rrange):
-    a, b = run(r)
+    a = run(r)
     res.append(a)
-    rho.append(b)
+    # rho.append(b)
 
 import matplotlib.pyplot as plt
 
@@ -79,12 +79,12 @@ for r in range(rrange):
     plt.plot(np.linspace(0,num-1, num), res[r], label=f'R={r}')
 plt.legend()
 
-plt.figure(2)
-for r in range(rrange):
-    if float('Nan') in rho[r]:
-        continue
-    plt.plot(np.linspace(0,num-1, num), rho[r], label=f'R={r}')
-plt.legend()
+# plt.figure(2)
+# for r in range(rrange):
+#     if float('Nan') in rho[r]:
+#         continue
+#     plt.plot(np.linspace(0,num-1, num), rho[r], label=f'R={r}')
+# plt.legend()
 
 plt.show()
 
