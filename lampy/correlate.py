@@ -28,7 +28,7 @@ def correlate(grid, r, dz, rho):
     nn2 = (grid.num_z) * num_phi
 
     try:
-        # corr2 = corr/ nn  #* rho**2
+        # corr = corr/ nn  #* rho**2
         corr /= (sumsq / nn2) * nn
 
     except ZeroDivisionError:
@@ -36,7 +36,7 @@ def correlate(grid, r, dz, rho):
 
 
 
-    return corr - 1 #, corr2
+    return corr  #, corr2
 
 
 import sys
@@ -64,7 +64,7 @@ def run(r):
 
 res = []
 # rho = []
-rrange = 10
+rrange = int(sys.argv[2])
 for r in range(rrange):
     a = run(r)
     res.append(a)
@@ -72,21 +72,23 @@ for r in range(rrange):
 
 import matplotlib.pyplot as plt
 
+# plt.rcParams.update({
+#     "text.usetex": True,
+#     "font.family": "sans-serif",
+#     "font.size": 14,
+#     "font.sans-serif": ["Helvetica"]})
+
 plt.figure(1)
+print(grd.length_z)
 for r in range(rrange):
     if float('Nan') in res[r]:
         continue
-    plt.plot(np.linspace(0,num-1, num), res[r], label=f'R={r}')
-plt.legend()
+    plt.plot(np.linspace(0, grd.length_z/2, num), res[r], label=f'R={r}')
+plt.xlabel(r'$\delta z$')
+plt.ylabel(r'$G(r,\delta z)$')
+plt.legend(loc='right')
 
-# plt.figure(2)
-# for r in range(rrange):
-#     if float('Nan') in rho[r]:
-#         continue
-#     plt.plot(np.linspace(0,num-1, num), rho[r], label=f'R={r}')
-# plt.legend()
 
-plt.show()
 
 # idr = []
 # idz = []
@@ -109,5 +111,7 @@ plt.show()
 # ax.set_ylabel('Length')
 # ax.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
 # ax.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
+# fig.set_dpi(460)
 
-# plt.show()
+
+plt.show()

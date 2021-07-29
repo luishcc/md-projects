@@ -127,4 +127,5 @@ if __name__=='__main__':
     ax.set_ylabel('Length')
     ax.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
+    fig.set_dpi(460)
     plt.show()
