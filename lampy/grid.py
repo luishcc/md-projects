@@ -4,6 +4,9 @@ from math import floor
 
 class Grid:
 
+    ''' Grid in cylindrical coordinates for liquid thread simulations.
+    Atoms are connected over z periodic boundary '''
+
     def __init__(self, data, size=2):
         self.cell = {}
         self.size = size
