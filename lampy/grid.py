@@ -15,12 +15,12 @@ class Grid:
 
         for atom in data.atoms:
             idr, idp = self.get_idpolar(atom.position)
-            # idr, idp = self.get_idpolar2(atom.position, 4)
             idz = self.get_idz(atom.position)
             try:
                 self.cell[(idr, idp,  idz)].add_atom(atom)
             except:
                 self.cell[(idr, idp,  idz)] = Cell(idr, idp,  idz)
+                self.cell[(idr, idp,  idz)].set_nangle(self.get_numphi(idr))
                 self.cell[(idr, idp,  idz)].compute_volume(self.size)
                 self.cell[(idr, idp,  idz)].add_atom(atom)
 
@@ -35,21 +35,8 @@ class Grid:
 
         r = np.sqrt(pos[0]**2 + pos[1]**2)
         idr = floor(r / self.size)
-        N = round(np.pi*(idr+1))
+        N = self.get_numphi(idr)
         bin_theta = 2*np.pi / N
-        angle = np.arctan2(pos[1], pos[0])+np.pi
-        idp = floor(angle / bin_theta)
-        return idr, idp
-
-    def get_idpolar2(self, pos, nangle):
-
-        ''' Calculate the IDs of radius coordinate and angular coordinate
-        for a cell volume having the same angle division in different radii.
-        Obs.: Outer cells have larger volume'''
-
-        r = np.sqrt(pos[0]**2 + pos[1]**2)
-        idr = floor(r / self.size)
-        bin_theta = 2*np.pi / nangle
         angle = np.arctan2(pos[1], pos[0])+np.pi
         idp = floor(angle / bin_theta)
         return idr, idp
@@ -59,7 +46,7 @@ class Grid:
         return floor(pos[2] / self.size_z)
 
     def get_numphi(self, idr):
-        return round(np.pi*(idr+1))
+        return round(np.pi*(2*idr+1))
 
     def compute_density_correlation(self, r):
         pass
@@ -71,12 +58,16 @@ class Cell:
         self.atoms = []
         self.id = (idr, idp, idz)
         self.volume = None
-        self.nangle = round(np.pi*(idr+1))
-        self.angle = 2*np.pi / self.nangle
+        self.nangle = None
+        self.angle = None
         self.density = None
 
     def add_atom(self, atom):
         self.atoms.append(atom)
+
+    def set_nangle(self, nangle):
+        self.nangle = nangle
+        self.angle = 2*np.pi / self.nangle
 
     def compute_volume(self, size):
         self.volume = self.angle * size**3 * (2*self.id[0] + 1) * 0.5
