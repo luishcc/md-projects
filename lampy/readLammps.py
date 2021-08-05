@@ -36,6 +36,38 @@ class Box:
         return self.zhi - self.zlo
 
 
+class Reader:
+
+    def __init__(self):
+        self.timesteps = []
+
+    def read_timestep(self, file_name):
+        numt = 0
+
+        def skip_lines(f, n_skip):
+            for _ in range(n_skip):
+                f.readline()
+
+        with open(file_name, ,'r') as file:
+
+            read_time = False
+            for line in file:
+
+                if line.find('ITEM: TIMESTEP') >= 0:
+                    read_time = True
+                    continue
+
+                if read_time:
+                    l = float(line)
+                    self.timestep.append(l)
+                    read_time = False
+                    skip_lines()
+
+
+
+
+
+
 class DumpReader:
 
     def __init__(self, file, type='atom'):
@@ -96,7 +128,7 @@ class DumpReader:
                 p = [float(l[2]), float(l[3]), float(l[4])]
                 self.atoms.append(Atom(id, p, type=t))
                 id+=1
-        self.box = Box(box_dim)       
+        self.box = Box(box_dim)
         return
 
 
