@@ -47,7 +47,7 @@ from readLammps import DumpReader
 from math import floor
 
 
-data = DumpReader('dump.corr')
+data = DumpReader('dump.corr2')
 grd = Grid(data, size = float(sys.argv[1]))
 
 
@@ -89,6 +89,28 @@ plt.ylabel(r'$G(r,\delta z)$')
 plt.legend(loc='right')
 
 
+from scipy.fft import fft, fftfreq, fftshift, rfft, rfftfreq
+
+f = fftshift(fft(res[5]))
+freq = fftshift(fftfreq(len(res[5])))
+
+f = rfft(res[5]) / len(res[5])
+freq = rfftfreq(len(res[5]))
+
+plt.figure(2)
+plt.plot(freq[:], f.real[:], 'k-', marker='o')
+# plt.plot([min(freq[1:20]), max(freq[1:20])], [0,0], 'r-.')
+# plt.ylim(-0.6,3)
+plt.xlim(0,0.2)
+
+# plt.plot(freq, f.imag, 'b-')
+
+# spec = np.abs(f)**2
+
+# plt.subplot(133)
+# plt.plot(freq, spec/max(spec), 'b-')
+
+plt.show()
 
 # idr = []
 # idz = []
