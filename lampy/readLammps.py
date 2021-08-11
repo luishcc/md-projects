@@ -38,33 +38,30 @@ class Box:
 
 class Reader:
 
-    def __init__(self):
-        self.timesteps = []
+    def __init__(self, file_name):
+        self.file_name = file_name
+        self.timesteps = {}
 
-    def read_timestep(self, file_name):
-        numt = 0
+    def skip_lines(self, f, n_skip):
+        for _ in range(n_skip):
+            f.readline()
 
-        def skip_lines(f, n_skip):
-            for _ in range(n_skip):
-                f.readline()
+    def read_timestep(self):
+        with open(self.file_name, 'r') as file:
 
-        with open(file_name, ,'r') as file:
-
-            read_time = False
+            idl = 0
             for line in file:
 
                 if line.find('ITEM: TIMESTEP') >= 0:
-                    read_time = True
+                    self.timesteps[int(file.readline())] = idl
+                    idl += 2
                     continue
 
-                if read_time:
-                    l = float(line)
-                    self.timestep.append(l)
-                    read_time = False
-                    skip_lines()
-
-
-
+                if line.find('ITEM: NUMBER OF ATOMS') >= 0:
+                    natom = int(file.readline())
+                    skip_lines(file, natom + 5)
+                    idl += natom + 7
+                    continue
 
 
 
@@ -185,4 +182,6 @@ class DataReader:
 
 if __name__=='__main__':
 
-    a = DumpReader('dump.atom')
+    # a = DumpReader('dump.atom')
+    a = AtomReader('dump.many')
+    a.read_timestep()
