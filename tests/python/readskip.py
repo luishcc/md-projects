@@ -23,7 +23,8 @@ with open(file, 'r') as f:
 t2 = time.time()
 
 with open(file, 'r') as f:
-
+    line = f.readline().split()[1:]
+    print(line)
     for id, line in enumerate(f):
         print(line)
 
