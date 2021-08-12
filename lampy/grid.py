@@ -7,16 +7,16 @@ class Grid:
     ''' Grid in cylindrical coordinates for liquid thread simulations.
     Atoms are connected over z periodic boundary '''
 
-    def __init__(self, data, size=2):
+    def __init__(self, snap, size=2):
         self.cell = {}
         self.size = size
 
-        self.length_z = data.box.get_length_z()
+        self.length_z = snap.box.get_length_z()
         self.num_z = round(self.length_z / self.size)
         self.size_z = self.length_z / (self.num_z)
 
 
-        for atom in data.atoms:
+        for atom in snap.atoms.values():
             idr, idp = self.get_idpolar(atom.position)
             idz = self.get_idz(atom.position)
             try:
@@ -45,6 +45,9 @@ class Grid:
         return idr, idp
 
 
+    def get_idr(self,r):
+        return floor(r / self.size)
+
     def get_idz(self, pos):
         return floor(pos[2] / self.size_z)
 
@@ -52,7 +55,41 @@ class Grid:
         return round(np.pi*(2*idr+1))
 
     def compute_density_correlation(self, r):
-        pass
+
+        idr = self.get_idr(r)
+
+        def correlate(dz):
+            num_phi = self.get_numphi(idr)
+            sumsq = 0
+            corr = 0
+            for z in range(self.num_z - dz):
+                for phi in range(num_phi):
+                    try:
+                        sumsq += self.cell[(idr, phi, z)].get_density()**2
+                        corr += self.cell[(idr, phi, z)].get_density() \
+                              * self.cell[(idr, phi, z+dz)].get_density()
+                    except KeyError:
+                        continue
+            for i in range(z+1, self.num_z):
+                for phi in range(num_phi):
+                    try:
+                        sumsq += self.cell[(idr, phi, i)].get_density()**2
+                    except KeyError:
+                        continue
+            nn = (self.num_z-dz) * num_phi
+            nn2 = (self.num_z) * num_phi
+            try:
+                corr /= (sumsq / nn2) * nn
+            except ZeroDivisionError:
+                return float('NaN')
+            return corr
+
+        num = floor(self.num_z/2)
+        correlation = np.zeros(num)
+        dz_list = np.zeros(num)
+        for dz in range(num):
+            correlation[dz] = correlate(dz)
+        return correlation
 
 
 class Cell:
@@ -84,10 +121,14 @@ if __name__=='__main__':
     import sys
     import os
     sys.path.insert(0, os.path.expanduser('~')+'/md-projects/lampy')
-    from readLammps import DumpReader
+    from readLammps import DumpReader, Reader
 
-    data = DumpReader(sys.argv[1])
+    rd = Reader(sys.argv[1])
+    rd.map_snapshot_in_file()
+    rd.read_snapshot(2500)
+    data = rd.snapshots[2500]
 
+    # data = DumpReader(sys.argv[1])
 
 
     grd = Grid(data, size = float(sys.argv[2])*0.75)
@@ -121,5 +162,5 @@ if __name__=='__main__':
     ax.set_ylabel('Length')
     ax.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
-    fig.set_dpi(460)
+    # fig.set_dpi(460)
     plt.show()

@@ -1,7 +1,13 @@
-import numpy as np
+#   Module for reading LAMMPS Dump and Data output files
+#
 
 
+#----------------------------------------------------------------
 class Atom:
+
+    ''' Atom object: used to describe describe position and other properties
+of a single atom/particle '''
+
     def __init__(self, id, p, v=None, type=None):
         self.id = id
         self.position = p
@@ -12,7 +18,11 @@ class Atom:
     def set_property(self, name, vale):
         self.properties[name] = value
 
+#----------------------------------------------------------------
 class Box:
+
+    ''' Box object: Contains x y z limits of simulation box.
+TO DO: Add boundary condition type '''
 
     def __init__(self, list):
         self.xlo = list[0]
@@ -35,107 +45,82 @@ class Box:
     def get_length_z(self):
         return self.zhi - self.zlo
 
+#----------------------------------------------------------------
+class Snapshot:
 
-class Reader:
+    ''' Snapshot object: Contains the collection of atoms/particles in a single
+timestep. Objects are instantiated by a Reader object '''
+
+    def __init__(self, time):
+        self.time = time
+        self.atoms = {}
+
+    def set_box(self, list):
+        self.box = Box(list)
+
+#----------------------------------------------------------------
+class DumpReader:
+
+    ''' Main class to read Dump files. It reads single snapshots at a time and
+works by first mapping where it snapshot begins in the file and then
+the .read_snapshot( method can be called on a specific timestep '''
 
     def __init__(self, file_name):
         self.file_name = file_name
         self.timesteps = {}
+        self.snapshots = {}
 
     def skip_lines(self, f, n_skip):
         for _ in range(n_skip):
             f.readline()
 
-    def read_timestep(self):
+    def read_snapshot(self, time):
+        ss = Snapshot(time)
         with open(self.file_name, 'r') as file:
+            self.skip_lines(file, self.timesteps[time] + 3)
+            ss.natoms = int(file.readline())
+            file.readline()
+            xx = file.readline().split()
+            yy = file.readline().split()
+            zz = file.readline().split()
+            xyz_lim = [None] * 6
+            for i in range(2):
+                xyz_lim[i] = float(xx[i])
+                xyz_lim[i+2] = float(yy[i])
+                xyz_lim[i+4] = float(zz[i])
+            ss.set_box(xyz_lim)
+            ss.dump_attributes = file.readline().split()[1:]
+            for n in range(ss.natoms):
+                line = file.readline().split()
+                id = int(line[0])
+                t = line[1]
+                p = [float(line[2]), float(line[3]), float(line[4])]
+                ss.atoms[id] = (Atom(id, p, type=t))
+        self.snapshots[time] = ss
 
+    def map_snapshot_in_file(self):
+        with open(self.file_name, 'r') as file:
+            reading = True
             idl = 0
-            for line in file:
-
-                if line.find('ITEM: TIMESTEP') >= 0:
+            while reading:
+                try:
+                    file.readline()
                     self.timesteps[int(file.readline())] = idl
-                    idl += 2
-                    continue
-
-                if line.find('ITEM: NUMBER OF ATOMS') >= 0:
+                    file.readline()
                     natom = int(file.readline())
-                    skip_lines(file, natom + 5)
-                    idl += natom + 7
+                    self.skip_lines(file, natom + 5)
+                    idl += natom + 9
+                except:
+                    reading = False
                     continue
 
-
-
-class DumpReader:
-
-    def __init__(self, file, type='atom'):
-        self.file_name = str(file)
-        self.atoms = []
-        self.box = None
-        #self.timestep = None
-        self.parse(type)
-
-
-    def parse(self, type):
-        if type == 'atom':
-            self.parse_atom_style()
-            return
-        elif type == 'xyz':
-            self.parse_xyz_style()
-            return
-        else:
-            print('Style not supported')
-            return
-
-
-    def parse_atom_style(self):
-        list = []
-
-        file = open(self.file_name, 'r')
-
-        linenumber = 0
-        reading_atoms = False
-        reading_box = False
-        id = 0
-        box_dim = []
-        for line in file:
-
-            if line.find('ITEM: ATOMS') >= 0:
-                reading_atoms = True
-                continue
-
-            if line.find('ITEM: BOX BOUNDS ') >= 0:
-                reading_box = True
-                dim_id = 0
-                continue
-
-            if reading_box:
-                l = line.split()
-                box_dim.append(float(l[0]))
-                box_dim.append(float(l[1]))
-                dim_id += 1
-                if dim_id >= 3:
-                    reading_box = False
-                continue
-
-
-            if reading_atoms:
-                l = line.split()
-                #id = int(l[0])
-                t = l[1]
-                p = [float(l[2]), float(l[3]), float(l[4])]
-                self.atoms.append(Atom(id, p, type=t))
-                id+=1
-        self.box = Box(box_dim)
-        return
-
+#----------------------------------------------------------------
 
     def parse_xyz_style(self):
         print('Implementation Incomplete / Not working')
         return None
 
-
-
-
+#----------------------------------------------------------------
 class DataReader:
 
     def __init__(self, file):
@@ -178,10 +163,9 @@ class DataReader:
         pass
 
 
-
-
+#----------------------------------------------------------------
 if __name__=='__main__':
 
     # a = DumpReader('dump.atom')
-    a = AtomReader('dump.many')
-    a.read_timestep()
+    a = Reader('dump.many')
+    a.map_snapshot_in_file()
