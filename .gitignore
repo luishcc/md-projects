@@ -5,8 +5,8 @@ dump.*
 info.*
 restart.*
 
-/gif
-/gif2
+*/gif/
+*/gif2
 *.gif
 
 */__pycache__/
