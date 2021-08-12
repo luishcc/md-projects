@@ -5,6 +5,9 @@ dump.*
 info.*
 restart.*
 
+/gif
+/gif2
+
 */__pycache__/
 /__pycache__/*
 *.pyc
