@@ -26,36 +26,46 @@ for time in rd.timesteps.keys():
     print(time/100 - 100)
     rd.read_snapshot(time)
     grd = Grid(rd.snapshots[time], size = float(sys.argv[1]))
-    res = []
-    rrange = int(sys.argv[2])
-    for r in range(rrange):
-        a = grd.compute_density_correlation(r)
-        res.append(a)
 
+    rrange = int(sys.argv[2])
     num = floor(grd.num_z/2)
-    plt.figure()
+
+    plt.figure(1)
     for r in range(rrange):
-        if float('Nan') in res[r]:
+
+        a = grd.compute_density_correlation(r)
+        plt.plot(np.linspace(0, grd.length_z/2, num), a, label=f'R={r}')
+
+        if r == 8:
+            # f = fftshift(fft(a))
+            # freq = fftshift(fftfreq(len(a)))
+            f = rfft(a) / len(a)
+            freq = rfftfreq(len(a))
+
+            plt.figure(2)
+            plt.plot(freq[:], f.real[:], 'k-', marker='o')
+            # plt.plot([min(freq[1:20]), max(freq[1:20])], [0,0], 'r-.')
+            # plt.ylim(-0.6,3)
+            plt.plot([0, 0.15], [0, 0], 'b--')
+            plt.xlim(-0.01,0.15)
+            plt.savefig(f'gif2/{time}.png', format='png')
+            plt.close(2)
+
+        if float('Nan') in a:
             continue
-        plt.plot(np.linspace(0, grd.length_z/2, num), res[r], label=f'R={r}')
+
     plt.xlabel(r'$\delta z$')
     plt.ylabel(r'$G(r,\delta z)$')
+    plt.ylim(-0.05, 1.1)
+    plt.plot([0, grd.length_z/2], [0, 0], 'k--')
     plt.legend(loc='right')
     plt.savefig(f'gif/{time}.png', format='png')
+    plt.close(1)
+
+    del rd.snapshots[time]
 
 
-    f = fftshift(fft(res[5]))
-    freq = fftshift(fftfreq(len(res[5])))
-
-    f = rfft(res[5]) / len(res[5])
-    freq = rfftfreq(len(res[5]))
-
-    plt.figure()
-    plt.plot(freq[:], f.real[:], 'k-', marker='o')
-    # plt.plot([min(freq[1:20]), max(freq[1:20])], [0,0], 'r-.')
-    # plt.ylim(-0.6,3)
-    plt.xlim(0,0.2)
-    plt.savefig(f'gif2/{time}.png', format='png')
+exit()
 
 # rd.read_snapshot(20500)
 # data = rd.snapshots[20500]
@@ -80,11 +90,12 @@ for snap in rd.snapshots.values():
     plt.ylabel(r'$G(r,\delta z)$')
     plt.legend(loc='right')
     plt.savefig(f'gif/{snap}.jpg', format='jpg')
+    plt.close()
 
 
 
-    f = fftshift(fft(res[5]))
-    freq = fftshift(fftfreq(len(res[5])))
+    # f = fftshift(fft(res[5]))
+    # freq = fftshift(fftfreq(len(res[5])))
 
     f = rfft(res[5]) / len(res[5])
     freq = rfftfreq(len(res[5]))
@@ -95,6 +106,7 @@ for snap in rd.snapshots.values():
     # plt.ylim(-0.6,3)
     plt.xlim(0,0.2)
     plt.savefig(f'gif2/{snap}.jpg', format='jpg')
+    plt.close()
 
     # plt.plot(freq, f.imag, 'b-')
 

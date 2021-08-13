@@ -37,7 +37,7 @@ class Grid:
         angular division for different radius'''
 
         r = np.sqrt(pos[0]**2 + pos[1]**2)
-        idr = floor(r / self.size)
+        idr = self.get_idr(r)
         N = self.get_numphi(idr)
         bin_theta = 2*np.pi / N
         angle = np.arctan2(pos[1], pos[0])+np.pi
