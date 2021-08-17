@@ -1,5 +1,6 @@
 #--------------------------------------------------------------#
 #               Write a LAMMPS data file (SIMPLIFIED)
+#               and .dat files
 #
 #               Luis Carnevale
 #               14 Feb 2021
@@ -53,3 +54,37 @@ class DataFile:
         for i in range(self.atoms.number):
             file.write(f'{i+1} 1 {self.atoms.density} {pos[i].x} {pos[i].y} {pos[i].z}\n')
         return
+
+
+class Dat:
+
+    def __init__(self, data, header=None):
+        self.data = data
+        self.header = header
+
+    def write_file(self, name, dir):
+        with open(f'{dir}/{name}.dat', 'w') as file:
+            if self.header is not None:
+                self.write_header(file)
+            self.write_block(file)
+
+    def write_header(self, file):
+        file.write('# ' + self.header)
+
+
+    def write_block(self, file):
+        for row in self.data:
+            file.write(' '.join(map(str, row))+'\n')
+
+
+
+if __name__=='__main__':
+
+    import os
+
+    data = [[1,2,'azul', 9.3], [1,2,'azul', 9.3], [1,2,'azul', 9.3], [1,2,'azul', 9.3]]
+    head = 'testing header'
+    wr = Dat(data)
+    name = 'test'
+    dir = os.getcwd()
+    wr.write_file(name, dir)

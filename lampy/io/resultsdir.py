@@ -27,7 +27,7 @@ def save_files(_name, _info):
     _file1 = open('/'.join((_path,'info.txt')), 'w+')
     _file1.write('date:{}\n'.format(date))
     for data in _info.items():
-        _file1.write('{}:{}\n'.format(data[0], data[1]))
+        _file1.write(f'{data[0]}:{data[1]}\n')
     _file1.close()
 
     return _path.split('/')[-1]
