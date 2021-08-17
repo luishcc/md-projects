@@ -74,29 +74,11 @@ the .read_snapshot( method can be called on a specific timestep '''
         for _ in range(n_skip):
             f.readline()
 
-    def read_snapshot(self, time):
+    def read_snapshot_at(self, time):
         ss = Snapshot(time)
         with open(self.file_name, 'r') as file:
-            self.skip_lines(file, self.timesteps[time] + 3)
-            ss.natoms = int(file.readline())
-            file.readline()
-            xx = file.readline().split()
-            yy = file.readline().split()
-            zz = file.readline().split()
-            xyz_lim = [None] * 6
-            for i in range(2):
-                xyz_lim[i] = float(xx[i])
-                xyz_lim[i+2] = float(yy[i])
-                xyz_lim[i+4] = float(zz[i])
-            ss.set_box(xyz_lim)
-            ss.dump_attributes = file.readline().split()[1:]
-            for n in range(ss.natoms):
-                line = file.readline().split()
-                id = int(line[0])
-                t = line[1]
-                p = [float(line[2]), float(line[3]), float(line[4])]
-                ss.atoms[id] = (Atom(id, p, type=t))
-        self.snapshots[time] = ss
+            self.skip_lines(file, self.timesteps[time])
+            self.read_snapshot(file)
 
     def map_snapshot_in_file(self):
         with open(self.file_name, 'r') as file:
@@ -114,11 +96,52 @@ the .read_snapshot( method can be called on a specific timestep '''
                     reading = False
                     continue
 
-#----------------------------------------------------------------
+    def read_sequential(self):
+        file = open(self.file_name, 'r')
+        self.read_snapshot(file)
+        self._file = file
 
-    def parse_xyz_style(self):
-        print('Implementation Incomplete / Not working')
-        return None
+    def read_next(self):
+        self.read_snapshot(self._file)
+
+    def close_read(self):
+        self._file.close()
+
+    def delete_snapshot(self, time):
+        del self.snapshots[time]
+
+    def skip_next(self, n=1):
+        for i in range(n):
+            self.skip_lines(self._file, 3)
+            num = int(self._file.readline())
+            self.skip_lines(self._file, num + 5)
+
+    def read_snapshot(self, file):
+        file.readline()
+        time = int(file.readline())
+        ss = Snapshot(time)
+        file.readline()
+        ss.natoms = int(file.readline())
+        file.readline()
+        xx = file.readline().split()
+        yy = file.readline().split()
+        zz = file.readline().split()
+        xyz_lim = [None] * 6
+        for i in range(2):
+            xyz_lim[i] = float(xx[i])
+            xyz_lim[i+2] = float(yy[i])
+            xyz_lim[i+4] = float(zz[i])
+        ss.set_box(xyz_lim)
+        ss.dump_attributes = file.readline().split()[1:]
+        for n in range(ss.natoms):
+            line = file.readline().split()
+            id = int(line[0])
+            t = line[1]
+            p = [float(line[2]), float(line[3]), float(line[4])]
+            ss.atoms[id] = (Atom(id, p, type=t))
+        self.snapshots[time] = ss
+
+
 
 #----------------------------------------------------------------
 class DataReader:
@@ -167,5 +190,5 @@ class DataReader:
 if __name__=='__main__':
 
     # a = DumpReader('dump.atom')
-    a = Reader('dump.many')
+    a = DumpReader('dump.many')
     a.map_snapshot_in_file()
