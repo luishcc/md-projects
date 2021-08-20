@@ -1,6 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# plt.rcParams.update({
+#     "text.usetex": True,
+#     "font.family": "sans-serif",
+#     "font.size": 14,
+#     "font.sans-serif": ["Helvetica"]})
+
 
 def total_force(x, a, b):
     a = attractive(a) * weight(x, cutoff=1)
