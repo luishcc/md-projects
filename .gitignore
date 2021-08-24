@@ -9,6 +9,7 @@ restart.*
 */gif2
 *.gif
 *.png
+*.dat
 
 */__pycache__/
 /__pycache__/*

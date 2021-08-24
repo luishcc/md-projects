@@ -1,92 +1,67 @@
 import sys
 import os
-from math import floor, ceil
 
 import numpy as np
-from scipy.fft import fft, fftfreq, fftshift, rfft, rfftfreq
 import matplotlib.pyplot as plt
 
-from mdpkg.rwfile import DumpReader, Dat
-from mdpkg.grid import Grid
+from mdpkg.rwfile import read_dat, Dat
 
 
+path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
-R = 6
-ratio = 8
-A = 50
-grid = 1
 
-n = 1
-data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
-dir = path_to_data + data_case_dir
-save_fourier_dir = dir + f'/fourier_grid{grid}'
-save_correlation_dir = dir + f'/correlation_grid{grid}'
+R = 10
+ratio = 6
+sim_case = f'R{R}_ratio{ratio}_A50'
+
+dir_in = path_to_data + sim_case + '-1'
+dir_out = '/'.join([path_to_save, sim_case])
+
+if not os.path.isdir(dir_out):
+    os.mkdir(dir_out)
+
+def dict_to_np(dict):
+    col = len(dict)
+    row = len(dict['dz'])
+    data = np.zeros((row, col))
+    data[:, 0] = dict['dz']
+    for i in range(1, col):
+        data[:, i] = dict[str(i-1)]
+    return data
 
 
-size = 1
-rrange = ceil((R*1.7)/size)
+def run_snap(dirf, s):
+    datfile = dirf + f'/correlation_grid1/{s}.dat'
+    data = read_dat(datfile)
+    data = dict_to_np(data)
+    avg = np.copy(data)
+    n = 2
+    dirf = '-'.join([dirf.split('-')[0], str(n)])
+    datfile = dirf + f'/correlation_grid1/{s}.dat'
+    # print(datfile)
+    while os.path.isfile(datfile):
+        # print(datfile)
+        data = read_dat(datfile)
+        avg += dict_to_np(data)
+        n += 1
+        dirf = '-'.join([dirf.split('-')[0], str(n)])
+        datfile = dirf + f'/correlation_grid1/{s}.dat'
+    return avg / n
 
-list = [str(r) for r in range(rrange)]
-header_c = 'dz ' + ' '.join(list)
-header_f = 'freq ' + ' '.join(list)
+DIR = dir_in +'/correlation_grid1/'
+onlyfiles = next(os.walk(DIR))[2]
+num = len(onlyfiles)
 
+with open(DIR+'0.dat') as f:
+    labels = f.readline()
+    # print(labels)
+    labels = ' '.join(labels.split()[1:])
+    # print(labels)
+# exit()
 
-
-def run_case(n, iter, skip):
-    while True:
-        print(iter)
-        grd = Grid(trj.snap, size=size)
-        num = floor(grd.num_z/2)
-        dz = np.linspace(0, grd.length_z/2, num)
-
-        if num % 2 == 0:
-            num_f = int((num / 2) + 1)
-        else:
-            num_f = int((num + 1) / 2)
-
-        corr = np.empty((num, rrange+1))
-        corr[:] = np.NaN
-        fourier = np.empty((num_f, rrange+1), dtype='complex')
-        fourier[:] = np.NaN
-        freq = rfftfreq(num)
-        corr[:, 0] = dz
-        fourier[:, 0] = freq
-        for r in range(rrange):
-            a = grd.compute_density_correlation(r)
-            if float('Nan') in a:
-                continue
-            f = rfft(a) / num
-            for i in range(num):
-                corr[i, r+1] = a[i]
-                try:
-                    fourier[i, r+1] = f[i]
-                except:
-                    continue
-
-        corr_dat = Dat(corr, labels=header_c)
-        rfft_dat = Dat(fourier, labels=header_f)
-
-        corr_dat.write_file(f'{iter}', dir=save_correlation_dir)
-        rfft_dat.write_file(f'{iter}', dir=save_fourier_dir)
-
-        try:
-            trj.skip_next(skip)
-            trj.read_next()
-            iter += (skip + 1)
-        except:
-            trj.close_read()
-            break
-
-while os.path.isdir(dir):
-    print(dir)
-    trj = DumpReader(dir + '/thread.lammpstrj')
-    trj.read_sequential()
-    iter = 0
-    skip = 0
-    run_case(n, iter, skip)
-    n += 1
-    data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
-    dir = path_to_data + data_case_dir
-    save_fourier_dir = dir + f'/fourier_grid{grid}'
-    save_correlation_dir = dir + f'/correlation_grid{grid}'
+for s in range(num):
+    print(s)
+    corr = run_snap(dir_in, s)
+    corr_dat = Dat(corr, labels=labels)
+    corr_dat.write_file(f'{s}', dir=dir_out)
