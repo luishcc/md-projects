@@ -28,7 +28,7 @@ while os.path.isfile(file):
     plt.figure(1)
 
     for i in range(1, len(data)):
-        plt.plot(data['dz'], data[str(i-1)],  label=f'R={i}')
+        plt.plot(data['dz'], data[str(i-1)],  label=f'R={i-1}')
 
     plt.xlabel(r'$\delta z$')
     plt.ylabel(r'$G(r,\delta z)$')
