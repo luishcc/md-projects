@@ -12,8 +12,8 @@ from mdpkg.grid import Grid
 
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
-R = 8
-ratio = 6
+R = 6
+ratio = 8
 A = 50
 grid = 1
 
@@ -64,8 +64,8 @@ def run_case(n, iter, skip):
                 except:
                     continue
 
-        corr_dat = Dat(corr, header=header_c)
-        rfft_dat = Dat(fourier, header=header_f)
+        corr_dat = Dat(corr, labels=header_c)
+        rfft_dat = Dat(fourier, labels=header_f)
 
         corr_dat.write_file(f'{iter}', dir=save_correlation_dir)
         rfft_dat.write_file(f'{iter}', dir=save_fourier_dir)
