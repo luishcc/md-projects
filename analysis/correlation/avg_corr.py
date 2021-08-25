@@ -11,8 +11,8 @@ path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 
-R = 10
-ratio = 6
+R = 6
+ratio = 16
 sim_case = f'R{R}_ratio{ratio}_A50'
 
 dir_in = path_to_data + sim_case + '-1'
@@ -47,7 +47,7 @@ def run_snap(dirf, s):
         n += 1
         dirf = '-'.join([dirf.split('-')[0], str(n)])
         datfile = dirf + f'/correlation_grid1/{s}.dat'
-    return avg / n
+    return avg / (n-1)
 
 DIR = dir_in +'/correlation_grid1/'
 onlyfiles = next(os.walk(DIR))[2]

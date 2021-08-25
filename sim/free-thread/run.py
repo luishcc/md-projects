@@ -13,10 +13,10 @@ except:
     print("Number of runs not specified, setting num_runs=1")
     num_runs = 1
 
-num_proc = 6
+num_proc = 3
 
-radius = 10
-ratio = 12  # L / 2 Pi R
+radius = 6
+ratio = 24  # L / 2 Pi R
 # linear instability when ratio > 1 (Continuum Theory)
 # instability above 0.8 (MDPD Simulation)
 

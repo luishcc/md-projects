@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 10
-ratio = 6
+R = 6
+ratio = 16
 sim_case = f'R{R}_ratio{ratio}_A50'
 
 path_to_data = os.getcwd()
