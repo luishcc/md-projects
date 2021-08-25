@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 6
-ratio = 16
+R = 10
+ratio = 12
 sim_case = f'R{R}_ratio{ratio}_A50'
 
 path_to_data = os.getcwd()
@@ -28,10 +28,15 @@ while os.path.isfile(file):
     plt.figure(1)
 
     for i in range(1, len(data)):
-        plt.plot(data['dz'], data[str(i-1)],  label=f'R={i-1}')
+        # print(data[str(i-1)])
+        if not np.any(np.isnan(data[str(i-1)])):
+            plt.plot(data['dz'], data[str(i-1)],  label=f'R={i-1}')
+
+
 
     plt.xlabel(r'$\delta z$')
     plt.ylabel(r'$G(r,\delta z)$')
+    plt.title(f'R = {R}, Ratio = {ratio}, Snapshot = {snap}')
     plt.ylim(-0.05, 1.1)
     plt.plot([0, data['dz'][-1]], [0, 0], 'k--')
     plt.legend(loc='right')
