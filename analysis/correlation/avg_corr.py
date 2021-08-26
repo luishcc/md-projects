@@ -11,8 +11,8 @@ path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 
-R = 6
-ratio = 16
+R = 10
+ratio = 12
 sim_case = f'R{R}_ratio{ratio}_A50'
 
 dir_in = path_to_data + sim_case + '-1'
