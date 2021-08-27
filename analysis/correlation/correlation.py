@@ -13,7 +13,7 @@ from mdpkg.grid import Grid
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 R = 6
-ratio = 8
+ratio = 24
 A = 50
 grid = 1
 
@@ -47,28 +47,28 @@ def run_case(n, iter, skip):
 
         corr = np.empty((num, rrange+1))
         corr[:] = np.NaN
-        fourier = np.empty((num_f, rrange+1), dtype='complex')
-        fourier[:] = np.NaN
-        freq = rfftfreq(num)
+        # fourier = np.empty((num_f, rrange+1), dtype='complex')
+        # fourier[:] = np.NaN
+        # freq = rfftfreq(num)
         corr[:, 0] = dz
-        fourier[:, 0] = freq
+        # fourier[:, 0] = freq
         for r in range(rrange):
             a = grd.compute_density_correlation(r)
             if float('Nan') in a:
                 continue
-            f = rfft(a) / num
+            # f = rfft(a) / num
             for i in range(num):
                 corr[i, r+1] = a[i]
-                try:
-                    fourier[i, r+1] = f[i]
-                except:
-                    continue
+            #     try:
+            #         fourier[i, r+1] = f[i]
+            #     except:
+            #         continue
 
         corr_dat = Dat(corr, labels=header_c)
-        rfft_dat = Dat(fourier, labels=header_f)
+        # rfft_dat = Dat(fourier, labels=header_f)
 
         corr_dat.write_file(f'{iter}', dir=save_correlation_dir)
-        rfft_dat.write_file(f'{iter}', dir=save_fourier_dir)
+        # rfft_dat.write_file(f'{iter}', dir=save_fourier_dir)
 
         try:
             trj.skip_next(skip)
@@ -88,5 +88,5 @@ while os.path.isdir(dir):
     n += 1
     data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
     dir = path_to_data + data_case_dir
-    save_fourier_dir = dir + f'/fourier_grid{grid}'
+    # save_fourier_dir = dir + f'/fourier_grid{grid}'
     save_correlation_dir = dir + f'/correlation_grid{grid}'
