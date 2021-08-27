@@ -54,8 +54,10 @@ def run_case(n, iter, skip):
         # fourier[:, 0] = freq
         for r in range(rrange):
             a = grd.compute_density_correlation(r)
-            if float('Nan') in a:
-                continue
+            # if float('Nan') in a:
+            if np.any(np.isnan(a)):
+                # continue
+                break
             # f = rfft(a) / num
             for i in range(num):
                 corr[i, r+1] = a[i]
