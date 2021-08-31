@@ -13,10 +13,10 @@ except:
     print("Number of runs not specified, setting num_runs=1")
     num_runs = 1
 
-num_proc = 3
+num_proc = 4
 
 radius = 6
-ratio = 14  # L / 2 Pi R
+ratio = 6  # L / 2 Pi R
 # linear instability when ratio > 1 (Continuum Theory)
 # instability above 0.8 (MDPD Simulation)
 
@@ -24,9 +24,9 @@ length = radius * ratio * 2 * np.pi
 
 seed = np.random.randint(1000, 4000)
 
-A = -50
+A = -60
 B = 25
-density = 7.0
+density = 7.8
 
 
 for i in range(num_runs):
