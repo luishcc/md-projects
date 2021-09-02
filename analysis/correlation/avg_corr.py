@@ -12,8 +12,9 @@ path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 
 R = 6
-ratio = 24
-sim_case = f'R{R}_ratio{ratio}_A50'
+ratio = 6
+A = -60
+sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 dir_in = path_to_data + sim_case + '-1'
 dir_out = '/'.join([path_to_save, sim_case])

@@ -66,7 +66,7 @@ lmp.commands_list(thermo_commands)
 lmp.commands_list(sim_commands)
 
 
-lmp.command("run 15000")
+lmp.command("run 10000")
 
 lmp.command(f"dump mydump all atom 100 {save_dir}/thread.lammpstrj")
 lmp.command("dump_modify mydump scale no")
