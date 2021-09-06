@@ -12,9 +12,9 @@ from mdpkg.grid import Grid
 
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
-R = 6
-ratio = 6
-A = 60
+R = 8
+ratio = 24
+A = 50
 grid = 1
 
 n = 1
