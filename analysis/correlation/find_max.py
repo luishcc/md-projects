@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 6
-ratio = 48
+R = 10
+ratio = 12
 A = -50
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}/fourier'
 
@@ -28,11 +28,12 @@ def dict_to_np(dict):
 def color(r):
     if (r+1)/R < 0.5:
         return 'blue'
-    else:
+    elif 1 > (r+1)/R > 0.5:
         return 'red'
+    else:
+        return 'black'
 
-
-
+from_freq = 1
 snap = 0
 file = dir + f'/{snap}.dat'
 plt.figure(1)
@@ -41,14 +42,14 @@ while os.path.isfile(file):
     data = read_dat(file)
     data = dict_to_np(data)
 
-    max = np.unravel_index(data[1:, 1:].argmax(),data[1:, 1:].shape)
+    max = np.unravel_index(data[from_freq:, 1:].argmax(),data[2:, 1:].shape)
 
     # for i in range(1, len(data)):
-    print(max)
-    print(data[max[0]+1 , 0])
-    plt.scatter(snap, 2*np.pi*R*data[max[0]+1 , 0], edgecolors=color(max[1]),
-                                          facecolors=color(max[1]))
-    print(color(max[1]))
+    # print(max)
+    print(data[max[0]+from_freq , 0])
+    plt.scatter(snap, 2*np.pi*R*data[max[0]+from_freq , 0],
+                        edgecolors=color(max[1]), facecolors=color(max[1]))
+    # print(color(max[1]))
 
     snap += 1
     file = dir + f'/{snap}.dat'
@@ -59,5 +60,5 @@ plt.ylabel(r'reduced wavenumber')
 plt.title(f'R = {R}, Ratio = {ratio}, Frequency')
 plt.grid(True)
 plt.ylim(0.0, 1)
-plt.savefig(f'{R}_{ratio}.png', format='png')
+plt.savefig(f'{R}_{ratio}_{abs(A)}.png', format='png')
 # plt.show()s
