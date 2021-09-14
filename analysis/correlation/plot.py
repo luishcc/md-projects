@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 6
-ratio = 48
+R = 8
+ratio = 24
 sim_case = f'R{R}_ratio{ratio}_A50'
 
 path_to_data = os.getcwd()
@@ -42,6 +42,7 @@ while os.path.isfile(file):
     plt.plot([0, data['dz'][-1]], [0, 0], 'k--')
     plt.legend(loc='right')
     plt.savefig(f'{dir_out}/{snap}.png', format='png')
+    # plt.show(block=False)
     plt.close(1)
     snap += 1
     file = dir + f'/{snap}.dat'

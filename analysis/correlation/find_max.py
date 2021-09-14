@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 10
-ratio = 12
+R = 8
+ratio = 24
 A = -50
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}/fourier'
 

@@ -7,9 +7,9 @@ from scipy.fft import rfft, rfftfreq
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 6
-ratio = 6
-sim_case = f'R{R}_ratio{ratio}_A60'
+R = 8
+ratio = 24
+sim_case = f'R{R}_ratio{ratio}_A50'
 
 path_to_data = os.getcwd()
 dir = '/'.join([path_to_data, sim_case])

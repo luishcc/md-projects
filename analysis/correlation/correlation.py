@@ -13,9 +13,9 @@ from mdpkg.grid import Grid
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 R = 6
-ratio = 6
-A = 60
-grid = 1
+ratio = 12
+A = 50
+grid = 0.5
 
 n = 1
 data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'

@@ -11,9 +11,10 @@ path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 
-R = 6
-ratio = 6
-A = -60
+R = 8
+ratio = 24
+A = -50
+grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 dir_in = path_to_data + sim_case + '-1'
@@ -33,13 +34,13 @@ def dict_to_np(dict):
 
 
 def run_snap(dirf, s):
-    datfile = dirf + f'/correlation_grid1/{s}.dat'
+    datfile = dirf + f'/correlation_grid{grid}/{s}.dat'
     data = read_dat(datfile)
     data = dict_to_np(data)
     avg = np.copy(data)
     n = 2
     dirf = '-'.join([dirf.split('-')[0], str(n)])
-    datfile = dirf + f'/correlation_grid1/{s}.dat'
+    datfile = dirf + f'/correlation_grid{grid}/{s}.dat'
     # print(datfile)
     while os.path.isfile(datfile):
         # print(datfile)
@@ -47,10 +48,10 @@ def run_snap(dirf, s):
         avg += dict_to_np(data)
         n += 1
         dirf = '-'.join([dirf.split('-')[0], str(n)])
-        datfile = dirf + f'/correlation_grid1/{s}.dat'
+        datfile = dirf + f'/correlation_grid{grid}/{s}.dat'
     return avg / (n-1)
 
-DIR = dir_in +'/correlation_grid1/'
+DIR = dir_in +f'/correlation_grid{grid}/'
 onlyfiles = next(os.walk(DIR))[2]
 num = len(onlyfiles)
 
