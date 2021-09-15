@@ -18,7 +18,7 @@ grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 dir_in = path_to_data + sim_case + '-1'
-dir_out = '/'.join([path_to_save, sim_case])
+dir_out = '/'.join([path_to_save, sim_case, f'grid_{grid}'])
 
 if not os.path.isdir(dir_out):
     os.mkdir(dir_out)

@@ -9,10 +9,11 @@ from mdpkg.rwfile import read_dat, Dat
 
 R = 8
 ratio = 24
-sim_case = f'R{R}_ratio{ratio}_A50/fourier'
+grid = 1
+sim_case = f'R{R}_ratio{ratio}_A50'
 
 path_to_data = os.getcwd()
-dir = '/'.join([path_to_data, sim_case])
+dir = '/'.join([path_to_data, sim_case, f'grid_{grid}/fourier'])
 
 dir_out = '/'.join([dir, 'fig'])
 

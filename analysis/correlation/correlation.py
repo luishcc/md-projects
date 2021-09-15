@@ -36,7 +36,7 @@ header_f = 'freq ' + ' '.join(list)
 def run_case(n, iter, skip):
     while True:
         print(iter)
-        grd = Grid(trj.snap, size=size)
+        grd = Grid(trj.snap, size=grid)
         num = floor(grd.num_z/2)
         dz = np.linspace(0, grd.length_z/2, num)
 
