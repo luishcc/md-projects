@@ -11,14 +11,15 @@ path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 
-R = 8
-ratio = 24
-A = -50
+R = 6
+ratio = 48
+A = -60
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 dir_in = path_to_data + sim_case + '-1'
-dir_out = '/'.join([path_to_save, sim_case, f'grid_{grid}'])
+# dir_out = '/'.join([path_to_save, sim_case, f'grid_{grid}'])
+dir_out = '/'.join([path_to_save, sim_case])
 
 if not os.path.isdir(dir_out):
     os.mkdir(dir_out)

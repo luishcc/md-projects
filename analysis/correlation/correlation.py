@@ -13,9 +13,11 @@ from mdpkg.grid import Grid
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 R = 6
-ratio = 12
-A = 50
-grid = 0.5
+ratio = 48
+A = 90
+grid = 1
+
+max = 400
 
 n = 1
 data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
@@ -33,7 +35,7 @@ header_f = 'freq ' + ' '.join(list)
 
 
 
-def run_case(n, iter, skip):
+def run_case(n, iter, skip, max):
     while True:
         print(iter)
         grd = Grid(trj.snap, size=grid)
@@ -76,6 +78,8 @@ def run_case(n, iter, skip):
             trj.skip_next(skip)
             trj.read_next()
             iter += (skip + 1)
+            if iter >= max:
+                break
         except:
             trj.close_read()
             break
@@ -86,7 +90,7 @@ while os.path.isdir(dir):
     trj.read_sequential()
     iter = 0
     skip = 0
-    run_case(n, iter, skip)
+    run_case(n, iter, skip, max)
     n += 1
     data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
     dir = path_to_data + data_case_dir

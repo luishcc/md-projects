@@ -7,15 +7,17 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 8
-ratio = 24
+R = 6
+ratio = 48
 A = -50
 grid = 1
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 path_to_data = os.getcwd()
-dir = '/'.join([path_to_data, sim_case, f'grid_{grid}/fourier'])
+# dir = '/'.join([path_to_data, sim_case, f'grid_{grid}/fourier'])
+dir = '/'.join([path_to_data, sim_case, 'fourier'])
+
 
 
 
@@ -36,7 +38,7 @@ def color(r):
     else:
         return 'black'
 
-from_freq = 1
+from_freq = 5
 snap = 0
 file = dir + f'/{snap}.dat'
 plt.figure(1)
@@ -60,8 +62,8 @@ while os.path.isfile(file):
 
 plt.xlabel(r'Time')
 plt.ylabel(r'reduced wavenumber')
-plt.title(f'R = {R}, Ratio = {ratio}, Frequency')
+plt.title(f'R = {R}, Ratio = {ratio}, A = {A}')
 plt.grid(True)
 plt.ylim(0.0, 1)
 plt.savefig(f'{R}_{ratio}_{abs(A)}.png', format='png')
-# plt.show()s
+# plt.show()

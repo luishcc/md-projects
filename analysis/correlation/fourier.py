@@ -7,14 +7,15 @@ from scipy.fft import rfft, rfftfreq
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 8
-ratio = 24
+R = 6
+ratio = 48
+A = -60
 grid = 1
-
-sim_case = f'R{R}_ratio{ratio}_A50'
+sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 path_to_data = os.getcwd()
-dir = '/'.join([path_to_data, sim_case, f'grid_{grid}'])
+# dir = '/'.join([path_to_data, sim_case, f'grid_{grid}'])
+dir = '/'.join([path_to_data, sim_case])
 
 dir_out = '/'.join([dir, 'fourier'])
 
