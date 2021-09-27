@@ -9,7 +9,7 @@ from mdpkg.rwfile import read_dat, Dat
 
 R = 6
 ratio = 48
-A = -50
+A = -60
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
@@ -41,7 +41,7 @@ while os.path.isfile(file):
     plt.ylabel(r'$G(r,\delta z)$')
     plt.title(f'R = {R}, Ratio = {ratio}, Snapshot = {snap}')
     plt.ylim(-0.05, 1.1)
-    plt.xlim(0, 110)
+    # plt.xlim(0, 110)
     plt.plot([0, data['dz'][-1]], [0, 0], 'k--')
     plt.legend(loc='right')
     plt.savefig(f'{dir_out}/{snap}.png', format='png')

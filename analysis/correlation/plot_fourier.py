@@ -9,7 +9,7 @@ from mdpkg.rwfile import read_dat, Dat
 
 R = 6
 ratio = 48
-A = -50
+A = -60
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
