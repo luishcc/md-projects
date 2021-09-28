@@ -14,7 +14,7 @@ path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 R = 6
 ratio = 48
-A = 90
+A = 80
 grid = 1
 
 max = 400
