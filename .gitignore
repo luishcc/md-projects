@@ -5,6 +5,8 @@ dump.*
 info.*
 restart.*
 
+*.csv
+
 */gif/
 */gif2
 *.gif

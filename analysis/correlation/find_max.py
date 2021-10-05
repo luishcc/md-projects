@@ -19,8 +19,6 @@ path_to_data = os.getcwd()
 dir = '/'.join([path_to_data, sim_case, 'fourier'])
 
 
-
-
 def dict_to_np(dict):
     col = len(dict)
     row = len(dict['freq'])
@@ -38,7 +36,7 @@ def color(r):
     else:
         return 'black'
 
-from_freq = 3
+from_freq = 2
 snap = 0
 file = dir + f'/{snap}.dat'
 plt.figure(1)

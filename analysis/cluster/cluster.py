@@ -4,7 +4,33 @@ from ovito.modifiers import *
 from scipy.linalg import eig, inv
 import numpy as np
 
-from mdpkg.rwfile import Dat
+from mdpkg.rwfile import Dat, CSV
+
+import os
+
+
+from mdpkg.rwfile import read_dat, Dat
+
+
+# dir = '/home/luishcc/hdd/free_thread_results/R6_ratio6_A50-4/'
+file = '/thread.lammpstrj'
+
+# path_to_data = '/home/luishcc/hdd/free_thread_results/'
+path_to_data = '/home/luishcc/test/'
+
+
+R = 6
+ratio = 6
+A = -50
+
+initial_snap = 150
+
+
+n = 4
+data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
+
+dir = path_to_data + data_case_dir
+save_dir = dir + f'/cluster'
 
 
 def asphericity(lst):
@@ -26,45 +52,46 @@ def get_eig(d):
     eva.sort()
     return eva
 
-dir = '/home/luishcc/hdd/free_thread_results/R6_ratio6_A50-4/'
-file = 'thread.lammpstrj'
+labels = ['size', 'radius', 'asphericity', 'acylindricity', 'anisotropy']
 
-pipeline = import_file(dir+file)
+while os.path.isdir(dir):
+    print(dir)
+    pipeline = import_file(dir+file)
 
-clt_mod = ClusterAnalysisModifier(cutoff = 0.8,
-                                  compute_gyration = True,
-                                  sort_by_size = True)
+    clt_mod = ClusterAnalysisModifier(cutoff = 0.8, compute_gyration = True)
+    pipeline.modifiers.append(clt_mod)
 
-pipeline.modifiers.append(clt_mod)
+    for i in range(initial_snap, pipeline.source.num_frames):
+        data = pipeline.compute(i)
+        cluster_table = data.tables['clusters']
+        print(i)
 
-labels = 'id size radius asphericity acylindricity anisotropy'
+        a = cluster_table['Radius of Gyration'][...]
+        b = cluster_table['Cluster Size'][...]
+        c = cluster_table['Gyration Tensor'][...]
 
-for i in range(50, 200):
+        ncl = len(a)
+        table = np.zeros((ncl, 5))
 
-    data = pipeline.compute(i)
-    cluster_table = data.tables['clusters']
-    print(i)
+        for j in range(ncl):
+            table[j, 0] = b[j]
+            table[j, 1] = a[j]
+            ev = get_eig(c[j])
+            table[j, 2] = asphericity(ev)
+            table[j, 3] = acylindricity(ev)
+            table[j, 4] = anisotropy(ev)
 
-    a = cluster_table['Radius of Gyration'][...]
-    b = cluster_table['Cluster Size'][...]
-    c = cluster_table['Gyration Tensor'][...]
+        save = CSV(table, labels)
+        save.write_file(f'{i}', dir=save_dir)
 
-    ncl = len(a)
-    dat = np.zeros((ncl, 6))
+        print(a, '\n', b, '\n', c)
+        print()
 
-    for j in range(ncl):
-        dat[j, 0] = j
-        dat[j, 1] = b[j]
-        dat[j, 2] = a[j]
-        ev = get_eig(c[j])
-        dat[j, 3] = asphericity(ev)
-        dat[j, 4] = acylindricity(ev)
-        dat[j, 5] = anisotropy(ev)
+    n += 1
+    data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
+    dir = path_to_data + data_case_dir
+    save_dir = dir + f'/cluster'
 
-    save = Dat(dat, labels)
-    save.write_file(f'{i}')
-
-    print(a, '\n', b, '\n', c)
-    print()
 
 # export_file(pipeline, f'{i}.dat', 'txt/table', key='clusters')
+# pandas.read_csv('dat', sep=' ', header=0, names=[labels])
