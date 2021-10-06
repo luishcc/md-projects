@@ -15,18 +15,18 @@ from mdpkg.rwfile import read_dat, Dat
 # dir = '/home/luishcc/hdd/free_thread_results/R6_ratio6_A50-4/'
 file = '/thread.lammpstrj'
 
-# path_to_data = '/home/luishcc/hdd/free_thread_results/'
-path_to_data = '/home/luishcc/test/'
+path_to_data = '/home/luishcc/hdd/free_thread_results/'
+# path_to_data = '/home/luishcc/test/'
 
 
 R = 6
-ratio = 6
-A = -50
+ratio = 48
+A = -60
 
-initial_snap = 150
+initial_snap = 50
 
 
-n = 4
+n = 1
 data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
 
 dir = path_to_data + data_case_dir
@@ -84,8 +84,8 @@ while os.path.isdir(dir):
         save = CSV(table, labels)
         save.write_file(f'{i}', dir=save_dir)
 
-        print(a, '\n', b, '\n', c)
-        print()
+        # print(a, '\n', b, '\n', c)
+        # print()
 
     n += 1
     data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'

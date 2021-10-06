@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 path_to_save = os.getcwd()
-# path_to_data = '/home/luishcc/hdd/free_thread_results/'
-path_to_data = '/home/luishcc/test/'
+path_to_data = '/home/luishcc/hdd/free_thread_results/'
+# path_to_data = '/home/luishcc/test/'
 
 R = 6
-ratio = 6
+ratio = 48
 A = -50
 
-initial = 150
-final = 400
+initial = 50
+final = 200
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
@@ -32,10 +32,9 @@ def path_to_file(case, snap):
     return dir_in + '-' + str(case) + f'/cluster/{snap}.csv'
 
 def run_snap(_snap):
-    case = 4
+    case = 1
     file_list = []
     ff = path_to_file(case, _snap)
-    print(ff)
     while os.path.isfile(ff):
         file_list.append(ff)
         case += 1
@@ -49,4 +48,4 @@ def run_snap(_snap):
 
 for s in range(initial, final+1):
     print(s)
-    corr = run_snap(s)
+    run_snap(s)
