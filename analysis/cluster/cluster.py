@@ -20,8 +20,8 @@ path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 
 R = 6
-ratio = 48
-A = -60
+ratio = 12
+A = -50
 
 initial_snap = 50
 
@@ -46,8 +46,8 @@ def acylindricity(lst):
 
 def get_eig(d):
     gy = np.array([[d[0], d[3], d[4]],
-              [d[3], d[1], d[5]],
-              [d[4], d[5], d[2]]])
+                   [d[3], d[1], d[5]],
+                   [d[4], d[5], d[2]]])
     eva, eve = eig(gy)
     eva.sort()
     return eva
