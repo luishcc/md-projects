@@ -13,9 +13,9 @@ path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 R = 6
 ratio = 48
-A = -80
+A = -50
 
-initial = 150
+initial = 50
 final = 400
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
