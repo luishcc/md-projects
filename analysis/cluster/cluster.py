@@ -20,10 +20,10 @@ path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 
 R = 6
-ratio = 12
+ratio = 48
 A = -50
 
-initial_snap = 50
+initial_snap = 150
 
 
 n = 1
