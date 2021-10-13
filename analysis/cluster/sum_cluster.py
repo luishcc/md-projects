@@ -11,11 +11,11 @@ path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
-R = 10
+R = 6
 ratio = 12
 A = -50
 
-initial = 50
+initial = 0
 final = 600
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'

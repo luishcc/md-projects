@@ -5,7 +5,7 @@ import os
 
 R = 6
 ratio = 48
-A = -90
+A = -50
 
 path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
 dir_out = '/'.join([path, 'fig'])
@@ -14,6 +14,8 @@ if not os.path.isdir(dir_out):
     os.mkdir(dir_out)
 
 for file in os.scandir(path):
+
+    name = file.name.split('.')[0]
 
     try:
         df = pd.read_csv(file.path)
@@ -31,12 +33,12 @@ for file in os.scandir(path):
     print(df.shape)
     print()
 
-    name = file.name.split('.')[0]
+
     try:
         # df['radius'].plot(marker='.', linestyle='none')
-        df['radius'].plot.kde(bw_method=0.1)
+        # df['radius'].plot.kde(bw_method=0.1)
         # df['size'].plot.kde(bw_method=0.01)
-        # df['radius'].plot.hist(bins=50, alpha=0.5)
+        df['radius'].plot.hist(bins=50, alpha=0.5)
         # df['size'].plot.hist(bins=50, alpha=0.5)
         # df['anisotropy'].plot.hist(bins=50, alpha=0.5)
         # df['asphericity'].plot.hist(bins=20, alpha=0.5)
@@ -47,9 +49,16 @@ for file in os.scandir(path):
 
     plt.title(f'Droplet Size Distribution, A={A}, snapshot={name}')
     plt.xlim(0, 15)
-    plt.ylim(0, 0.3)
+    plt.ylim(0, 60)
     plt.xlabel('Radius')
     plt.grid(True)
     plt.savefig(f'{dir_out}/{name}.png', format='png')
-    plt.close()
+    # plt.close()
     # plt.show()
+
+
+
+
+
+
+#

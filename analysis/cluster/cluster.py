@@ -23,7 +23,8 @@ R = 6
 ratio = 48
 A = -50
 
-initial_snap = 150
+initial_snap = 50
+final_step = 150
 
 
 n = 1
@@ -62,6 +63,8 @@ while os.path.isdir(dir):
     pipeline.modifiers.append(clt_mod)
 
     for i in range(initial_snap, pipeline.source.num_frames):
+        if i >= final_step:
+            break
         data = pipeline.compute(i)
         cluster_table = data.tables['clusters']
         print(i)
