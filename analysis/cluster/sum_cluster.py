@@ -12,8 +12,8 @@ path_to_data = '/home/luishcc/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
 R = 6
-ratio = 12
-A = -50
+ratio = 48
+A = -90
 
 initial = 0
 final = 600
