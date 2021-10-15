@@ -8,6 +8,8 @@ R = 6
 ratio = 48
 A = -90
 
+separation = 5
+
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
 path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
 # dir_out = '/'.join([path, 'fig'])
@@ -16,10 +18,12 @@ path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/
 #     os.mkdir(dir_out)
 
 num_cluster = {}
+num_main = {}
+num_satellite = {}
 num_drops = {}
 
-for file in os.scandir(path):
 
+for file in os.scandir(path):
 
     try:
         df = pd.read_csv(file.path)
@@ -36,38 +40,63 @@ for file in os.scandir(path):
     df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
     # df.drop(df[df['asphericity'] > 3].index, inplace=True)
 
+    satellite = df[df['radius'] < separation]
+    main = df[df['radius'] > separation]
+
     print(df.shape)
     num_drops[name] = df.shape[0]
+    num_main[name] = main.shape[0]
+    num_satellite[name] = satellite.shape[0]
     print()
 
 
 list1 = sorted(num_cluster.items())
 list2 = sorted(num_drops.items())
+list3 = sorted(num_satellite.items())
+list4 = sorted(num_main.items())
 
 x1, y1 = zip(*list1)
 x2, y2 = zip(*list2)
+x3, y3 = zip(*list3)
+x4, y4 = zip(*list4)
+
 x = np.linspace(int(x1[0]), int(x1[-1]), len(y2))
 
-max_snap1 = max(num_drops, key=num_cluster.get)
+max_snap1 = max(num_cluster, key=num_cluster.get)
 max_snap2 = max(num_drops, key=num_drops.get)
+max_snap3 = max(num_satellite, key=num_satellite.get)
+max_snap4 = max(num_main, key=num_main.get)
 
 plt.figure(1)
 plt.suptitle(f'R={R}; ratio={ratio}; A={A}')
 
 ax1 = plt.subplot(2,1,1)
-plt.xlim(100, 400)
+plt.xlim(150, 400)
 plt.ylabel('Number of Clusters')
-plt.plot(x, y1, 'k-', label='Unfiltered')
-plt.plot(x, y2, 'b-', label='Filtered')
+plt.plot(x, y1, 'k-', label=r'Total, any $\kappa^2$')
+plt.plot(x, y3, 'k--', label=r'Satellite, $\kappa^2 < 0.2$')
+plt.plot(x, y4, 'b-.', label=r'Main, $\kappa^2 < 0.2$')
 plt.grid(True)
-plt.legend(loc='lower right')
-plt.plot(max_snap2, max(num_drops.values()), 'bo')
-plt.plot(max_snap1, max(num_cluster.values()), 'ko')
+plt.legend(loc='upper left', prop={'size': 8.5})
+# plt.plot(max_snap2, max(num_drops.values()), 'ko')
+# plt.plot(max_snap1, max(num_cluster.values()), 'ko')
 
 ax2 = plt.subplot(2,1,2, sharex=ax1)
+
+def catch(func, *args, handle=lambda e : e, **kwargs):
+    try:
+        return func(*args, **kwargs)
+    except:
+        return None
+
+p1 = [catch(lambda : 100*d/c) for c,d in zip(y2,y4)]
+p2 = [catch(lambda : 100*d/c) for c,d in zip(y2,y3)]
+
 plt.xlabel('Snapshot')
-plt.ylabel('% of Valid Clusters')
-plt.plot(x, [100*d/c for c,d in zip(y1,y2)])
+plt.ylabel('% of Valid Droplets')
+plt.plot(x, p2, 'k--', label='Satellite')
+plt.plot(x, p1, 'b-.', label='Main')
+plt.legend(loc='center left', prop={'size': 9})
 plt.grid(True)
 
 plt.savefig(f'{case}.png', format='png')
@@ -75,6 +104,7 @@ plt.close()
 # plt.show()
 
 plt.figure(2)
+ax1 = plt.subplot(2,1,1)
 df = pd.read_csv(path+f'{max_snap2}.csv')
 df.drop(df[df['size'] <= 1].index, inplace=True)
 df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
@@ -84,8 +114,20 @@ plt.title(f'Droplet Size Distribution, A={A}, snapshot={max_snap2}')
 # plt.ylim(0, 60)
 plt.xlabel('Radius')
 plt.grid(True)
+
+ax2 = plt.subplot(2,1,2, sharex=ax1)
+df = pd.read_csv(path+f'{max_snap3}.csv')
+df.drop(df[df['size'] <= 1].index, inplace=True)
+df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
+df['radius'].plot.hist(bins=50, alpha=0.5)
+plt.title(f'Droplet Size Distribution, A={A}, snapshot={max_snap3}')
+# plt.xlim(0, 15)
+# plt.ylim(0, 60)
+plt.xlabel('Radius')
+plt.grid(True)
+
 plt.savefig(f'{case}_Dist.png', format='png')
-plt.show()
+# plt.show()
 
 # scale_x = 1
 # scale_y = 1

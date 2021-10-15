@@ -10,14 +10,16 @@ from mdpkg.rwfile import DumpReader, Dat
 from mdpkg.grid import Grid
 
 
-path_to_data = '/home/luishcc/hdd/free_thread_results/'
+# path_to_data = '/home/luishcc/hdd/free_thread_results/'
+path_to_data = '/home/luishcc/hdd/'
 
-R = 6
+
+R = 10
 ratio = 48
-A = 80
+A = 50
 grid = 1
 
-max = 400
+max = 600
 
 n = 1
 data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
