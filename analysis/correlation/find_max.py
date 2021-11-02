@@ -8,8 +8,9 @@ from mdpkg.rwfile import read_dat, Dat
 
 
 R = 6
+R2 = 5
 ratio = 48
-A = -60
+A = -50
 grid = 1
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
@@ -29,14 +30,14 @@ def dict_to_np(dict):
     return np.nan_to_num(data)
 
 def color(r):
-    if (r+1)/R < 0.5:
+    if (r+1)/R2 < 0.5:
         return 'blue'
-    elif 1 > (r+1)/R > 0.5:
+    elif 1 > (r+1)/R2 > 0.5:
         return 'red'
     else:
         return 'black'
 
-from_freq = 2
+from_freq = 5
 snap = 0
 file = dir + f'/{snap}.dat'
 plt.figure(1)
@@ -50,8 +51,8 @@ while os.path.isfile(file):
     # for i in range(1, len(data)):
     # print(max)
     print(data[max[0]+from_freq , 0])
-    plt.scatter(snap, 2*np.pi*R*data[max[0]+from_freq , 0],
-                        edgecolors=color(max[1]), facecolors=color(max[1]))
+    plt.scatter(snap, 2*np.pi*R2*data[max[0]+from_freq , 0],
+                        edgecolors=color(100), facecolors=color(100))
     # print(color(max[1]))
 
     snap += 1

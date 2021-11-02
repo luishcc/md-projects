@@ -3,13 +3,14 @@ import os
 
 import numpy as np
 from scipy.fft import rfft, rfftfreq
+# from scipy.fft import fft, fftfreq
 
 from mdpkg.rwfile import read_dat, Dat
 
 
 R = 6
 ratio = 48
-A = -60
+A = -50
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
@@ -47,7 +48,7 @@ while os.path.isfile(file):
     fourier[:,:] = np.NaN
     for i in range(1, col):
         if not np.any(np.isnan(data[str(i-1)])):
-            fourier[:, i] = rfft(data[str(i-1)])
+            fourier[:, i] = abs(rfft(data[str(i-1)]))
     fourier[:,0] = rfftfreq(num)
 
     fourier_dat = Dat(fourier, labels=labels)

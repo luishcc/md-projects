@@ -9,7 +9,7 @@ from mdpkg.rwfile import read_dat, Dat
 
 R = 6
 ratio = 48
-A = -90
+A = -50
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
@@ -33,13 +33,13 @@ while os.path.isfile(file):
     for i in range(1, len(data)):
         if not np.any(np.isnan(data[str(i-1)])):
             plt.plot(data['freq'], data[str(i-1)],
-                     label=f'R={i-1}')
+                     label=f'r={i-1}')
 
 
 
     plt.xlabel(r'Frequency')
-    plt.ylabel(r'Fourier')
-    plt.title(f'R = {R}, Ratio = {ratio}, Snapshot = {snap}')
+    plt.ylabel(r'Fourier of $G(r,\delta z)$')
+    plt.title(f'$R_0$ = {R}, Ratio = {ratio}, Snapshot = {snap}')
     plt.grid(True)
     plt.ylim(-0.05, 35)
     plt.xlim(-0.01, 0.15)

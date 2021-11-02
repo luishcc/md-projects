@@ -10,7 +10,7 @@ from mdpkg.rwfile import read_dat, Dat
 R = 6
 R2 = 5
 ratio = 48
-A = -60
+A = -50
 grid = 1
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
@@ -31,6 +31,7 @@ def dict_to_np(dict):
 
 def get_max(x, y, ran):
     id = y.index(max(y))
+    print(id)
     y = y[id-ran:id+ran+1]
     x = x[id-ran:id+ran+1]
     fit = np.polyfit(x,y,2)
@@ -43,30 +44,32 @@ def color(r,l):
     return 'black'
 
 
-from_freq = 5
+from_freq = 3
 snap = 0
 file = dir + f'/{snap}.dat'
 plt.figure(1)
-while os.path.isfile(file):
+while os.path.isfile(file) and snap < 500:
     print(file)
     data = read_dat(file)
 
     col = len(data)
     max_freq = 0
     sum = 0
-    for i in range(4,8):
+    for i in range(4,7):
         try:
+            # print(data[str(i-1)][from_freq:])
             max_freq += get_max(data['freq'][from_freq:],
-                                data[str(i-1)][from_freq:], 3)
+                                data[str(i-1)][from_freq:], 1)
             print(max_freq)
             sum += 1
-        except:
+        except TypeError:
+            print('skipped  ', i)
             continue
-        try:
-            plt.scatter(snap, 2*np.pi*R2*max_freq/sum,
+    try:
+        plt.scatter(snap, 2*np.pi*R2*max_freq/sum,
                 edgecolors=color(i,col), facecolors=color(i,col))
-        except ZeroDivisionError:
-            continue
+    except ZeroDivisionError:
+        pass
     snap += 1
     file = dir + f'/{snap}.dat'
 
