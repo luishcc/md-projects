@@ -30,16 +30,16 @@ while os.path.isfile(file):
 
     plt.figure(1)
 
-    for i in range(1, len(data)):
+    for i in range(5, 9):
         # print(data[str(i-1)])
         if not np.any(np.isnan(data[str(i-1)])):
-            plt.plot(data['dz'], data[str(i-1)],  label=f'R={i-1}')
+            plt.plot(data['dz'], data[str(i-1)],  label=f'r={i-1}')
 
 
 
     plt.xlabel(r'$\delta z$')
     plt.ylabel(r'$G(r,\delta z)$')
-    plt.title(f'R = {R}, Ratio = {ratio}, Snapshot = {snap}')
+    plt.title(f'R_0 = {R}, Ratio = {ratio}, Snapshot = {snap}')
     plt.ylim(-0.05, 1.1)
     # plt.xlim(0, 110)
     plt.plot([0, data['dz'][-1]], [0, 0], 'k--')

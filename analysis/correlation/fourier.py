@@ -48,7 +48,8 @@ while os.path.isfile(file):
     fourier[:,:] = np.NaN
     for i in range(1, col):
         if not np.any(np.isnan(data[str(i-1)])):
-            fourier[:, i] = abs(rfft(data[str(i-1)]))
+            # fourier[:, i] = abs(rfft(data[str(i-1)]))
+            fourier[:, i] = rfft(data[str(i-1)])
     fourier[:,0] = rfftfreq(num)
 
     fourier_dat = Dat(fourier, labels=labels)
