@@ -7,9 +7,9 @@ cwd = os.getcwd()
 #   os.mkdir(cwd+'/results')
 
 
-def make_dir(_name):
-    dir = '/' + _name + '-1'
-    i = 1
+def make_dir(_name, _number_from):
+    dir = '/' + _name + f'-{_number_from}'
+    i = _number_from
     while os.path.isdir(cwd + dir):
       dir = dir.split('-')[0] + '-'+str(i)
       i+=1
@@ -18,9 +18,9 @@ def make_dir(_name):
     os.mkdir(results_path)
     return results_path
 
-def save_files(_name, _info):
+def save_files(_name, _info, _number_from=1):
 
-    _path = make_dir(_name)
+    _path = make_dir(_name, _number_from)
 
     from datetime import datetime
     date = datetime.now().strftime("%d-%m-%Y")
