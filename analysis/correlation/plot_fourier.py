@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 6
+R = 8
 ratio = 48
-A = -60
+A = -50
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
