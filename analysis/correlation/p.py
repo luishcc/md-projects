@@ -14,10 +14,12 @@ for i in range(len(oh)):
     x[i] = func(oh[i])
 
 
-r50 = 5
-r60 = 5
-r80 = 5
-r90 = 5
+r50 = 4.85
+r60 = 4.75
+# r80 = 4.50
+r80 = 4.7
+# r90 = 4.38
+r90 = 4.7
 
 
 wl50 = [0.018785, 0.01657]
@@ -31,23 +33,18 @@ oh80 = 0.762
 oh90 = 1.214
 
 plt.figure()
-plt.plot(oh, x, label='PRE paper')
+plt.plot(oh, x, label='Theory')
 
-plt.plot(oh50, 2*np.pi*r50*sum(wl50)/len(wl50), 'ro')
-plt.plot(oh60, 2*np.pi*r60*sum(wl60)/len(wl60), 'ro')
-plt.plot(oh80, 2*np.pi*r80*sum(wl80)/len(wl80), 'ro')
-plt.plot(oh90, 2*np.pi*r90*sum(wl90)/len(wl90), 'ro')
+# plt.plot(oh50, 2*np.pi*r50*sum(wl50)/len(wl50), 'ro')
+# plt.plot(oh60, 2*np.pi*r60*sum(wl60)/len(wl60), 'ro')
+# plt.plot(oh80, 2*np.pi*r80*sum(wl80)/len(wl80), 'ro')
+# plt.plot(oh90, 2*np.pi*r90*sum(wl90)/len(wl90), 'ro')
 
+plt.plot(oh50, 2*np.pi*r50*wl50[0], 'ro', label='Simulations')
+plt.plot(oh60, 2*np.pi*r60*wl60[0], 'ro')
+plt.plot(oh80, 2*np.pi*r80*wl80[1], 'ro')
+plt.plot(oh90, 2*np.pi*r90*wl90[0], 'ro')
 
-# plt.plot([0.311], [0.657], 'ro')
-# plt.plot([0.359], [0.5416], 'ro')
-# # plt.plot([0.499], [0.657], 'ro')
-# #plt.plot([0.762], [0.4166], 'rx')
-# plt.plot([0.762], [0.4582], 'ro')
-# #plt.plot([1.214], [0.3749], 'rx')
-# plt.plot([1.214], [0.5*(0.4166+0.3749)], 'ro')
-# #plt.plot([1.214], [0.4166], 'rx')
-#
 
 plt.title('Reduced Wavenumber')
 plt.ylabel(r'$\chi$')
