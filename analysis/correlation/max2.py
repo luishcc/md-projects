@@ -9,8 +9,8 @@ from mdpkg.rwfile import read_dat, Dat
 
 R = 6
 R2 = 5
-ratio = 8
-A = -50
+ratio = 48
+A = -90
 grid = 1
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
@@ -42,13 +42,13 @@ def color(r,l):
     return 'black'
 
 
-from_freq = 1
-r = 6
+from_freq = 5
+r = 5
 snap = 0
 file = dir + f'/{snap}.dat'
 
 plt.figure(1)
-while os.path.isfile(file) and snap < 250:
+while os.path.isfile(file) and snap < 350:
 
     print(file)
     data = read_dat(file)
