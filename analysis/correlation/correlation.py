@@ -15,13 +15,14 @@ path_to_data = '/home/luishcc/hdd/'
 
 R = 6
 ratio = 48
-A = 90
+A = 85
 grid = 1
 
 max = 600
-skip = 5
+skip = 0
 
-n = 21
+n = 1 + 10*0
+nn = n + 10
 data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
 dir = path_to_data + data_case_dir
 save_correlation_dir = dir + f'/correlation_grid{grid}'
@@ -74,6 +75,8 @@ while os.path.isdir(dir):
     iter = 0
     run_case(n, iter, skip, max)
     n += 1
+    if n >= nn:
+        exit()
     data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
     dir = path_to_data + data_case_dir
     save_correlation_dir = dir + f'/correlation_grid{grid}'
