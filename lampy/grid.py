@@ -121,9 +121,9 @@ if __name__=='__main__':
     import sys
     import os
     sys.path.insert(0, os.path.expanduser('~')+'/md-projects/lampy')
-    from readLammps import DumpReader, Reader
+    from readLammps import DumpReader
 
-    rd = Reader(sys.argv[1])
+    rd = DumpReader(sys.argv[1])
     rd.map_snapshot_in_file()
     rd.read_snapshot(2500)
     data = rd.snapshots[2500]
