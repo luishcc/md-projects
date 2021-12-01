@@ -26,7 +26,7 @@ create_atoms        1 region tube
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
 pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
-mass                1 0.5
+mass                1 1
 
 compute             mythermo all temp
 thermo              100
@@ -40,6 +40,8 @@ fix         mvv     all mvv/dpd 0.65
 timestep            0.01
 
 dump        mydump  all atom 100 thread2.lammpstrj
+dump_modify mydump scale no
+
 dump force all custom 100 dump.force2 id fx fy fz
 
 run                 25000
