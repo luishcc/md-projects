@@ -125,13 +125,15 @@ if __name__=='__main__':
 
     rd = DumpReader(sys.argv[1])
     rd.map_snapshot_in_file()
-    rd.read_snapshot(2500)
-    data = rd.snapshots[2500]
+    rd.read_snapshot_at(5000)
+    data = rd.snapshots[5000]
+
 
     # data = DumpReader(sys.argv[1])
+    print(data)
 
 
-    grd = Grid(data, size = float(sys.argv[2])*0.75)
+    grd = Grid(data, size=1)
 
     idr = []
     idz = []
