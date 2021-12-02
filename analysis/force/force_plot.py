@@ -19,7 +19,7 @@ trj_file = 'test.lammpstrj'
 force_file = 'dump.force'
 trj_file = 'threads.lammpstrj'
 
-#
+
 # force_file = 'dump.force2'
 # trj_file = 'thread2.lammpstrj'
 
@@ -57,8 +57,7 @@ def run2():
     coo2 = coo_matrix((d[2], (idr, idz)))
     return coo, coo0, coo1, coo2
 
-trj.skip_next(100)
-# end = True
+trj.skip_next(0)
 end = False
 while True:
     try:
@@ -125,7 +124,7 @@ while True:
         plt.show()
         break
     if not end:
-        plt.savefig(f'figs/{trj.snap.time}.png', dpi=600)
+        plt.savefig(f'figs2/{trj.snap.time}.png', dpi=600)
         plt.close()
 
 
