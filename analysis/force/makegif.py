@@ -12,7 +12,7 @@ e = sys.exit
 # sim_case = f'R{R}_ratio{ratio}_A50'
 
 path_to_data = os.getcwd()
-newdir = '/'.join([path_to_data, 'figs'])
+newdir = '/'.join([path_to_data, 'f2'])
 
 cwd = os.getcwd()
 os.chdir(newdir)
@@ -28,7 +28,7 @@ def create_gif(filenames, duration):
 
 if __name__ == "__main__":
     script = sys.argv.pop(0)
-    duration = 0.05
+    duration = 0.06
     filenames = sorted(filter(os.path.isfile, [x for x in os.listdir(newdir) if x.endswith(".png")]),
                             key=lambda p: os.path.exists(p) and os.stat(p).st_mtime or
                                       time.mktime(datetime.now().timetuple()))
