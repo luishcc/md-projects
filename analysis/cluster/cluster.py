@@ -21,10 +21,10 @@ path_to_data = '/home/luishcc/hdd/free_thread_results/'
 
 R = 6
 ratio = 48
-A = -50
+A = -90
 
 initial_snap = 50
-final_step = 150
+final_step = 500
 
 
 n = 1
@@ -56,7 +56,16 @@ def get_eig(d):
 labels = ['size', 'radius', 'asphericity', 'acylindricity', 'anisotropy']
 
 while os.path.isdir(dir):
+
     print(dir)
+
+    # if os.path.isdir(save_dir):
+    #     n += 1
+    #     data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
+    #     dir = path_to_data + data_case_dir
+    #     save_dir = dir + f'/cluster'
+    #     continue
+
     pipeline = import_file(dir+file)
 
     clt_mod = ClusterAnalysisModifier(cutoff = 0.8, compute_gyration = True)
