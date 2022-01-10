@@ -43,8 +43,8 @@ fix         mvv     all mvv/dpd 0.65
 timestep            0.01
 
 
-dump force all custom 100 dump.force2 id fx fy fz
-dump vel all custom 100 dump.vel2 id vx vy vz
+dump force all custom 100 dump.force-re id fx fy fz
+dump vel all custom 100 dump.vel-re id vx vy vz
 
 
 rerun thread.lammpstrj dump x y z 
