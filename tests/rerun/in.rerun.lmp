@@ -11,7 +11,7 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 variable Radius equal 6.0
-variable WaveNumber equal 4
+variable WaveNumber equal 2
 variable WaveLength equal 2*PI*v_Radius*v_WaveNumber
 print ${WaveLength}
 
@@ -29,9 +29,14 @@ pair_coeff          1 1 mdpd/rhosum  0.75
 pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
 mass                1 1
 
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
 
-#velocity            all create 1.0 2093 loop local dist gaussian
-velocity            all create 1.0 1410 loop local dist gaussian
+
+velocity            all create 1.0 2093 loop local dist gaussian
+#velocity            all create 1.0 1410 loop local dist gaussian
 comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 

@@ -17,7 +17,8 @@ force_file = 'force.test'
 trj_file = 'test.lammpstrj'
 
 force_file = 'dump.force'
-trj_file = 'threads.lammpstrj'
+velocity_file = 'dump.vel'
+trj_file = 'thread.lammpstrj'
 
 
 # force_file = 'dump.force2'
@@ -27,7 +28,7 @@ grid = 1.5
 
 trj = DumpReader('/'.join([dir, trj_file]))
 trj.read_sequential()
-
+#
 # trj.skip_next(170)
 # trj.read_next()
 # trj.read_force('/'.join([dir, force_file]), trj.snap)
@@ -43,9 +44,12 @@ def run2():
     d = [[], [], []]
     dens = []
     for key, cell in grd.cell.items():
+        if cell.id[0] >= 4 :
+            continue
         idr.append(cell.id[0])
         idz.append(cell.id[2])
-        force = cell.get_force_cylindrical()
+        # force = cell.get_force_cylindrical()
+        force = cell.get_velocity_cylindrical()
         dens.append(cell.get_density()/cell.nangle)
         d[0].append(force[0]/cell.nangle)
         d[1].append(force[1]/cell.nangle)
@@ -58,11 +62,12 @@ def run2():
     return coo, coo0, coo1, coo2
 
 trj.skip_next(0)
-end = False
+end = True
 while True:
     try:
         trj.read_next()
         trj.read_force('/'.join([dir, force_file]), trj.snap)
+        trj.read_velocity('/'.join([dir, velocity_file]), trj.snap)
         grd = Grid(trj.snap, size = grid)
         print(trj.snap.time)
         coo, coo0, coo1, coo2 = run2()
@@ -83,9 +88,11 @@ while True:
     ax1.set_ylabel('Length')
     divider = make_axes_locatable(ax1)
     cax = divider.append_axes('right', size='50%', pad=0.1)
+    # im1.set_clim(vmin=-30, vmax=0)
     fig.colorbar(im1, cax=cax, orientation='vertical')
     ax1.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax1.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
+
 
     ax2.set_title('F_t')
     # im2 = ax2.imshow(coo1, extent=[0, 1, 0, 1], aspect=10)
@@ -94,6 +101,7 @@ while True:
     ax2.set_ylabel('Length')
     divider = make_axes_locatable(ax2)
     cax = divider.append_axes('right', size='50%', pad=0.1)
+    # im2.set_clim(vmin=-6e-15, vmax=6e-15)
     fig.colorbar(im2, cax=cax, orientation='vertical')
     ax2.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax2.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
@@ -105,6 +113,7 @@ while True:
     ax3.set_ylabel('Length')
     divider = make_axes_locatable(ax3)
     cax = divider.append_axes('right', size='50%', pad=0.1)
+    # im3.set_clim(vmin=-10, vmax=10)
     fig.colorbar(im3, cax=cax, orientation='vertical')
     ax3.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax3.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
@@ -116,9 +125,13 @@ while True:
     ax4.set_ylabel('Length')
     divider = make_axes_locatable(ax4)
     cax = divider.append_axes('right', size='50%', pad=0.1)
+    im4.set_clim(vmin=0, vmax=8)
     fig.colorbar(im4, cax=cax, orientation='vertical')
     ax4.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax4.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
+
+    plt.show()
+    continue
 
     if end:
         plt.show()
