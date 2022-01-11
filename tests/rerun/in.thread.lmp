@@ -39,12 +39,11 @@ fix         mvv     all mvv/dpd 0.65
 
 timestep            0.01
 
-#dump        mydump  all atom 100 thread.lammpstrj
-#dump_modify mydump scale no
+dump        mydump  all atom 100 thread.lammpstrj
+dump_modify mydump scale no
 
-#dump force all custom 100 dump.force id fx fy fz
-#dump vel all custom 100 dump.vel id vx vy vz
+dump force all custom 100 dump.force id fx fy fz
+dump vel all custom 100 dump.vel id vx vy vz
 dump full all custom 100 dump.all id x y z vx vy vz fx fy fz
 
 run                 25000
-

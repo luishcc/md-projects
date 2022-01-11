@@ -12,13 +12,19 @@ from mdpkg.grid import Grid
 
 
 dir = '/home/luishcc/testdata'
+dir = '/home/luishcc/md-projects/tests/rerun'
 
 force_file = 'force.test'
 trj_file = 'test.lammpstrj'
 
+force_file = 'dump.force2'
+velocity_file = 'dump.vel2'
+trj_file = 'thread2.lammpstrj'
+
 force_file = 'dump.force'
 velocity_file = 'dump.vel'
 trj_file = 'thread.lammpstrj'
+
 
 
 # force_file = 'dump.force2'
@@ -62,7 +68,7 @@ def run2():
     return coo, coo0, coo1, coo2
 
 trj.skip_next(0)
-end = True
+end = False
 while True:
     try:
         trj.read_next()
@@ -80,64 +86,65 @@ while True:
     coo1 = coo1.todense().transpose()
     coo2 = coo2.todense().transpose()
 
-    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4)
+
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4, figsize = (8,10))
     # im1 = ax1.imshow(coo0, extent=[0, 1, 0, 1], aspect=10)
-    im1 = ax1.imshow(coo0)
-    ax1.set_title(r'F_r')
-    ax1.set_xlabel('Radius')
-    ax1.set_ylabel('Length')
+    im1 = ax1.imshow(coo0, extent=[0, 4, 0, 20], aspect='auto')
+    ax1.set_title(r'V_r')
+    # ax1.set_xlabel('Radius')
+    # ax1.set_ylabel('Length')
     divider = make_axes_locatable(ax1)
-    cax = divider.append_axes('right', size='50%', pad=0.1)
-    # im1.set_clim(vmin=-30, vmax=0)
-    fig.colorbar(im1, cax=cax, orientation='vertical')
+    cax = divider.append_axes('bottom', size='3%', pad=0.2)
+    im1.set_clim(vmin=-40, vmax=0)
+    fig.colorbar(im1, cax=cax, orientation='horizontal')
     ax1.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax1.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
 
 
-    ax2.set_title('F_t')
+    ax2.set_title('V_t')
     # im2 = ax2.imshow(coo1, extent=[0, 1, 0, 1], aspect=10)
-    im2 = ax2.imshow(coo1)
-    ax2.set_xlabel('Radius')
-    ax2.set_ylabel('Length')
+    im2 = ax2.imshow(coo1, extent=[0, 4, 0, 20], aspect='auto')
+    # ax2.set_xlabel('Radius')
+    # ax2.set_ylabel('Length')
     divider = make_axes_locatable(ax2)
-    cax = divider.append_axes('right', size='50%', pad=0.1)
-    # im2.set_clim(vmin=-6e-15, vmax=6e-15)
-    fig.colorbar(im2, cax=cax, orientation='vertical')
+    cax = divider.append_axes('bottom', size='3%', pad=0.2)
+    im2.set_clim(vmin=-6e-15, vmax=6e-15)
+    fig.colorbar(im2, cax=cax, orientation='horizontal')
     ax2.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax2.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
-    ax3.set_title('F_z')
+    ax3.set_title('V_z')
 
     # im3 = ax3.imshow(coo2, extent=[0, 1, 0, 1], aspect=10)
-    im3 = ax3.imshow(coo2)
-    ax3.set_xlabel('Radius')
-    ax3.set_ylabel('Length')
+    im3 = ax3.imshow(coo2, extent=[0, 4, 0, 20], aspect='auto')
+    # ax3.set_xlabel('Radius')
+    # ax3.set_ylabel('Length')
     divider = make_axes_locatable(ax3)
-    cax = divider.append_axes('right', size='50%', pad=0.1)
-    # im3.set_clim(vmin=-10, vmax=10)
-    fig.colorbar(im3, cax=cax, orientation='vertical')
+    cax = divider.append_axes('bottom', size='3%', pad=0.2)
+    im3.set_clim(vmin=-10, vmax=10)
+    fig.colorbar(im3, cax=cax, orientation='horizontal')
     ax3.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax3.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
 
     ax4.set_title('Density')
     # im4 = ax4.imshow(coo, extent=[0, 1, 0, 1], aspect=10)
-    im4 = ax4.imshow(coo)
-    ax4.set_xlabel('Radius')
-    ax4.set_ylabel('Length')
+    im4 = ax4.imshow(coo, extent=[0, 4, 0, 20], aspect='auto')
+    # ax4.set_xlabel('Radius')
+    # ax4.set_ylabel('Length')
     divider = make_axes_locatable(ax4)
-    cax = divider.append_axes('right', size='50%', pad=0.1)
+    cax = divider.append_axes('bottom', size='3%', pad=0.2)
     im4.set_clim(vmin=0, vmax=8)
-    fig.colorbar(im4, cax=cax, orientation='vertical')
+    fig.colorbar(im4, cax=cax, orientation='horizontal')
     ax4.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax4.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
 
-    plt.show()
-    continue
+    # plt.show()
+    # continue
 
     if end:
         plt.show()
         break
     if not end:
-        plt.savefig(f'figs2/{trj.snap.time}.png', dpi=600)
+        plt.savefig(f'small-v/{trj.snap.time}.png', dpi=600)
         plt.close()
 
 
