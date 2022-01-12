@@ -41,7 +41,9 @@ trj.read_sequential()
 # grd = Grid(trj.snap, size = grid)
 # print(trj.snap.time)
 
-
+import matplotlib as mpl
+cmap = mpl.cm.cool
+norm = mpl.colors.Normalize(vmin=5, vmax=10)
 
 def run2():
 
@@ -95,7 +97,7 @@ while True:
     # ax1.set_ylabel('Length')
     divider = make_axes_locatable(ax1)
     cax = divider.append_axes('bottom', size='3%', pad=0.2)
-    im1.set_clim(vmin=-40, vmax=0)
+    im1.set_clim(vmin=-1, vmax=0.2)
     fig.colorbar(im1, cax=cax, orientation='horizontal')
     ax1.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax1.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
@@ -108,19 +110,19 @@ while True:
     # ax2.set_ylabel('Length')
     divider = make_axes_locatable(ax2)
     cax = divider.append_axes('bottom', size='3%', pad=0.2)
-    im2.set_clim(vmin=-6e-15, vmax=6e-15)
+    im2.set_clim(vmin=-6e-16, vmax=6e-16)
     fig.colorbar(im2, cax=cax, orientation='horizontal')
     ax2.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax2.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
     ax3.set_title('V_z')
 
     # im3 = ax3.imshow(coo2, extent=[0, 1, 0, 1], aspect=10)
-    im3 = ax3.imshow(coo2, extent=[0, 4, 0, 20], aspect='auto')
+    im3 = ax3.imshow(coo2, extent=[0, 4, 0, 20], aspect='auto', cmap=plt.get_cmap('seismic'))
     # ax3.set_xlabel('Radius')
     # ax3.set_ylabel('Length')
     divider = make_axes_locatable(ax3)
     cax = divider.append_axes('bottom', size='3%', pad=0.2)
-    im3.set_clim(vmin=-10, vmax=10)
+    im3.set_clim(vmin=-0.2, vmax=0.2)
     fig.colorbar(im3, cax=cax, orientation='horizontal')
     ax3.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax3.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
@@ -144,7 +146,7 @@ while True:
         plt.show()
         break
     if not end:
-        plt.savefig(f'small-v/{trj.snap.time}.png', dpi=600)
+        plt.savefig(f'small-v2/{trj.snap.time}.png', dpi=600)
         plt.close()
 
 
