@@ -12,7 +12,7 @@ e = sys.exit
 # sim_case = f'R{R}_ratio{ratio}_A50'
 
 path_to_data = os.getcwd()
-newdir = '/'.join([path_to_data, 'small-v2'])
+newdir = '/'.join([path_to_data, 'small-f'])
 
 cwd = os.getcwd()
 os.chdir(newdir)

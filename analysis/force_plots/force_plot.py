@@ -57,8 +57,8 @@ def run2():
             continue
         idr.append(cell.id[0])
         idz.append(cell.id[2])
-        force = cell.get_force()
-        # force[1] = cell.get_velocity()[2]
+        force = cell.get_force_cylindrical()
+        force = cell.get_velocity_cylindrical()
         dens.append(cell.get_density()/cell.nangle)
         d[0].append(force[0]/cell.nangle)
         d[1].append(force[1]/cell.nangle)
