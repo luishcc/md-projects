@@ -20,11 +20,14 @@ os.chdir(newdir)
 def create_gif(filenames, duration):
     images = []
 
-    for filename in filenames:
-        images.append(imageio.imread(filename))
     output_file = 'Gif-%s.gif' % datetime.datetime.now().strftime('%Y-%M-%d-%H-%M-%S')
-    os.chdir(cwd)
-    imageio.mimsave(output_file, images, duration=duration)
+    with imageio.get_writer(cwd+'/'+output_file, mode='I') as writer:
+        for filename in filenames:
+            image = imageio.imread(filename)
+            writer.append_data(image)
+        
+#    os.chdir(cwd)
+#    imageio.mimsave(output_file, images, duration=duration)
 
 if __name__ == "__main__":
     script = sys.argv.pop(0)

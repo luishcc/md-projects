@@ -51,13 +51,14 @@ def run2():
     idz = []
     d = [[], [], []]
     dens = []
+    force = [[], []]
     for key, cell in grd.cell.items():
         if cell.id[0] >= 4 :
             continue
         idr.append(cell.id[0])
         idz.append(cell.id[2])
-        # force = cell.get_force_cylindrical()
-        force = cell.get_velocity_cylindrical()
+        force = cell.get_force()
+        # force[1] = cell.get_velocity()[2]
         dens.append(cell.get_density()/cell.nangle)
         d[0].append(force[0]/cell.nangle)
         d[1].append(force[1]/cell.nangle)
@@ -92,43 +93,41 @@ while True:
     fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4, figsize = (8,10))
     # im1 = ax1.imshow(coo0, extent=[0, 1, 0, 1], aspect=10)
     im1 = ax1.imshow(coo0, extent=[0, 4, 0, 20], aspect='auto')
-    ax1.set_title(r'V_r')
+    ax1.set_title(r'F_r')
     # ax1.set_xlabel('Radius')
     # ax1.set_ylabel('Length')
     divider = make_axes_locatable(ax1)
     cax = divider.append_axes('bottom', size='3%', pad=0.2)
-    im1.set_clim(vmin=-1, vmax=0.2)
+    im1.set_clim(vmin=-15, vmax=15)
     fig.colorbar(im1, cax=cax, orientation='horizontal')
     ax1.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax1.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
 
 
-    ax2.set_title('V_t')
+    ax2.set_title('F_t')
     # im2 = ax2.imshow(coo1, extent=[0, 1, 0, 1], aspect=10)
     im2 = ax2.imshow(coo1, extent=[0, 4, 0, 20], aspect='auto')
     # ax2.set_xlabel('Radius')
     # ax2.set_ylabel('Length')
     divider = make_axes_locatable(ax2)
     cax = divider.append_axes('bottom', size='3%', pad=0.2)
-    im2.set_clim(vmin=-6e-16, vmax=6e-16)
+    im2.set_clim(vmin=-15, vmax=15)
     fig.colorbar(im2, cax=cax, orientation='horizontal')
     ax2.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax2.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
-    ax3.set_title('V_z')
 
-    # im3 = ax3.imshow(coo2, extent=[0, 1, 0, 1], aspect=10)
-    im3 = ax3.imshow(coo2, extent=[0, 4, 0, 20], aspect='auto', cmap=plt.get_cmap('seismic'))
+    ax3.set_title('F_z')
+    im3 = ax3.imshow(coo2, extent=[0, 4, 0, 20], aspect='auto')
     # ax3.set_xlabel('Radius')
     # ax3.set_ylabel('Length')
     divider = make_axes_locatable(ax3)
     cax = divider.append_axes('bottom', size='3%', pad=0.2)
-    im3.set_clim(vmin=-0.2, vmax=0.2)
+    im3.set_clim(vmin=-15, vmax=15)
     fig.colorbar(im3, cax=cax, orientation='horizontal')
     ax3.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
     ax3.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
 
     ax4.set_title('Density')
-    # im4 = ax4.imshow(coo, extent=[0, 1, 0, 1], aspect=10)
     im4 = ax4.imshow(coo, extent=[0, 4, 0, 20], aspect='auto')
     # ax4.set_xlabel('Radius')
     # ax4.set_ylabel('Length')
@@ -146,7 +145,7 @@ while True:
         plt.show()
         break
     if not end:
-        plt.savefig(f'small-v2/{trj.snap.time}.png', dpi=600)
+        plt.savefig(f'small-f/{trj.snap.time}.png', dpi=600)
         plt.close()
 
 

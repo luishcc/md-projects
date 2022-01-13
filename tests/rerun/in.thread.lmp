@@ -10,8 +10,8 @@ neigh_modify        every 1 check yes
 
 atom_style	        mdpd
 
-variable Radius equal 6.0
-variable WaveNumber equal 6
+variable Radius equal 12.0
+variable WaveNumber equal 10/6
 variable WaveLength equal 2*PI*v_Radius*v_WaveNumber
 print ${WaveLength}
 
@@ -39,11 +39,11 @@ fix         mvv     all mvv/dpd 0.65
 
 timestep            0.01
 
-dump        mydump  all atom 100 thread.lammpstrj
+dump        mydump  all atom 100 thread3.lammpstrj
 dump_modify mydump scale no
 
-dump force all custom 100 dump.force id fx fy fz
-dump vel all custom 100 dump.vel id vx vy vz
-dump full all custom 100 dump.all id x y z vx vy vz fx fy fz
+dump force all custom 100 dump.force3 id fx fy fz
+dump vel all custom 100 dump.vel3 id vx vy vz
+dump full all custom 100 dump.all3 id x y z vx vy vz fx fy fz
 
-run                 25000
+run                 40000
