@@ -10,18 +10,24 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mdpkg.rwfile import DumpReader, Dat
 from mdpkg.grid import Grid
 
+from scipy.signal import savgol_filter
+from scipy.fft import rfft, rfftfreq
 
 dir = '/home/luishcc/testdata'
+dir = '/home/luishcc/md-projects/tests/rerun'
 
 force_file = 'force.test'
 trj_file = 'test.lammpstrj'
 
+force_file = 'dump.force2'
+velocity_file = 'dump.vel2'
+trj_file = 'thread2.lammpstrj'
+
 force_file = 'dump.force'
-trj_file = 'threads.lammpstrj'
+velocity_file = 'dump.vel'
+trj_file = 'thread.lammpstrj'
 
 
-# force_file = 'dump.force2'
-# trj_file = 'thread2.lammpstrj'
 
 grid = 1.5
 
@@ -40,21 +46,24 @@ def run2():
 
     idr = []
     idz = []
-    d = [[], [], []]
-    dens = []
+    d = [[], [], [], []]
     for key, cell in grd.cell.items():
+        if cell.id[0]>= 4:
+            continue
         idr.append(cell.id[0])
         idz.append(cell.id[2])
         force = cell.get_force_cylindrical()
-        dens.append(cell.get_density()/cell.nangle)
+        vel = cell.get_velocity_cylindrical()
         d[0].append(force[0]/cell.nangle)
-        d[1].append(force[1]/cell.nangle)
-        d[2].append(force[2]/cell.nangle)
+        d[1].append(force[2]/cell.nangle)
+        d[2].append(vel[0]/cell.nangle)
+        d[3].append(vel[2]/cell.nangle)
 
-    coo = coo_matrix((dens, (idr, idz)))
-    coo0 = coo_matrix((d[0], (idr, idz)))
-    coo1 = coo_matrix((d[1], (idr, idz)))
-    coo2 = coo_matrix((d[2], (idr, idz)))
+    idr = [-i+3 for i in idr]
+    coo = coo_matrix((d[0], (idr, idz)))
+    coo0 = coo_matrix((d[1], (idr, idz)))
+    coo1 = coo_matrix((d[2], (idr, idz)))
+    coo2 = coo_matrix((d[3], (idr, idz)))
     return coo, coo0, coo1, coo2
 
 trj.skip_next(0)
@@ -63,6 +72,7 @@ while True:
     try:
         trj.read_next()
         trj.read_force('/'.join([dir, force_file]), trj.snap)
+        trj.read_velocity('/'.join([dir, velocity_file]), trj.snap)
         grd = Grid(trj.snap, size = grid)
         print(trj.snap.time)
         coo, coo0, coo1, coo2 = run2()
@@ -75,57 +85,89 @@ while True:
     coo1 = coo1.todense().transpose()
     coo2 = coo2.todense().transpose()
 
-    # fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4)
-    # im1 = ax1.imshow(coo0, extent=[0, 1, 0, 1], aspect=10)
-    fig, ax1 = plt.subplots(1,1)
+
+    filter = 11
+    fr = savgol_filter(coo[:,0], filter, 2, axis=0)
+    fr2 = savgol_filter(coo[:,1], filter, 2, axis=0)
+    fz = savgol_filter(coo0[:,0], filter, 2, axis=0)
+    fz2 = savgol_filter(coo0[:,1], filter, 2, axis=0)
+    vr = savgol_filter(coo1[:,0], filter, 2, axis=0)
+    vr2 = savgol_filter(coo1[:,1], filter, 2, axis=0)
+    vz = savgol_filter(coo2[:,0], filter, 2, axis=0)
+    vz2 = savgol_filter(coo2[:,1], filter, 2, axis=0)
+
+    # freq = rfftfreq(len(coo))
+    # fr = rfft(coo[:,0], axis=0)
+    # fr2 = rfft(coo[:,1], axis=0)
+    # fz = rfft(coo0[:,0], axis=0)
+    # fz2 = rfft(coo0[:,1], axis=0)
+    # vr = rfft(coo1[:,0], axis=0)
+    # vr2 = rfft(coo1[:,1], axis=0)
+    # vz = rfft(coo2[:,0], axis=0)
+    # vz2 = rfft(coo2[:,1], axis=0)
+
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(15,9))
+    # fig, ax1 = plt.subplots(nrows=1, ncols=1)
+
     try:
-        ax1.plot(np.linspace(1, len(coo0), len(coo0)), coo0[:,2], label='3')
-        ax1.plot(np.linspace(1, len(coo0), len(coo0)), coo0[:,3], label='4')
-        ax1.plot(np.linspace(1, len(coo0), len(coo0)), coo0[:,4], label='5')
+        ax1.plot(np.linspace(1, len(coo), len(coo)), coo[:,0], label='4')
+        ax1.plot(np.linspace(1, len(coo), len(coo)), coo[:,1], label='3')
+        # ax1.plot(np.linspace(1, len(coo), len(coo)), fr, label='4')
+        # ax1.plot(np.linspace(1, len(coo), len(coo)), fr2, label='3')
+        # ax1.plot(freq, fr, label='4')
+        # ax1.plot(freq, fr2, label='3')
     except Exception as e: print(e)
     ax1.legend(loc='lower right')
-    ax1.set_title(r'F_r')
-    ax1.set_xlabel('ID_z')
-    ax1.set_ylim(-50, 1)
-    ax1.set_ylabel('Force')
-    # divider = make_axes_locatable(ax1)
-    # cax = divider.append_axes('right', size='50%', pad=0.1)
-    # fig.colorbar(im1, cax=cax, orientation='vertical')
-    # ax1.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
-    # ax1.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
+    ax1.set_title(r'$F_r$')
+    # ax1.set_xlabel('ID_z')
+    # ax1.set_ylim(-20, 10)
+    # ax1.set_ylabel('Force')
 
-    # ax2.set_title('F_t')
-    # # im2 = ax2.imshow(coo1, extent=[0, 1, 0, 1], aspect=10)
-    # im2 = ax2.imshow(coo1)
-    # ax2.set_xlabel('Radius')
-    # ax2.set_ylabel('Length')
-    # divider = make_axes_locatable(ax2)
-    # cax = divider.append_axes('right', size='50%', pad=0.1)
-    # fig.colorbar(im2, cax=cax, orientation='vertical')
-    # ax2.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
-    # ax2.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
-    # ax3.set_title('F_z')
-    #
-    # # im3 = ax3.imshow(coo2, extent=[0, 1, 0, 1], aspect=10)
-    # im3 = ax3.imshow(coo2)
-    # ax3.set_xlabel('Radius')
-    # ax3.set_ylabel('Length')
-    # divider = make_axes_locatable(ax3)
-    # cax = divider.append_axes('right', size='50%', pad=0.1)
-    # fig.colorbar(im3, cax=cax, orientation='vertical')
-    # ax3.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
-    # ax3.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
-    #
-    # ax4.set_title('Density')
-    # # im4 = ax4.imshow(coo, extent=[0, 1, 0, 1], aspect=10)
-    # im4 = ax4.imshow(coo)
-    # ax4.set_xlabel('Radius')
-    # ax4.set_ylabel('Length')
-    # divider = make_axes_locatable(ax4)
-    # cax = divider.append_axes('right', size='50%', pad=0.1)
-    # fig.colorbar(im4, cax=cax, orientation='vertical')
-    # ax4.yaxis.set_major_locator(plt.NullLocator()) # remove y axis ticks
-    # ax4.xaxis.set_major_locator(plt.NullLocator()) # remove x axis ticks
+    try:
+        ax2.plot(np.linspace(1, len(coo0), len(coo0)), coo0[:,0], label='4')
+        ax2.plot(np.linspace(1, len(coo0), len(coo0)), coo0[:,1], label='3')
+        # ax2.plot(np.linspace(1, len(coo0), len(coo0)), fz, label='4')
+        # ax2.plot(np.linspace(1, len(coo0), len(coo0)), fz2, label='3')
+        # ax2.plot(freq, fz, label='4')
+        # ax2.plot(freq, fz2, label='3')
+    except Exception as e: print(e)
+    ax2.legend(loc='lower right')
+    ax2.set_title(r'$F_z$')
+    # ax2.set_xlabel('ID_z')
+    # ax2.set_ylim(-15, 15)
+    # ax2.set_ylabel('Force')
+
+    try:
+        ax3.plot(np.linspace(1, len(coo1), len(coo1)), coo1[:,0], label='4')
+        ax3.plot(np.linspace(1, len(coo1), len(coo1)), coo1[:,1], label='3')
+        # ax3.plot(np.linspace(1, len(coo1), len(coo1)), vr, label='4')
+        # ax3.plot(np.linspace(1, len(coo1), len(coo1)), vr2, label='3')
+        # ax3.plot(freq, vr, label='4')
+        # ax3.plot(freq, vr2, label='3')
+    except Exception as e: print(e)
+    ax3.legend(loc='lower right')
+    ax3.set_title(r'$V_r$')
+    # ax3.set_xlabel('ID_z')
+    # ax3.set_ylim(-0.4, 0.4)
+    # ax3.set_ylabel('Force')
+
+    try:
+        ax4.plot(np.linspace(1, len(coo2), len(coo2)), coo2[:,0], label='4')
+        ax4.plot(np.linspace(1, len(coo2), len(coo2)), coo2[:,1], label='3')
+        # ax4.plot(np.linspace(1, len(coo2), len(coo2)), vz, label='4')
+        # ax4.plot(np.linspace(1, len(coo2), len(coo2)), vz2, label='3')
+        # ax4.plot(freq, vz, label='4')
+        # ax4.plot(freq, vz2, label='3')
+    except Exception as e: print(e)
+    ax4.legend(loc='lower right')
+    ax4.set_title(r'$V_z$')
+    # ax4.set_xlabel('ID_z')
+    # ax4.set_ylim(-0.3, 0.3)
+    # ax4.set_ylabel('Force')
+
+
+    plt.show()
+    continue
 
     if end:
         plt.show()
@@ -133,11 +175,3 @@ while True:
     if not end:
         plt.savefig(f'f2/{trj.snap.time}.png', dpi=250)
         plt.close()
-
-
-# plt.show()
-
-
-
-
-# run_case(n, iter, skip, max)

@@ -25,7 +25,7 @@ def create_gif(filenames, duration):
         for filename in filenames:
             image = imageio.imread(filename)
             writer.append_data(image)
-        
+
 #    os.chdir(cwd)
 #    imageio.mimsave(output_file, images, duration=duration)
 
