@@ -9,34 +9,52 @@ from mdpkg.rwfile import DumpReader, Dat
 from mdpkg.grid import Grid
 
 
-path_to_data = '/home/luishcc/hdd/free_thread_results/'
-# path_to_data = '/home/luishcc/hdd/'
 
+dir = '/home/luishcc/testdata'
+dir = '/home/luishcc/md-projects/tests/rerun'
+
+
+velocity_file = 'dump.vel2'
+force_file = 'dump.force2'
+trj_file = 'thread2.lammpstrj'
+
+velocity_file = 'dump.vel'
+force_file = 'dump.force'
+trj_file = 'thread.lammpstrj'
+
+# velocity_file = 'dump.vel3'
+# force_file = 'dump.force3'
+# trj_file = 'thread3.lammpstrj'
+
+
+save_dir = trj_file.split('.')[0]
+
+
+grid = 1.5
 
 R = 6
-ratio = 48
-A = 50
-grid = 1
+# ratio = 48
+# A = 50
+# grid = 1
+#
+max = 150
+skip = 5
+#
+# n = 1 + 10*0
+# nn = n + 100
+# data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
+# dir = path_to_data + data_case_dir
+# save_correlation_dir = dir + f'/correlation_grid{grid}'
 
-max = 600
-skip = 0
 
-n = 1 + 10*0
-nn = n + 100
-data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
-dir = path_to_data + data_case_dir
-save_correlation_dir = dir + f'/correlation_grid{grid}'
+size = grid
+rrange = 5
 
-
-size = 1
-rrange = ceil((R*1.7)/size)
-
-list = [str(r) for r in range(rrange)]
+list = [str(r) for r in range(5)]
 header_c = 'dz ' + ' '.join(list)
-header_f = 'freq ' + ' '.join(list)
 
 
-def run_case(n, iter, skip, max):
+def run_case(iter, skip, max):
     while True:
         print(iter)
         grd = Grid(trj.snap, size=grid)
@@ -48,7 +66,9 @@ def run_case(n, iter, skip, max):
         corr[:, 0] = dz
 
         for r in range(rrange):
-            a = grd.compute_density_correlation(r)
+            grd.set_forces()
+            grd.set_velocities()
+            a = grd.compute_auto_correlation(r, ['vt', 'vz'])
             if np.any(np.isnan(a)):
                 break
 
@@ -56,7 +76,9 @@ def run_case(n, iter, skip, max):
                 corr[i, r+1] = a[i]
 
         corr_dat = Dat(corr, labels=header_c)
-        corr_dat.write_file(f'{iter}', dir=save_correlation_dir)
+        # corr_dat.write_file(f'{iter}', dir=save_dir+'/force')
+        corr_dat.write_file(f'{iter}', dir=save_dir+'/velocity')
+        # corr_dat.write_file(f'{iter}', dir=save_dir+'/density')
 
         try:
             iter += (skip + 1)
@@ -64,25 +86,38 @@ def run_case(n, iter, skip, max):
                 break
             trj.skip_next(skip)
             trj.read_next()
-        except:
+            trj.read_force('/'.join([dir,force_file]), trj.snap)
+            trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
+        except Exception as e:
             trj.close_read()
+            print(e)
             break
 
-while os.path.isdir(dir):
-    print(dir)
-    if os.path.isdir(save_correlation_dir):
-        n+=1
-        data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
-        dir = path_to_data + data_case_dir
-        save_correlation_dir = dir + f'/correlation_grid{grid}'
-        continue
-    trj = DumpReader(dir + '/thread.lammpstrj')
-    trj.read_sequential()
-    iter = 0
-    run_case(n, iter, skip, max)
-    n += 1
-    if n >= nn:
-        exit()
-    data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
-    dir = path_to_data + data_case_dir
-    save_correlation_dir = dir + f'/correlation_grid{grid}'
+
+trj = DumpReader('/'.join([dir,trj_file]))
+trj.read_sequential()
+trj.skip_next(0)
+trj.read_force('/'.join([dir,force_file]), trj.snap)
+trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
+iter = 0
+grd = run_case(iter, skip, max)
+exit()
+
+# while os.path.isdir(dir):
+#     print(dir)
+    # if os.path.isdir(save_correlation_dir):
+    #     n+=1
+    #     data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
+    #     dir = path_to_data + data_case_dir
+    #     save_correlation_dir = dir + f'/correlation_grid{grid}'
+    #     continue
+    # trj = DumpReader(trj_file)
+    # trj.read_sequential()
+    # iter = 0
+    # run_case(n, iter, skip, max)
+    # n += 1
+    # if n >= nn:
+    #     exit()
+    # data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n}'
+    # dir = path_to_data + data_case_dir
+    # save_correlation_dir = dir + f'/correlation_grid{grid}'
