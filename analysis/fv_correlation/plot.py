@@ -18,8 +18,9 @@ from mdpkg.rwfile import read_dat, Dat
 # dir = '/'.join([path_to_data, sim_case])
 
 
-# dir = 'thread/force'
-dir = 'thread/velocity_tz'
+dir = 'thread/force'
+# dir = 'thread/cross'
+# dir = 'thread/velocity'
 # dir = 'thread/density'
 dir_out = '/'.join([dir, 'fig'])
 

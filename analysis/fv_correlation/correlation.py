@@ -68,7 +68,7 @@ def run_case(iter, skip, max):
         for r in range(rrange):
             grd.set_forces()
             grd.set_velocities()
-            a = grd.compute_auto_correlation(r, ['vt', 'vz'])
+            a = grd.compute_auto_correlation(r, ['fz', 'vz'])
             if np.any(np.isnan(a)):
                 break
 
@@ -77,7 +77,8 @@ def run_case(iter, skip, max):
 
         corr_dat = Dat(corr, labels=header_c)
         # corr_dat.write_file(f'{iter}', dir=save_dir+'/force')
-        corr_dat.write_file(f'{iter}', dir=save_dir+'/velocity')
+        corr_dat.write_file(f'{iter}', dir=save_dir+'/cross')
+        # corr_dat.write_file(f'{iter}', dir=save_dir+'/velocity')
         # corr_dat.write_file(f'{iter}', dir=save_dir+'/density')
 
         try:
