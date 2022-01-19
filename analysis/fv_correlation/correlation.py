@@ -66,9 +66,10 @@ def run_case(iter, skip, max):
         corr[:, 0] = dz
 
         for r in range(rrange):
-            grd.set_forces()
-            grd.set_velocities()
-            a = grd.compute_auto_correlation(r, ['fz', 'vz'])
+            # grd.set_forces()
+            # grd.set_velocities()
+            # a = grd.compute_auto_correlation(r, ['density', 'density'])
+            a = grd.compute_density_correlation(r)
             if np.any(np.isnan(a)):
                 break
 
@@ -87,8 +88,8 @@ def run_case(iter, skip, max):
                 break
             trj.skip_next(skip)
             trj.read_next()
-            trj.read_force('/'.join([dir,force_file]), trj.snap)
-            trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
+            # trj.read_force('/'.join([dir,force_file]), trj.snap)
+            # trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
         except Exception as e:
             trj.close_read()
             print(e)
@@ -98,8 +99,8 @@ def run_case(iter, skip, max):
 trj = DumpReader('/'.join([dir,trj_file]))
 trj.read_sequential()
 trj.skip_next(0)
-trj.read_force('/'.join([dir,force_file]), trj.snap)
-trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
+# trj.read_force('/'.join([dir,force_file]), trj.snap)
+# trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
 iter = 0
 grd = run_case(iter, skip, max)
 exit()

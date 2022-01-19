@@ -18,9 +18,9 @@ from mdpkg.rwfile import read_dat, Dat
 # dir = '/'.join([path_to_data, sim_case])
 
 
-dir = 'thread/force'
-# dir = 'thread/cross'
-# dir = 'thread/velocity'
+# dir = 'thread/force'
+dir = 'thread/cross'
+# dir = 'thread/velocity_r'
 # dir = 'thread/density'
 dir_out = '/'.join([dir, 'fig'])
 
@@ -38,7 +38,7 @@ while os.path.isfile(file):
     for i in range(1, 5):
         # print(data[str(i-1)])
         if not np.any(np.isnan(data[str(i-1)])):
-            plt.plot(data['dz'], data[str(i-1)],  label=f'r={i-1}')
+            plt.plot(data['dz'][1:], data[str(i-1)][1:],  label=f'r={i-1}')
         else:
             print(i)
 
@@ -47,7 +47,7 @@ while os.path.isfile(file):
     plt.xlabel(r'$\delta z$')
     plt.ylabel(r'$G(r,\delta z)$')
     plt.title(f' Snapshot = {snap}')
-    # plt.ylim(-0.25, 1.22)
+    # plt.ylim(-0.25, 0.5)
     # plt.xlim(0, 110)
     plt.plot([0, data['dz'][-1]], [0, 0], 'k--')
     plt.legend(loc='upper right')
