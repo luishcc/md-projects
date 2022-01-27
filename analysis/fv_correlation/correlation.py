@@ -22,13 +22,17 @@ velocity_file = 'dump.vel'
 force_file = 'dump.force'
 trj_file = 'thread.lammpstrj'
 
-# velocity_file = 'dump.vel3'
-# force_file = 'dump.force3'
-# trj_file = 'thread3.lammpstrj'
+velocity_file = 'dump.vel3'
+force_file = 'dump.force3'
+trj_file = 'thread3.lammpstrj'
 
 
-save_dir = trj_file.split('.')[0]
+save_dir = trj_file.split('.')[0] + '-sat'
 
+try:
+    os.mkdir(save_dir)
+except:
+    pass
 
 grid = 1.5
 
@@ -37,7 +41,7 @@ R = 6
 # A = 50
 # grid = 1
 #
-max = 150
+max = 600
 skip = 5
 #
 # n = 1 + 10*0
@@ -48,9 +52,9 @@ skip = 5
 
 
 size = grid
-rrange = 5
+rrange = 6
 
-list = [str(r) for r in range(5)]
+list = [str(r) for r in range(6)]
 header_c = 'dz ' + ' '.join(list)
 
 
@@ -67,9 +71,9 @@ def run_case(iter, skip, max):
 
         for r in range(rrange):
             # grd.set_forces()
-            # grd.set_velocities()
-            # a = grd.compute_auto_correlation(r, ['density', 'density'])
-            a = grd.compute_density_correlation(r)
+            grd.set_velocities()
+            a = grd.compute_auto_correlation(r, ['vz', 'vz'])
+            # a = grd.compute_density_correlation(r)
             if np.any(np.isnan(a)):
                 break
 
@@ -77,9 +81,9 @@ def run_case(iter, skip, max):
                 corr[i, r+1] = a[i]
 
         corr_dat = Dat(corr, labels=header_c)
-        # corr_dat.write_file(f'{iter}', dir=save_dir+'/force')
-        corr_dat.write_file(f'{iter}', dir=save_dir+'/cross')
-        # corr_dat.write_file(f'{iter}', dir=save_dir+'/velocity')
+        # corr_dat.write_file(f'{iter}', dir=save_dir+'/force_r')
+        # corr_dat.write_file(f'{iter}', dir=save_dir+'/cross')
+        corr_dat.write_file(f'{iter}', dir=save_dir+'/velocity')
         # corr_dat.write_file(f'{iter}', dir=save_dir+'/density')
 
         try:
@@ -89,7 +93,7 @@ def run_case(iter, skip, max):
             trj.skip_next(skip)
             trj.read_next()
             # trj.read_force('/'.join([dir,force_file]), trj.snap)
-            # trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
+            trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
         except Exception as e:
             trj.close_read()
             print(e)
@@ -98,10 +102,10 @@ def run_case(iter, skip, max):
 
 trj = DumpReader('/'.join([dir,trj_file]))
 trj.read_sequential()
-trj.skip_next(0)
+iter = 500
+trj.skip_next(iter)
 # trj.read_force('/'.join([dir,force_file]), trj.snap)
-# trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
-iter = 0
+trj.read_velocity('/'.join([dir,velocity_file]), trj.snap)
 grd = run_case(iter, skip, max)
 exit()
 

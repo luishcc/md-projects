@@ -18,16 +18,16 @@ from mdpkg.rwfile import read_dat, Dat
 # dir = '/'.join([path_to_data, sim_case])
 
 
-# dir = 'thread/force'
-dir = 'thread/cross'
-# dir = 'thread/velocity_r'
+# dir = 'thread-2/force_r'
+# dir = 'thread/cross'
+dir = 'thread3-sat/velocity'
 # dir = 'thread/density'
 dir_out = '/'.join([dir, 'fig'])
 
 if not os.path.isdir(dir_out):
     os.mkdir(dir_out)
 
-snap = 0
+snap = 500
 file = dir + f'/{snap}.dat'
 while os.path.isfile(file):
     print(file)
@@ -35,7 +35,7 @@ while os.path.isfile(file):
 
     plt.figure(1)
 
-    for i in range(1, 5):
+    for i in [1, 6]:
         # print(data[str(i-1)])
         if not np.any(np.isnan(data[str(i-1)])):
             plt.plot(data['dz'][1:], data[str(i-1)][1:],  label=f'r={i-1}')
@@ -47,10 +47,10 @@ while os.path.isfile(file):
     plt.xlabel(r'$\delta z$')
     plt.ylabel(r'$G(r,\delta z)$')
     plt.title(f' Snapshot = {snap}')
-    # plt.ylim(-0.25, 0.5)
+    plt.ylim(-0.8, 0.9)
     # plt.xlim(0, 110)
     plt.plot([0, data['dz'][-1]], [0, 0], 'k--')
-    plt.legend(loc='upper right')
+    plt.legend(loc='lower left')
     plt.savefig(f'{dir_out}/{snap}.png', format='png')
     # plt.show(block=False)
     plt.close(1)

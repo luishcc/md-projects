@@ -28,8 +28,8 @@ velocity_file = 'dump.vel'
 trj_file = 'thread.lammpstrj'
 
 
-# velocity_file = 'dump.vel3'
-# trj_file = 'thread3.lammpstrj'
+velocity_file = 'dump.vel3'
+trj_file = 'thread3.lammpstrj'
 
 
 
@@ -56,7 +56,7 @@ def run2():
     dens = []
     force = [[], []]
     for key, cell in grd.cell.items():
-        if cell.id[0] >= 4 :
+        if cell.id[0] >= 8 :
             continue
         idr.append(cell.id[0])
         idz.append(cell.id[2])
@@ -66,14 +66,14 @@ def run2():
         d[1].append(v[1]/cell.nangle)
         d[2].append(v[2]/cell.nangle)
 
-    idr = [-i + 3 for i in idr]
+    idr = [-i + 7 for i in idr]
     coo = coo_matrix((dens, (idr, idz)))
     coo0 = coo_matrix((d[0], (idr, idz)))
     coo1 = coo_matrix((d[1], (idr, idz)))
     coo2 = coo_matrix((d[2], (idr, idz)))
     return coo, coo0, coo1, coo2
 
-trj.skip_next(0)
+trj.skip_next(579)
 end = False
 while True:
     try:
@@ -153,7 +153,7 @@ while True:
         plt.show()
         break
     if not end:
-        plt.savefig(f'small-v/{trj.snap.time}.png', dpi=100)
+        plt.savefig(f'sat/{trj.snap.time}.png', dpi=100)
         plt.close()
 
 

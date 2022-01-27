@@ -49,7 +49,7 @@ trj.read_sequential()
 
 import matplotlib as mpl
 cmap = mpl.cm.cool
-norm = mpl.colors.Normalize(vmin=5, vmax=10)
+norm = mpl.colors.Normalize(vmin=-10, vmax=10)
 
 def run2():
 
