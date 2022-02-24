@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d, splrep, splev, CubicSpline
 import scipy.optimize as opt
 from mdpkg.rwfile import read_dat, Dat
-from scipy import asarray as ar,exp
+from numpy import asarray as ar,exp
+from scipy.stats import chisquare
 
 
 R = 6
@@ -42,9 +43,9 @@ def gaus(x,a,x0,sigma):
 for snap in snaps[A]:
     print(snap)
     data = read_dat('/'.join([path_to_data, f'{snap}.dat']))
-    l = len(data['freq'][7:])//5
-    x = data['freq'][6:25]
-    y = data[str(6)][6:25]
+    l = len(data['freq'][7:])//6
+    x = data['freq'][9:21]
+    y = data[str(6)][9:21]
     n = len(x)
     plt.plot(x, y, label=f'time={snap}', marker='.')
 
@@ -58,7 +59,7 @@ for snap in snaps[A]:
     # chi = sum((splev(x, tck) - ar(y))**2/ar(y))
     # chi2 = sum((splev(x, tck) - ar(y))**2/splev(x, tck))
 
-    # x0 = np.array([0.0, 0.0, 0.0, 0.0 ])
+    # x0 = np.array([1.0, 1.0, 1.0, 1.0 ])
     # sigma = np.array([1.0,1.0,1.0,1.0,1.0,1.0])
     # curve = opt.curve_fit(func, x, y, x0, sigma=None)
     # ff = func(xx, curve[0][0], curve[0][1], curve[0][2], curve[0][3])
@@ -67,7 +68,8 @@ for snap in snaps[A]:
     # ste = np.sqrt( sum((ff2 - ar(y))**2)/(n-2))
     # chi = sum((ff2 - ar(y))**2/ar(y))
     # chi2 = sum((ff2 - ar(y))**2/ff2)
-
+    # a = chisquare(y, ff2)
+    #
     mean = sum(ar(x)*ar(y))/n
     sigma = sum(ar(y)*(ar(x)-mean)**2)/n
     popt, pcov = opt.curve_fit(gaus, x, y, p0=[1,mean, sigma])
@@ -75,9 +77,11 @@ for snap in snaps[A]:
     ste = np.sqrt( sum((gaus(x,*popt) - ar(y))**2)/(n-2))
     chi = sum((gaus(x,*popt) - ar(y))**2/ar(y))
     chi2 = sum((gaus(x,*popt) - ar(y))**2/gaus(x,*popt))
+    a = chisquare(y, gaus(x,*popt))
 
     print(ste, chi/n, chi2/n )
-    print(opt.fmin(lambda x1: -gaus(x1,*popt), 0)*2*np.pi*4.8)
+    print(a[0]/(n-1), a[0], a[1])
+    # print(opt.fmin(lambda x1: -gaus(x1,*popt), 0)*2*np.pi*4.8)
 
 
 
