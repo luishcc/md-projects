@@ -2,7 +2,7 @@
 units 		          lj
 dimension	          3
 boundary	          p p p
-neighbor	          0.5 bin
+neighbor	          0.3 bin
 #neigh_modify        every 5 check yes
 neigh_modify    every 10
 
@@ -13,29 +13,25 @@ create_box 1 box
 
 region     cyl    cylinder z 83.8235 83.8235 4.235 INF INF
 
-
-
-
 lattice fcc 0.0027
 create_atoms 1 box
 
 lattice fcc 0.8067
 create_atoms 1 region cyl
 
-
 mass 1 1.0
-velocity all create 1 87287
+velocity all create 1. 87289
 
 pair_style lj/cut 5.5
-pair_coeff 1 1 119.4 3.4 5.5
+pair_coeff 1 1 0.234 0.34 5.5
 
-
-fix 1 all nvt temp 0.7 0.7 0.0005
+fix 1 all nvt temp 0.7 0.7 0.5
 dump full all custom 100 dump.all id x y z vx vy vz fx fy fz
 
-minimize 1.0e-4 1.0e-6 100 1000
-
-timestep 0.000005
+#minimize 1.0e-4 1.0e-6 100 1000
 
 thermo 100
-run 10000
+
+timestep 0.005
+
+run 100000
