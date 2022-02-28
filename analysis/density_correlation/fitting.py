@@ -26,11 +26,11 @@ if not os.path.isdir(save_correlation_dir):
     os.mkdir(save_correlation_dir)
 
 snaps = {50: [170],
-         60: [],
-         70: [],
-         80: [],
-         85: [],
-         90: []}
+         60: [180],
+         70: [185, 200],
+         80: [200],
+         85: [230],
+         90: [240]}
 
 plt.figure(1)
 
@@ -44,8 +44,8 @@ for snap in snaps[A]:
     print(snap)
     data = read_dat('/'.join([path_to_data, f'{snap}.dat']))
     l = len(data['freq'][7:])//6
-    x = data['freq'][9:21]
-    y = data[str(6)][9:21]
+    x = data['freq'][8:21]
+    y = data[str(6)][8:21]
     n = len(x)
     plt.plot(x, y, label=f'time={snap}', marker='.')
 
@@ -81,7 +81,7 @@ for snap in snaps[A]:
 
     print(ste, chi/n, chi2/n )
     print(a[0]/(n-1), a[0], a[1])
-    # print(opt.fmin(lambda x1: -gaus(x1,*popt), 0)*2*np.pi*4.8)
+    print(opt.fmin(lambda x1: -gaus(x1,*popt), 0))
 
 
 

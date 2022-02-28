@@ -8,9 +8,9 @@ from scipy.fft import rfft, rfftfreq
 from mdpkg.rwfile import read_dat, Dat
 
 
-R = 8
-ratio = 24
-A = -50
+R = 6
+ratio = 48
+A = -90
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
