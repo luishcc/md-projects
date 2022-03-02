@@ -11,7 +11,7 @@ from scipy.stats import chisquare
 
 R = 6
 ratio = 48
-A = 50
+A = 85
 grid = 1
 
 max = 600
@@ -29,7 +29,7 @@ snaps = {50: [170],
          60: [180],
          70: [185, 200],
          80: [200],
-         85: [230],
+         85: [215],
          90: [240]}
 
 plt.figure(1)
@@ -44,8 +44,8 @@ for snap in snaps[A]:
     print(snap)
     data = read_dat('/'.join([path_to_data, f'{snap}.dat']))
     l = len(data['freq'][7:])//6
-    x = data['freq'][8:21]
-    y = data[str(6)][8:21]
+    x = data['freq'][6:15]
+    y = data[str(6)][6:15]
     n = len(x)
     plt.plot(x, y, label=f'time={snap}', marker='.')
 

@@ -14,7 +14,7 @@ for i in range(len(oh)):
     x[i] = func(oh[i])
 
 
-r=5.75
+r=5.8
 # r=6
 
 r50 = r
@@ -28,7 +28,7 @@ wl50 = [0.01626563]
 wl60 = [0.01482813]
 wl70 = [0.013125, 0.01409375]
 wl80 = [0.01246875]
-wl85 = [0.0105625]
+wl85 = [0.0105625, 0.01115625]
 wl90 = [0.010625]
 
 # oh50 = 0.315
@@ -49,7 +49,7 @@ plt.plot(oh60, 2*np.pi*r60*wl60[0], 'ro')
 # plt.plot(oh70, 2*np.pi*r70*wl70[0], 'ro')
 plt.plot(oh70, 2*np.pi*r70*wl70[1], 'ro')
 plt.plot(oh80, 2*np.pi*r80*wl80[0], 'ro')
-plt.plot(oh85, 2*np.pi*r85*wl85[0], 'ro')
+plt.plot(oh85, 2*np.pi*r85*wl85[1], 'ro')
 plt.plot(oh90, 2*np.pi*r90*wl90[0], 'ro')
 
 
