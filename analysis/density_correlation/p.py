@@ -7,42 +7,49 @@ def func(x):
     a = 1/(2+b)
     return np.sqrt(a)
 
-oh = np.linspace(0.2, 1.50, 10000)
+oh = np.linspace(0.2, 1.30, 10000)
 x = np.zeros(len(oh))
 
 for i in range(len(oh)):
     x[i] = func(oh[i])
 
 
-r50 = 4.85
-r60 = 4.75
-# r80 = 4.50
-r80 = 4.75
-# r90 = 4.38
-r90 = 5
+r=5.75
+# r=6
 
+r50 = r
+r60 = r
+r70 = r
+r80 = r
+r85 = r
+r90 = r
 
-wl50 = [0.018785, 0.01657]
-wl60 = [0.01878, 0.01767]
-wl80 = [0.012155, 0.014365]
-wl90 = [0.011049]
+wl50 = [0.01626563]
+wl60 = [0.01482813]
+wl70 = [0.013125, 0.01409375]
+wl80 = [0.01246875]
+wl85 = [0.0105625]
+wl90 = [0.010625]
 
-oh50 = 0.311
-oh60 = 0.359
-oh80 = 0.762
-oh90 = 1.214
+# oh50 = 0.315
+
+oh50 = 0.266
+oh60 = 0.321
+oh70 = 0.451
+oh80 = 0.704
+oh85 = 0.901
+oh90 = 1.137
 
 plt.figure()
 plt.plot(oh, x, label='Theory')
 
-# plt.plot(oh50, 2*np.pi*r50*sum(wl50)/len(wl50), 'ro')
-# plt.plot(oh60, 2*np.pi*r60*sum(wl60)/len(wl60), 'ro')
-# plt.plot(oh80, 2*np.pi*r80*sum(wl80)/len(wl80), 'ro')
-# plt.plot(oh90, 2*np.pi*r90*sum(wl90)/len(wl90), 'ro')
 
 plt.plot(oh50, 2*np.pi*r50*wl50[0], 'ro', label='Simulations')
 plt.plot(oh60, 2*np.pi*r60*wl60[0], 'ro')
-plt.plot(oh80, 2*np.pi*r80*wl80[1], 'ro')
+# plt.plot(oh70, 2*np.pi*r70*wl70[0], 'ro')
+plt.plot(oh70, 2*np.pi*r70*wl70[1], 'ro')
+plt.plot(oh80, 2*np.pi*r80*wl80[0], 'ro')
+plt.plot(oh85, 2*np.pi*r85*wl85[0], 'ro')
 plt.plot(oh90, 2*np.pi*r90*wl90[0], 'ro')
 
 
