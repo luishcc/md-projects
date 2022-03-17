@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import os
 
@@ -31,15 +32,19 @@ for file in os.scandir(path):
     df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
     # df.drop(df[df['asphericity'] > 3].index, inplace=True)
 
+    # Radius of Gyration to sphere:
+    df['radius'] = df['radius'].multiply(np.sqrt(5/3))
+
     print(df.shape)
     print()
 
+    plt.figure(1)
 
     try:
         # df['radius'].plot(marker='.', linestyle='none')
-        # df['radius'].plot.kde(bw_method=0.1)
+        df['radius'].plot.kde(bw_method=0.1)
         # df['size'].plot.kde(bw_method=0.01)
-        df['radius'].plot.hist(bins=50, alpha=0.5)
+        df['radius'].plot.hist(bins=50, alpha=0.5, density=True)
         # df['size'].plot.hist(bins=50, alpha=0.5)
         # df['anisotropy'].plot.hist(bins=50, alpha=0.5)
         # df['asphericity'].plot.hist(bins=20, alpha=0.5)
@@ -50,11 +55,12 @@ for file in os.scandir(path):
 
     plt.title(f'Droplet Size Distribution, A={A}, snapshot={name}')
     plt.xlim(0, 15)
-    plt.ylim(0, 60)
+    plt.ylim(0, 0.5)
     plt.xlabel('Radius')
+    plt.ylabel('Density')
     plt.grid(True)
     plt.savefig(f'{dir_out}/{name}.png', format='png')
-    # plt.close()
+    plt.close(1)
     # plt.show()
 
 

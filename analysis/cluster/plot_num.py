@@ -32,7 +32,7 @@ for file in os.scandir(path):
     name = int(file.name.split('.')[0])
 
     print(df.shape)
-    num_cluster[name] = df.shape[0]
+
 
     df.drop(df[df['size'] <= 1].index, inplace=True)
     # df.drop(df[df['radius'] > 5].index, inplace=True)
@@ -42,11 +42,15 @@ for file in os.scandir(path):
 
     satellite = df[df['radius'] < separation]
     main = df[df['radius'] > separation]
+    #
+    # satellite = satellite.multiply(1/(30*1810))
+    # main = main.multiply(1/(30*1810))
 
     print(df.shape)
-    num_drops[name] = df.shape[0]
-    num_main[name] = main.shape[0]
-    num_satellite[name] = satellite.shape[0]
+    num_cluster[name] = df.shape[0] / (30 * 0.4)
+    num_drops[name] = df.shape[0]  / (30 * 0.4 )
+    num_main[name] = main.shape[0] / (30 * 0.4)
+    num_satellite[name] = satellite.shape[0] / (30 * 0.4)
     print()
 
 
@@ -71,7 +75,7 @@ plt.figure(1)
 plt.suptitle(f'R={R}; ratio={ratio}; A={A}')
 
 ax1 = plt.subplot(2,1,1)
-plt.xlim(150, 400)
+plt.xlim(200, 370)
 plt.ylabel('Number of Clusters')
 plt.plot(x, y1, 'k-', label=r'Total, any $\kappa^2$')
 plt.plot(x, y3, 'k--', label=r'Satellite, $\kappa^2 < 0.2$')
@@ -100,8 +104,10 @@ plt.legend(loc='center left', prop={'size': 9})
 plt.grid(True)
 
 # plt.savefig(f'{case}.png', format='png')
-plt.close()
-# plt.show()
+# plt.close()
+plt.show()
+
+exit()
 
 plt.figure(2)
 ax1 = plt.subplot(2,1,1)
@@ -132,7 +138,7 @@ plt.xlabel('Radius')
 plt.ylabel('KDE')
 plt.grid(True)
 
-plt.savefig(f'{case}_Dist.png', format='png')
+# plt.savefig(f'{case}_Dist.png', format='png')
 # plt.show()
 
 # scale_x = 1
