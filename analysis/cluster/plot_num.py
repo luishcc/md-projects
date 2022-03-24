@@ -6,7 +6,7 @@ import numpy as np
 
 R = 6
 ratio = 48
-A = -90
+A = -50
 
 separation = 5
 
@@ -75,7 +75,7 @@ plt.figure(1)
 plt.suptitle(f'R={R}; ratio={ratio}; A={A}')
 
 ax1 = plt.subplot(2,1,1)
-plt.xlim(200, 370)
+plt.xlim(100, 250)
 plt.ylabel('Number of Clusters')
 plt.plot(x, y1, 'k-', label=r'Total, any $\kappa^2$')
 plt.plot(x, y3, 'k--', label=r'Satellite, $\kappa^2 < 0.2$')

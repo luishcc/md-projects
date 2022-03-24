@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from scipy import stats
 
 
 R = 6
@@ -15,9 +16,16 @@ dir_out = '/'.join([path, 'fig'])
 if not os.path.isdir(dir_out):
     os.mkdir(dir_out)
 
+
+
+
+
 for file in os.scandir(path):
 
+
     name = file.name.split('.')[0]
+
+    # name = '300.csv'
 
     try:
         df = pd.read_csv(file.path)
@@ -42,7 +50,7 @@ for file in os.scandir(path):
 
     try:
         # df['radius'].plot(marker='.', linestyle='none')
-        df['radius'].plot.kde(bw_method=0.1)
+        # df['radius'].plot.kde(bw_method=0.1)
         # df['size'].plot.kde(bw_method=0.01)
         df['radius'].plot.hist(bins=50, alpha=0.5, density=True)
         # df['size'].plot.hist(bins=50, alpha=0.5)
@@ -53,15 +61,32 @@ for file in os.scandir(path):
         open(f'{dir_out}/{name}.png', 'w').close()
         continue
 
+    main = df.drop(df[df['radius'] < 5].index)
+    satellite = df.drop(df[df['radius'] > 5].index)
+
+    try:
+        am, locm, scalem = stats.skewnorm.fit(main['radius'].tolist())
+        ass, locs, scales = stats.skewnorm.fit(satellite['radius'].tolist())
+        xs = np.linspace(0, 5, 100)
+        xm = np.linspace(5, 18, 100)
+        pm = stats.skewnorm.pdf(xm, am, locm, scalem)
+        ps = stats.skewnorm.pdf(xs, ass, locs, scales)
+
+        plt.plot(xs, ps)
+        plt.plot(xm, pm)
+    except:
+        pass
+
+
     plt.title(f'Droplet Size Distribution, A={A}, snapshot={name}')
     plt.xlim(0, 15)
-    plt.ylim(0, 0.5)
+    plt.ylim(0, 0.8)
     plt.xlabel('Radius')
     plt.ylabel('Density')
     plt.grid(True)
     plt.savefig(f'{dir_out}/{name}.png', format='png')
-    plt.close(1)
     # plt.show()
+    plt.close(1)
 
 
 

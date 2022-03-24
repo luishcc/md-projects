@@ -39,9 +39,6 @@ plt.figure(1)
 def func(x, a, b, c, d):
     return a + b*x + c*x*2 + d*x**3
 
-def gaus(x,a,x0,sigma):
-    return a*exp(-(x-x0)**2/(2*sigma**2))
-
 
 initials = [10, 30, 8 , -15] # initial guess
 from scipy.optimize import leastsq
@@ -55,7 +52,6 @@ def asymGaussian(x, p):
 
 def residuals(p,y,x):
     return y - asymGaussian(x, p)
-
 
 
 for snap in snaps[A]:
