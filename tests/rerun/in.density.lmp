@@ -10,7 +10,7 @@ neigh_modify        every 1 check yes
 
 atom_style	        mdpd
 
-variable Radius equal 8.0
+variable Radius equal 10.0
 variable WaveNumber equal 100/55
 variable WaveLength equal 2*PI*v_Radius*v_WaveNumber
 print ${WaveLength}
@@ -19,7 +19,7 @@ print ${WaveLength}
 region     mdpd     block -25 25 -25 25 0 ${WaveLength} units box
 create_box          1 mdpd
 
-lattice             fcc 7.7
+lattice             fcc 8
 region     tube     cylinder z 0 0 v_Radius INF INF
 create_atoms        1 region tube
 
@@ -28,11 +28,11 @@ region     avg     cylinder z 0 0 3 INF INF
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
-pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
+pair_coeff          1 1 mdpd         -90 25 18.0 1.0 0.75
 mass                1 1
 
 
-compute den all chunk/atom bin/cylinder z lower 3 0 0 0 3 4 discard yes
+compute den all chunk/atom bin/cylinder z lower 4 0 0 0 6 4 discard yes
 fix den all ave/chunk 1 100 100 den density/number file den.txt
 
 compute             mythermo all temp
@@ -48,6 +48,6 @@ fix         mvv     all mvv/dpd 0.65
 
 timestep            0.01
 
-dump full all custom 100 dump.all3 id x y z vx vy vz fx fy fz
+#dump full all custom 100 dump.all3 id x y z vx vy vz fx fy fz
 
-run                 1000
+run                 2000
