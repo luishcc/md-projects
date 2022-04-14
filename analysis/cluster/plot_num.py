@@ -6,7 +6,7 @@ import numpy as np
 
 R = 6
 ratio = 48
-A = -50
+A = -90 
 
 separation = 5
 
@@ -47,10 +47,10 @@ for file in os.scandir(path):
     # main = main.multiply(1/(30*1810))
 
     print(df.shape)
-    num_cluster[name] = df.shape[0] / (30 * 0.4)
-    num_drops[name] = df.shape[0]  / (30 * 0.4 )
-    num_main[name] = main.shape[0] / (30 * 0.4)
-    num_satellite[name] = satellite.shape[0] / (30 * 0.4)
+    num_cluster[name] = df.shape[0] / (30 * 1810)
+    num_drops[name] = df.shape[0]  / (30 * 1810)
+    num_main[name] = main.shape[0] / (30 * 1810)
+    num_satellite[name] = satellite.shape[0] / (30 * 1810)
     print()
 
 
@@ -75,8 +75,8 @@ plt.figure(1)
 plt.suptitle(f'R={R}; ratio={ratio}; A={A}')
 
 ax1 = plt.subplot(2,1,1)
-plt.xlim(100, 250)
-plt.ylabel('Number of Clusters')
+plt.xlim(200, 350)
+plt.ylabel('Clusters Density')
 plt.plot(x, y1, 'k-', label=r'Total, any $\kappa^2$')
 plt.plot(x, y3, 'k--', label=r'Satellite, $\kappa^2 < 0.2$')
 plt.plot(x, y4, 'b-.', label=r'Main, $\kappa^2 < 0.2$')
@@ -84,6 +84,9 @@ plt.grid(True)
 plt.legend(loc='upper left', prop={'size': 8.5})
 # plt.plot(max_snap2, max(num_drops.values()), 'ko')
 # plt.plot(max_snap1, max(num_cluster.values()), 'ko')
+
+print()
+print('PERCENT: ', max(num_satellite.values())/max(num_main.values()))
 
 ax2 = plt.subplot(2,1,2, sharex=ax1)
 

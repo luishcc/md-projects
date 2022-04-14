@@ -50,8 +50,8 @@ for file in os.scandir(path):
 
     try:
         # df['radius'].plot(marker='.', linestyle='none')
-        # df['radius'].plot.kde(bw_method=0.1)
         # df['size'].plot.kde(bw_method=0.01)
+        df['radius'].plot.kde(bw_method=0.1)
         df['radius'].plot.hist(bins=50, alpha=0.5, density=True)
         # df['size'].plot.hist(bins=50, alpha=0.5)
         # df['anisotropy'].plot.hist(bins=50, alpha=0.5)
