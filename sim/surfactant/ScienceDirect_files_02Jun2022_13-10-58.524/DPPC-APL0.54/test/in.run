@@ -8,9 +8,10 @@ neighbor 0.3 bin
 neigh_modify delay 4 every 2
 comm_modify vel yes
 
-read_data dppc-apl0.54.data
+read_data data.data
 
-region  water  block 0 18.2 0 18.2 16 24
+region  water  cylinder y 9 20 6 INF INF
+#region  water  block 0 18.2 0 18.2 16 24
 create_atoms 5 random 21792 2021 water
 group 1 type 1
 group 2 type 2
@@ -54,6 +55,8 @@ pair_coeff  3  3   mdpd  -34.0  25.0  4.5  1.0  0.75
 pair_coeff 1*2 4   mdpd  -30.0  25.0  4.5  1.0  0.75
 pair_coeff  3  4   mdpd  -27.0  25.0  4.5  1.0  0.75
 
+
+dump 20 all atom 100 min.lammpstrj
 
 neigh_modify every 1 delay 0 check yes
 min_style cg
