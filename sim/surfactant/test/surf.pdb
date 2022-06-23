@@ -1,0 +1,9 @@
+HEADER
+HETATM    1  H     2    2        0.000   0.000   0
+HETATM    2  H     2    2        0.5   0.000   0
+HETATM    3  C     2    2        1.00   0.000   0
+HETATM    4  C     2    2        1.5   0.000   0
+HETATM    5  C     2    2        2.0   0.000   0
+HETATM    6  C     2    2        2.5   0.000   0
+HETATM    7  C     2    2        3   0.000   0
+

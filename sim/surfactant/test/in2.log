@@ -1,0 +1,40 @@
+units lj
+dimension 3
+boundary p p p
+
+atom_style molecular
+neighbor 0.3 bin
+neigh_modify delay 4 every 2
+comm_modify vel yes
+
+read_data pol.data
+Reading data file ...
+  orthogonal box = (0.0000000 -8.0000000 -8.0000000) to (60.000000 8.0000000 8.0000000)
+  6 by 1 by 1 MPI processor grid
+  reading atoms ...
+  4200 atoms
+  scanning bonds ...
+  12 = max bonds/atom
+  reading bonds ...
+  19044 bonds
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+    20 = max # of 1-2 neighbors
+   212 = max # of 1-3 neighbors
+  2603 = max # of 1-4 neighbors
+   150 = max # of special neighbors
+  special bonds CPU = 0.015 seconds
+  read_data CPU = 0.040 seconds
+
+
+region  water  cylinder x 0 0 6 INF INF
+create_atoms 3 random 21792 2021 water
+Created 21792 atoms
+  using lattice units in orthogonal box = (0.0000000 -8.0000000 -8.0000000) to (60.000000 8.0000000 8.0000000)
+  create_atoms CPU = 0.001 seconds
+
+#fix 1 all property/atom d_rho
+compute 10 all sph/rho/atom
+ERROR: Unrecognized compute style 'sph/rho/atom' is part of the SPH package which is not enabled in this LAMMPS binary. (src/modify.cpp:1265)
+Last command: compute 10 all sph/rho/atom
