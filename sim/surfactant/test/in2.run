@@ -3,69 +3,46 @@ units lj
 dimension 3
 boundary p p p
 
-atom_style molecular
+atom_style hybrid angle mdpd
 neighbor 0.3 bin
 neigh_modify delay 4 every 2
 comm_modify vel yes
 
-read_data pol.data
-
+read_data system.data
 
 region  water  cylinder x 0 0 6 INF INF
-create_atoms 3 random 21792 2021 water
+create_atoms 3 random 20357 2021 water
 
-#fix 1 all property/atom d_rho
-compute 10 all sph/rho/atom
-
+#fix 1 all property/atom d_meso/rho
+#compute 10 all sph/rho/atom
 
 group 1 type 1
 group 2 type 2
-group 3 type 3
-group 4 type 4
-group water type 5
-group membrane type 1:4
+group water type 3
+group membrane type 1:2
 group all union water membrane
 
-bond_style harmonic
-bond_coeff 1 200 0.45
-#bond_coeff 2 200 0.40
+group aa union 1 2 water
+set group water sph/rho 6
 
-#angle_style harmonic
-#angle_coeff 1 2 180
-#angle_coeff 2 2 180
-#angle_coeff 3 2 120
-#angle_coeff 4 2 100
-#angle_coeff 5 2 180
-#angle_coeff 6 2 180
-#angle_coeff 7 2 180
-#angle_coeff 8 2 180
-#angle_coeff 9 2 120
-#angle_coeff 10 2 180
-#angle_coeff 11 2 180
-#angle_coeff 12 2 180
-#angle_coeff 13 2 180
+
+bond_style harmonic
+bond_coeff 1 400 0.64
+bond_coeff 2 400 0.64
+
+angle_style harmonic
+angle_coeff 1 100 160
+angle_coeff 2 100 160
 
 pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
 pair_coeff  *  *   mdpd/rhosum  0.75
-#pair_coeff  4  4   mdpd  -23.0  25.0  4.5  1.0  0.75
-#pair_coeff  5  5   mdpd  -50.0  25.0  4.5  1.0  0.75
-#pair_coeff  4  5   mdpd  -26.0  25.0  4.5  1.0  0.75
-#pair_coeff 1*2 5   mdpd  -51.0  25.0  4.5  1.0  0.75
-#pair_coeff  3  5   mdpd  -48.0  25.0  4.5  1.0  0.75
-#pair_coeff  1  1   mdpd  -37.0  25.0  4.5  1.0  0.75
-#pair_coeff  1  2   mdpd  -37.0  25.0  4.5  1.0  0.75
-#pair_coeff  2  2   mdpd  -37.0  25.0  4.5  1.0  0.75
-#pair_coeff 1*2 3   mdpd  -34.0  25.0  4.5  1.0  0.75
-#pair_coeff  3  3   mdpd  -34.0  25.0  4.5  1.0  0.75
-#pair_coeff 1*2 4   mdpd  -30.0  25.0  4.5  1.0  0.75
-#pair_coeff  3  4   mdpd  -27.0  25.0  4.5  1.0  0.75
 
-pair_coeff  2  2   mdpd  -23.0  25.0  4.5  1.0  0.75
-pair_coeff  3  3   mdpd  -50.0  25.0  4.5  1.0  0.75
-pair_coeff  2  3   mdpd  -26.0  25.0  4.5  1.0  0.75
-pair_coeff  1  3   mdpd  -51.0  25.0  4.5  1.0  0.75
-pair_coeff  1  1   mdpd  -37.0  25.0  4.5  1.0  0.75
-pair_coeff  1  2   mdpd  -30.0  25.0  4.5  1.0  0.75
+pair_coeff  1  1   mdpd  -19.0  25.0  12  1.0  0.75
+pair_coeff  1  2   mdpd  -5.98  25.0  12  1.0  0.75
+pair_coeff  1  3   mdpd  -32.18 25.0  12  1.0  0.75
+pair_coeff  2  2   mdpd  -22.0  25.0  12  1.0  0.75
+pair_coeff  2  3   mdpd  -27.0  25.0  12  1.0  0.75
+pair_coeff  3  3   mdpd  -40.0  25.0  12  1.0  0.75
 
 
 dump 20 all atom 100 min2.lammpstrj
@@ -81,7 +58,7 @@ thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-#thermo_modify	 lost ignore lost/bond ignore
+thermo_modify	 lost ignore lost/bond ignore
 
 timestep 0.01
 

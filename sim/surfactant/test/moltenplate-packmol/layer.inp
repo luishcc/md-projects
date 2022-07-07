@@ -1,0 +1,19 @@
+
+tolerance 0.1
+
+nloop0 30
+
+output layer_surf.xyz
+filetype xyz
+
+structure surfactant.xyz
+  number 5000
+  atoms 1
+    inside box 1 -9 -9 29 9 9
+    inside cylinder 0. 0. 0. 1. 0. 0. 5.4 30
+  end atoms
+  atoms 4
+    inside box 1 -9 -9 29 9 9
+    outside cylinder 0. 0. 0. 1. 0. 0. 6.0 30
+  end atoms
+end structure
