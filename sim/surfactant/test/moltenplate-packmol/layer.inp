@@ -1,19 +1,23 @@
 
-tolerance 0.1
+tolerance 0.8
+discale 1.5
 
-nloop0 50
+movebadrandom
+
+nloop0 100
 
 output layer_surf.xyz
 filetype xyz
 
 structure surfactant.xyz
-  number 10000
+  number 3000
   atoms 1
-    inside box 0 -10 -10 120 10 10
-    inside cylinder 0. 0. 0. 1. 0. 0. 5.4 120
+    inside box 1.1 -10 -10 36.5 10 10
+    inside cylinder 0. 0. 0. 1. 0. 0. 5.4 37.7
+    outside cylinder 0. 0. 0. 1. 0. 0. 5.2 37.7
   end atoms
   atoms 4
-    inside box 0 -10 -10 120 10 10
-    outside cylinder 0. 0. 0. 1. 0. 0. 6.0 120
+    inside box 1.1 -10 -10 36.5 10 10
+    outside cylinder 0. 0. 0. 1. 0. 0. 6.2 37.7
   end atoms
 end structure

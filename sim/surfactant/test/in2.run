@@ -8,10 +8,10 @@ neighbor 0.3 bin
 neigh_modify delay 4 every 2
 comm_modify vel yes
 
-read_data big.data
+read_data system.data
 
 region  water  cylinder x 0 0 6 INF INF
-create_atoms 3 random 50000 2021 water
+create_atoms 3 random 16000 2021 water
 
 #fix 1 all property/atom d_meso/rho
 #compute 10 all sph/rho/atom
@@ -45,7 +45,7 @@ pair_coeff  2  3   mdpd  -27.0  25.0  12  1.0  0.75
 pair_coeff  3  3   mdpd  -40.0  25.0  12  1.0  0.75
 
 
-dump 20 all atom 100 min2.lammpstrj
+dump 20 all atom 100 min-l.lammpstrj
 
 neigh_modify every 1 delay 0 check yes
 min_style cg
@@ -62,8 +62,8 @@ thermo_modify	 lost ignore lost/bond ignore
 
 timestep 0.01
 
-dump 1 membrane atom 1000 membrane-big.lammpstrj
-dump 2 all atom 100 all-big.lammpstrj
-dump 3 water atom 1000 water-big.lammpstrj
+#dump 1 membrane atom 1000 membrane-big.lammpstrj
+dump 2 all atom 100 all.lammpstrj
+#dump 3 water atom 1000 water-big.lammpstrj
 
-run 250000
+run 350000

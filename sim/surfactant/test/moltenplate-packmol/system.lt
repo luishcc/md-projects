@@ -1,11 +1,14 @@
 import "surfactant.lt"
 using namespace surfactant
 
+#import "water.lt"
+#using namespace water
 
-layer = new HT3 [10000]
+layer = new HT3 [3000]
+#liquid = new H2O [0]
 
 write_once("Data Boundary") {
-  0      120       xlo xhi
+  0      37.7       xlo xhi
   -25      25       ylo yhi
   -25      25       zlo zhi
 }

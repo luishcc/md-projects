@@ -4,7 +4,7 @@ from scipy.signal import savgol_filter
 
 
 file = 'in2.log'
-file = 'log.lammps'
+#file = 'log.lammps'
 
 energy = []
 pressure = []
@@ -13,7 +13,7 @@ step = []
 i=0
 flag = True
 with open(file, 'r') as fd:
-    for _ in range(93):
+    for _ in range(178):
         fd.readline()
     while flag:
         print(i)
@@ -31,7 +31,7 @@ with open(file, 'r') as fd:
             while True:
                 try:
                     line = fd.readline().split()
-                    step.append(int(line[0]))
+                    step.append(int(line[0])/100)
                     energy.append(float(line[4]))
                     pressure.append(float(line[5]))
                 except:
@@ -52,7 +52,13 @@ def move_avg(data, num):
 fig, ax = plt.subplots(1,2)
 
 ax[0].plot(step[1:], energy[1:])
+ax[0].set_xlabel('Time')
+ax[0].set_ylabel('Energy')
+
 ax[1].plot(step[1:], pressure[1:])
+ax[1].set_xlabel('Time')
+ax[1].set_ylabel('Pressure')
+
 
 energy2 = savgol_filter(energy[1:], 51, 2)
 pressure2 = savgol_filter(pressure[1:], 51, 2)
