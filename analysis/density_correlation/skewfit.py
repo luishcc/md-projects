@@ -13,7 +13,7 @@ from scipy import stats
 
 R = 6
 ratio = 48
-A = 80
+A = 50
 grid = 1
 
 max = 600
@@ -58,15 +58,15 @@ for snap in snaps[A]:
     print(snap)
     data = read_dat('/'.join([path_to_data, f'{snap}.dat']))
     # l = len(data['freq'][7:])//6
-    x = np.multiply(data['freq'][3:50], 1)
-    y = np.multiply(data[str(6)][3:50], 1)
+    x = np.multiply(data['freq'][6:20], 1)
+    y = np.multiply(data[str(6)][6:20], 1)
     n = len(x)
     plt.plot(x, y, label=f'time={snap}', marker='.')
 
     # sa, sloc, sscale = stats.skewnorm.fit(y)
     # sa, sloc, sscale = 10, 0.8, 0.08
 
-    xx = np.linspace(x[0], x[-1], 100)
+    xx = np.linspace(x[0], x[-1], 300)
     # pp = stats.skewnorm.pdf(xx, sa, sloc, sscale)
     # plt.plot(xx, pp, 'k-')
 
@@ -84,10 +84,10 @@ for snap in snaps[A]:
     ste = np.sqrt( sum( (gaus2 - ar(y))**2 ) /(n-2) )
     chi = sum((gaus2 - ar(y))**2/ar(y))
     chi2 = sum((gaus2 - ar(y))**2/gaus2)
-    a = chisquare(y, gaus2)
+    # a = chisquare(y, gaus2)
 
     print(ste, chi/n, chi2/n )
-    print(a[0]/(n-1), a[0], a[1])
+    # print(a[0]/(n-1), a[0], a[1])
     print(xx[np.argmax(gaus)])
     # print(opt.fmin(lambda x1: -gaus(x1,*popt), 0))
 

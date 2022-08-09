@@ -9,7 +9,7 @@ from mdpkg.rwfile import read_dat, Dat
 
 R = 6
 ratio = 48
-A = -90
+A = -50
 grid = 1
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
@@ -30,7 +30,7 @@ while os.path.isfile(file):
 
     plt.figure(1)
 
-    for i in range(6, 8): #len(data)
+    for i in range(5, 8): #len(data)
         if not np.any(np.isnan(data[str(i-1)])):
             plt.plot(data['freq'][1:], data[str(i-1)][1:],
                      label=f'r={i-1}', marker='.')
