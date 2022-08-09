@@ -18,3 +18,5 @@ restart.*
 *.pyc
 *.log
 *.mpg
+
+*.xyz
