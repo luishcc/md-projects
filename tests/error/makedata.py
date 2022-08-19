@@ -31,7 +31,7 @@ for i in range(10):
     for j in range(1,4):
         real = [sine(xx) for xx in x]
         data[:,j] = real
-        dataf[:,j] = abs(rfft(real))
+        dataf[:,j] = (rfft(real))
 
 
     _dat = Dat(data, labels=label)

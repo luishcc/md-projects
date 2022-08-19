@@ -58,8 +58,8 @@ for snap in snaps[A]:
     print(snap)
     data = read_dat('/'.join([path_to_data, f'{snap}.dat']))
     # l = len(data['freq'][7:])//6
-    x = np.multiply(data['freq'][6:20], 1)
-    y = np.multiply(data[str(6)][6:20], 1)
+    x = np.multiply(data['freq'][6:50], 1)
+    y = np.multiply(data[str(6)][6:50], 1)
     n = len(x)
     plt.plot(x, y, label=f'time={snap}', marker='.')
 

@@ -77,10 +77,10 @@ for snap in snaps[A]:
     ste = np.sqrt( sum((gaus(x,*popt) - ar(y))**2)/(n-2))
     chi = sum((gaus(x,*popt) - ar(y))**2/ar(y))
     chi2 = sum((gaus(x,*popt) - ar(y))**2/gaus(x,*popt))
-    a = chisquare(y, gaus(x,*popt))
+    # a = chisquare(y, gaus(x,*popt))
 
     print(ste, chi/n, chi2/n )
-    print(a[0]/(n-1), a[0], a[1])
+    # print(a[0]/(n-1), a[0], a[1])
     print(opt.fmin(lambda x1: -gaus(x1,*popt), 0))
 
 

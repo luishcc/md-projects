@@ -7,7 +7,7 @@ ratio = 48
 A = -60
 snap = 150
 
-file = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
+file = f'~/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
 # file = 'a.csv'
 
 

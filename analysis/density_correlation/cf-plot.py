@@ -17,10 +17,15 @@ from mdpkg.rwfile import read_dat
 r6 = [0.017699, 0.018868, 0.016257, 0.017699,
         0.018339, 0.019133, 0.017699, 0.017685]
 
+r6 = [0.017699, 0.018868, 0.017699,
+        0.018339, 0.017699, 0.017685]
+
 # r6 = [0.017699, 0.019868, 0.015957, 0.017699,
 #         0.018939, 0.019933, 0.017699, 0.017685]
 
-xr6 = [226, 301, 376, 452, 527, 603, 904, 1809]
+# xr6 = [226, 301, 376, 452, 527, 603, 904, 1809]
+xr6 = [226, 301,  452, 527,  904, 1809]
+
 
 r8 = [0.013245, 0.013289, 0.013267]
 xr8 = [301, 603, 1206]
@@ -63,7 +68,7 @@ skip_f = 3
 for i in range(5, 6):
     # print(data[str(i-1)])
     if not np.any(np.isnan(data[str(i-1)])):
-        ax2.plot(data['dz'], data[str(i-1)],  label=f'r={i-1}')
+        ax2.plot([k/1809 for k in data['dz']], data[str(i-1)],  label=f'r={i-1}')
         ax1.plot(data_f['freq'][skip_f:], data_f[str(i-1)][skip_f:],  label=f'r={i-1}')
 
 
@@ -84,10 +89,10 @@ ax.set_xlabel('$L/2\pi R_0$')
 ax1.set_ylim(0,9)
 ax1.set_xlim(0,0.1)
 ax1.set_xlabel('q')
-ax1.set_ylabel('Ĝ(r,dz)')
+ax1.set_ylabel('Ĝ(r,q)')
 
 ax2.set_ylim(0.3,0.8)
-ax2.set_xlabel('dz')
+ax2.set_xlabel('dz/L')
 ax2.set_ylabel('G(r,dz)')
 
 

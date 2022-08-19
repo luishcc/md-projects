@@ -6,12 +6,12 @@ import numpy as np
 
 R = 6
 ratio = 48
-A = -90 
+A = -90
 
 separation = 5
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
-path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
+path = f'~/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
 # dir_out = '/'.join([path, 'fig'])
 #
 # if not os.path.isdir(dir_out):
