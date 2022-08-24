@@ -39,7 +39,7 @@ xr8 = [l/(2*np.pi*8) for l in xr8]
 xr10 = [l/(2*np.pi*10) for l in xr10]
 
 
-snap = 160
+snap = 150
 
 R = 6
 ratio = 48
@@ -65,7 +65,7 @@ ax2.set_axes_locator(ip)
 # mark_inset(ax1, ax2, loc1=2, loc2=4, fc="none", ec='0.5')
 
 skip_f = 3
-for i in range(5, 6):
+for i in range(4, 7):
     # print(data[str(i-1)])
     if not np.any(np.isnan(data[str(i-1)])):
         ax2.plot([k/1809 for k in data['dz']], data[str(i-1)],  label=f'r={i-1}')
@@ -86,12 +86,12 @@ ax.legend(loc=(0.55, 0.05))
 ax.set_xlabel('$L/2\pi R_0$')
 
 # Some ad hoc tweaks.
-ax1.set_ylim(0,9)
+# ax1.set_ylim(0,9)
 ax1.set_xlim(0,0.1)
 ax1.set_xlabel('q')
 ax1.set_ylabel('Ĝ(r,q)')
 
-ax2.set_ylim(0.3,0.8)
+# ax2.set_ylim(0.3,0.8)
 ax2.set_xlabel('dz/L')
 ax2.set_ylabel('G(r,dz)')
 
