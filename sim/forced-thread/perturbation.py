@@ -56,15 +56,15 @@ def remove_atoms(list, a, wl, type='simple'):
         del list[i]
 
 
-density = 6.9
+density = 7.65
 radius = 10
-wave_number = 0.55
+wave_number = 0.57
 wave_length = (2 * np.pi * radius) / wave_number
-perturbation_amp = 0.01 
+perturbation_amp = 0.01
 
 box = Box(6*radius, 6*radius, wave_length)
 
-data = DumpReader('dump.atom')
+data = DumpReader('dump.initial_larger')
 
 remove_atoms(data.atoms, perturbation_amp, wave_length)
 #remove_atoms(data.atoms, perturbation_amp, wave_length, type='satellite')
