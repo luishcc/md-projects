@@ -19,7 +19,6 @@ if not os.path.isdir(dir_out):
 
 
 
-
 for file in os.scandir(path):
 
 
@@ -92,7 +91,7 @@ for file in os.scandir(path):
         avg_sat = satellite['radius'].mean()
         std_sat = satellite['radius'].std()
 
-        plt.errorbar(avg, 0.6, xerr = std, fmt='o',ecolor = 'black',color='black')
+        plt.errorbar(avg, 0.6, xerr = std, fmt='o',ecolor = 'black ',color='black')
         plt.errorbar(avg_sat, 0.6, xerr = std_sat, fmt='o',ecolor = 'black',color='black')
         plt.scatter(median, 0.7, 'ko')
         plt.text(median, 0.75, 'ko')

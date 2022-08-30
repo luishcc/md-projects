@@ -6,34 +6,35 @@ import numpy as np
 from scipy.sparse import coo_matrix
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-plt.rcParams.update({
-  "text.usetex": True,
-  "font.family": "Helvetica"
-})
+# plt.rcParams.update({
+#   "text.usetex": True,
+#   "font.family": "Helvetica"
+# })
 
 
 from mdpkg.rwfile import DumpReader, Dat
 from mdpkg.grid import Grid
 
 
-dir = '/home/luishcc/testdata'
-dir = '/home/luishcc/md-projects/tests/rerun'
+# dir = '/home/luishcc/testdata'
+# dir = '/home/luishcc/md-projects/tests/rerun'
+dir = '/home/luis/md-projects/sim/satellite'
 
 
 velocity_file = 'dump.vel2'
 trj_file = 'thread2.lammpstrj'
 
+#
+# velocity_file = 'dump.vel'
+# trj_file = 'thread.lammpstrj'
+#
+#
+# velocity_file = 'dump.vel3'
+# trj_file = 'thread3.lammpstrj'
 
-velocity_file = 'dump.vel'
-trj_file = 'thread.lammpstrj'
 
 
-velocity_file = 'dump.vel3'
-trj_file = 'thread3.lammpstrj'
-
-
-
-grid = 1.5
+grid = 1.4
 
 trj = DumpReader('/'.join([dir, trj_file]))
 trj.read_sequential()
@@ -46,7 +47,7 @@ trj.read_sequential()
 
 import matplotlib as mpl
 cmap = mpl.cm.cool
-norm = mpl.colors.Normalize(vmin=5, vmax=10)
+norm = mpl.colors.Normalize(vmin=-0.3, vmax=0.3)
 
 def run2():
 
@@ -73,7 +74,7 @@ def run2():
     coo2 = coo_matrix((d[2], (idr, idz)))
     return coo, coo0, coo1, coo2
 
-trj.skip_next(579)
+trj.skip_next(180)
 end = False
 while True:
     try:

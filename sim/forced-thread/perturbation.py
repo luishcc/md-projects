@@ -44,11 +44,11 @@ def remove_atoms(list, a, wl, type='simple'):
         pert_func = perturbation_radius
     for atom in list:
         i+=1
-        print(i, len(list))
+        # print(i, len(list))
         x, y, z = atom.x
         max_dist = radius*pert_func(a, wl, z)
         current_dist = np.sqrt(x**2 + y**2)
-        print(current_dist, max_dist)
+        # print(current_dist, max_dist)
         if current_dist > max_dist:
             id_to_remove.append(atom.id)
 
@@ -60,7 +60,7 @@ density = 7.65
 radius = 10
 wave_number = 0.57
 wave_length = (2 * np.pi * radius) / wave_number
-perturbation_amp = 0.01
+perturbation_amp = 0.1
 
 box = Box(6*radius, 6*radius, wave_length)
 
@@ -76,4 +76,4 @@ for atom in data.atoms:
 atoms_list = Atoms(positions, 1.)
 
 data = DataFile(box, atoms_list)
-data.write_file('perturbed', os.getcwd())
+data.write_file('initial_perturbed', os.getcwd())
