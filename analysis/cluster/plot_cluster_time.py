@@ -1,4 +1,16 @@
 import pandas as pd
+import matplotlib as mpl
+
+dpi = 1600
+side = 7
+rc_fonts = {
+    "font.family": "serif",
+    "font.size": 12,
+    'figure.figsize': (0.8*side, 0.6*side),
+    "text.usetex": True
+    }
+mpl.rcParams.update(rc_fonts)
+
 import matplotlib.pyplot as plt
 import os
 import numpy as np
@@ -6,12 +18,14 @@ import numpy as np
 
 R = 6
 ratio = 48
-A = -90
+A = -70
 
 separation = 5
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
-path = f'/home/luis/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
+# path = f'/home/luis/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
+path = f'/home/luis/md-projects/analysis/cluster/break_avg/R{R}_ratio{ratio}_A{abs(A)}/'
+
 # dir_out = '/'.join([path, 'fig'])
 #
 # if not os.path.isdir(dir_out):
@@ -47,10 +61,15 @@ for file in os.scandir(path):
     # main = main.multiply(1/(30*1810))
 
     print(df.shape)
-    num_cluster[name] = df.shape[0] / (30 * 1810)
-    num_drops[name] = df.shape[0]  / (30 * 1810)
-    num_main[name] = main.shape[0] / (30 * 1810)
-    num_satellite[name] = satellite.shape[0] / (30 * 1810)
+    # num_cluster[name] = df.shape[0] / (30 * 1810)
+    # num_drops[name] = df.shape[0]  / (30 * 1810)
+    # num_main[name] = main.shape[0] / (30 * 1810)
+    # num_satellite[name] = satellite.shape[0] / (30 * 1810)
+
+    num_cluster[name] = df.shape[0] / (30 * 2*np.pi*4.8)
+    num_drops[name] = df.shape[0]  / (30 * 2*np.pi*4.8)
+    num_main[name] = main.shape[0] / (30 * 2*np.pi*4.8)
+    num_satellite[name] = satellite.shape[0] / (30 * 2*np.pi*4.8)
     print()
 
 
@@ -72,39 +91,49 @@ max_snap3 = max(num_satellite, key=num_satellite.get)
 max_snap4 = max(num_main, key=num_main.get)
 
 plt.figure(1)
-plt.suptitle(f'R={R}; ratio={ratio}; A={A}')
+# plt.suptitle(f'R={R}; ratio={ratio}; A={A}')
 
-ax1 = plt.subplot(2,1,1)
-plt.xlim(200, 350)
-plt.ylabel('Clusters Density')
-plt.plot(x, y1, 'k-', label=r'Total, any $\kappa^2$')
-plt.plot(x, y3, 'k--', label=r'Satellite, $\kappa^2 < 0.2$')
-plt.plot(x, y4, 'b-.', label=r'Main, $\kappa^2 < 0.2$')
-plt.grid(True)
-plt.legend(loc='upper left', prop={'size': 8.5})
+ax1 = plt.subplot(1,1,1)
+# plt.xlim(200, 350)
+plt.ylabel('$<N_{droplets}>/2\pi R_0$')
+plt.xlabel(r'$t-t_b$')
+# plt.plot(x, y2, 'k-', label=r'Total, $\kappa^2 < 0.2$')
+# plt.plot(x, y3, 'k--', label=r'Satellite, $\kappa^2 < 0.2$')
+# plt.plot(x, y4, 'b-.', label=r'Main, $\kappa^2 < 0.2$')
+
+plt.plot(x, y2, 'k-', label=r'Total')
+plt.plot(x, y3, 'k--', label=r'Satellite')
+plt.plot(x, y4, 'b-.', label=r'Main')
+
+plt.scatter(max_snap2, num_drops[max_snap2], color='k')
+plt.scatter(max_snap2, num_satellite[max_snap2], color='k')
+# plt.grid(True)
+plt.legend(loc='upper left', prop={'size': 11.})
 # plt.plot(max_snap2, max(num_drops.values()), 'ko')
 # plt.plot(max_snap1, max(num_cluster.values()), 'ko')
 
 print()
-print('PERCENT: ', max(num_satellite.values())/max(num_main.values()))
-
-ax2 = plt.subplot(2,1,2, sharex=ax1)
-
-def catch(func, *args, handle=lambda e : e, **kwargs):
-    try:
-        return func(*args, **kwargs)
-    except:
-        return None
-
-p1 = [catch(lambda : 100*d/c) for c,d in zip(y2,y4)]
-p2 = [catch(lambda : 100*d/c) for c,d in zip(y2,y3)]
-
-plt.xlabel('Snapshot')
-plt.ylabel('% of Valid Droplets')
-plt.plot(x, p2, 'k--', label='Satellite')
-plt.plot(x, p1, 'b-.', label='Main')
-plt.legend(loc='center left', prop={'size': 9})
-plt.grid(True)
+print('PERCENT: ', max(num_satellite.values())/max(num_drops.values()))
+# print('PERCENT: ', num_satellite[max_snap2]/max(num_drops.values()))
+print(max_snap3)
+#
+# ax2 = plt.subplot(2,1,2, sharex=ax1)
+#
+# def catch(func, *args, handle=lambda e : e, **kwargs):
+#     try:
+#         return func(*args, **kwargs)
+#     except:
+#         return None
+#
+# p1 = [catch(lambda : 100*d/c) for c,d in zip(y2,y4)]
+# p2 = [catch(lambda : 100*d/c) for c,d in zip(y2,y3)]
+#
+# plt.xlabel('Snapshot')
+# plt.ylabel('% of Valid Droplets')
+# plt.plot(x, p2, 'k--', label='Satellite')
+# plt.plot(x, p1, 'b-.', label='Main')
+# plt.legend(loc='center left', prop={'size': 9})
+# plt.grid(True)
 
 # plt.savefig(f'{case}.png', format='png')
 # plt.close()

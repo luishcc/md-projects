@@ -1,6 +1,17 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib as mpl
 
+dpi = 1600
+side = 7
+rc_fonts = {
+    "font.family": "serif",
+    "font.size": 12,
+    'figure.figsize': (0.85*side, 0.55*side),
+    "text.usetex": True
+    }
+mpl.rcParams.update(rc_fonts)
+
+import matplotlib.pyplot as plt
 
 def func(x):
     b = x*np.sqrt(18)
@@ -17,7 +28,7 @@ x = func(oh)
 
 
 # r=5.7
-r=4.7
+r=4.8
 #r=6
 
 
@@ -29,23 +40,29 @@ oh_data = [0.266,0.321,0.451,0.704,0.901,1.137]
 
 q = []
 q_var = []
-for iter, a in enumarate(A[:4]):
+for iter, a in enumerate(A[:]):
     file = f'R{R}_ratio{ratio}_A{a}-peak.csv'
     with open(file, 'r') as fd:
+        fd.readline()
         line = fd.readline().split(',')
-        q.append(line[0])
-        q_var.append(line[1])
+        q.append(float(line[0])*2*np.pi*r)
+        q_var.append(float(line[1]))
 
 
+q_var = np.array(q_var)
 
-plt.figure()
-plt.plot(oh, x, label='Theory')
+fig, ax = plt.subplots(1,1)
+ax.plot(oh, x, 'k--', label='Theory')
 
-plt.errorbar(oh_data[:4], q, yerr = np.sqrt(q_var), fmt='o',ecolor = 'black',color='black')
+ax.errorbar(oh_data[:], q, yerr = np.sqrt(q_var)*2*np.pi*r,
+fmt='o',ecolor = 'black',color='black', label='Simulation')
 
-plt.title('Reduced Wavenumber')
-plt.ylabel(r'$\chi$')
-plt.xlabel(r'$Oh$')
-plt.legend(loc=0)
-plt.grid(True)
+ax.set_ylabel(r'$\chi$')
+ax.set_xlabel(r'$Oh$')
+from matplotlib import container
+handles, labels = ax.get_legend_handles_labels()
+handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
+ax.legend(handles, labels, loc='upper right')
+
+# plt.legend(loc=0)
 plt.show()
