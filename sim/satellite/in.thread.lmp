@@ -1,7 +1,7 @@
 # Script modified from mDPD example folder
 #
 # Break up of fluid thread
-processors 2 2 2
+processors 1 1 4
 
 units 		          lj
 dimension	          3
@@ -31,6 +31,9 @@ pair_coeff          1 1 mdpd/rhosum  0.75
 pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
 mass                1 1
 
+
+fix 2 all balance 1000 1.1 shift z 10 1.05
+
 compute             mythermo all temp
 thermo              100
 thermo_modify       temp mythermo
@@ -41,6 +44,9 @@ velocity            all create 1.0 2093 loop local dist gaussian
 comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 
+
+
+restart             100 restart.* 
 timestep            0.01
 
 dump        mydump  all atom 100 thread2.lammpstrj

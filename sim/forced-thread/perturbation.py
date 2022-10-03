@@ -56,10 +56,10 @@ def remove_atoms(list, a, wl, type='simple'):
         del list[i]
 
 
-density = 7.65
-radius = 10
-wave_number = 0.57
-wave_length = (2 * np.pi * radius) / wave_number
+density = 10.65
+radius = 14
+wave_number = 0.383
+wave_length = 2*(2 * np.pi * radius) / wave_number
 perturbation_amp = 0.1
 
 box = Box(6*radius, 6*radius, wave_length)

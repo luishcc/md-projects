@@ -1,6 +1,7 @@
 # Script modified from mDPD example folder
 #
 # Break up of fluid thread
+processors 2 2 1
 
 units 		          lj
 dimension	          3
@@ -10,36 +11,35 @@ neigh_modify        every 1 check yes
 
 atom_style	        mdpd
 
-variable Radius equal 14
-variable Radius_init equal v_Radius*1.5
-variable WaveNumber equal 0.383
-variable WaveLength equal 2*2*PI*v_Radius/v_WaveNumber
-print ${WaveLength}
 
-
-region     mdpd     block -30 30 -30 30 0 ${WaveLength} units box
+region     mdpd     block -10 10 -10 10 -10 10  units box
 create_box          1 mdpd
 
-lattice             fcc 10.65
-region     tube     cylinder z 0 0 v_Radius_init INF INF
-create_atoms        1 region tube
+lattice             fcc 9.7
+create_atoms        1 region mdpd
+
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
 pair_coeff          1 1 mdpd         -90 25 18.0 1.0 0.75
-mass                1 1.0
+mass                1 1
+
 
 compute             mythermo all temp
 thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-velocity            all create 1.0 38497 loop local dist gaussian
+
+velocity            all create 1.0 2093 loop local dist gaussian
 comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 
 
 timestep            0.01
-run                 2000
 
-write_dump all atom dump.initial_larger modify scale no
+dump        mydump  all atom 100 thread2.lammpstrj
+dump_modify mydump scale no
+
+
+run                 70000

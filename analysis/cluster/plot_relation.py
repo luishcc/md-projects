@@ -34,7 +34,17 @@ c = [1.248, 1.151, 1.234, 1.109, 1.222, .932]
 
 wave = [.018927425365090515, .017959188701441885, .016553644129911244,
 .014737153310297676, .013920311412504544, .01340404171055144]
-wave = [1/i for i in wave]
+# wave = [1/i for i in wave]
+wave = [i*2*np.pi*4.8 for i in wave]
+
+q_var = [3.156327982930347e-06,
+2.328394395880221e-06,
+1.8893985765694086e-06,
+2.054396275751638e-06,
+3.954677744054939e-06,
+9.193559899539904e-06]
+# q_var = [i*2*np.pi*4.8 for i in q_var]
+
 
 
 #
@@ -57,15 +67,30 @@ def pred2(x):
     return 0.75*(6*scale)**2*x-8.7**3
 
 
+def pred3(x):
+    scale = 0.8
+    return np.cbrt(0.75*(6*scale)**2/x)
+
+def pred4(x):
+    scale = 0.8
+    return (6*scale)*np.cbrt(1.5*np.pi/x)
+
 plt.figure()
-plt.plot(wave, b, 'ko', label='Simulation')
-# plt.plot(wave, b2, 'b-')
-# plt.plot(wave, b3, 'g-')
-x = np.linspace(wave[0], wave[-1], 100)
-plt.plot(x, pred(x), 'k--', label='Theory')
-plt.xlabel('$\lambda$ $[r_c]$')
+
+# plt.plot(wave, b, 'ko', label='Simulation')
+
+plt.errorbar(wave, b, xerr = np.sqrt(q_var)*2*np.pi*4.8,
+fmt='o',ecolor = 'black',color='black', label='Simulation')
+
+dv = abs(wave[-1]-wave[0])
+pdv = 0.3 * dv
+x = np.linspace(wave[0]+pdv, wave[-1]-pdv, 100)
+plt.plot(x, pred4(x), 'k--', label='Theory')
+
+# plt.xlabel('$\lambda$ $[r_c]$')
+plt.xlabel('$\chi$')
 plt.ylabel('$R_D$ $[r_c]$')
 plt.legend()
-plt.savefig('rel.png', transparent=True)
+plt.savefig('rel.png', transparent=False)
 
 plt.show()
