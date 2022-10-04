@@ -1,0 +1,5 @@
+      bond_coeff   @/bond:surfactant/HT3/ht   harmonic     116.847 7.5
+      bond_coeff   @/bond:surfactant/HT3/backbone   harmonic     116.847 7.5
+      angle_coeff   @/angle:surfactant/HT3/htt   harmonic     116.847 7.5
+      angle_coeff   @/angle:surfactant/HT3/backbone   harmonic     116.847 7.5
+

@@ -4,7 +4,7 @@ using namespace surfactant
 #import "water.lt"
 #using namespace water
 
-layer = new HT3 [3000]
+layer = new HT3 [2000]
 #liquid = new H2O [0]
 
 write_once("Data Boundary") {

@@ -1,0 +1,5 @@
+      bond_coeff   1   harmonic     116.847 7.5
+      bond_coeff   2   harmonic     116.847 7.5
+      angle_coeff   1   harmonic     116.847 7.5
+      angle_coeff   2   harmonic     116.847 7.5
+
