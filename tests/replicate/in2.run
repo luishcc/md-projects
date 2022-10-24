@@ -1,18 +1,15 @@
-log in_22.log
 units lj
 dimension 3
 boundary p p p
 
-processors 1 2 2
 atom_style hybrid angle mdpd
 neighbor 0.3 bin
 neigh_modify delay 4 every 2
 comm_modify vel yes
 
-read_data system_2_21.data
+read_data initial.data
 
-region  water  cylinder x 0 0 6 INF INF
-create_atoms 3 random 23000 2021 water
+replicate 2 1 1 
 
 #fix 1 all property/atom d_meso/rho
 #compute 10 all sph/rho/atom
@@ -45,12 +42,9 @@ pair_coeff  2  2   mdpd  -22.0  25.0  12  1.0  0.75
 pair_coeff  2  3   mdpd  -27.0  25.0  12  1.0  0.75
 pair_coeff  3  3   mdpd  -40.0  25.0  12  1.0  0.75
 
-
-#dump 20 all atom 100 min-l.lammpstrj
+dump 20 all atom 100 min-l.lammpstrj
 
 neigh_modify every 1 delay 0 check yes
-min_style cg
-minimize 0 0 1000 10000
 
 fix         mvv     all mvv/dpd 0.65
 
@@ -59,12 +53,11 @@ thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-#thermo_modify	 lost ignore lost/bond ignore
+thermo_modify	 lost ignore lost/bond ignore
 
-timestep 0.005
+timestep 0.01
 
-dump 2 all atom 10000 all22.lammpstrj
+dump 2 all atom 100 all-rep.lammpstrj
 
-run 10000000
+run 4000
 
-write_data  initial.data

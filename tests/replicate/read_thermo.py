@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 
 
-file = 'in2_f.log'
+file = 'in_f2.log'
 #file = 'log.lammps'
 
 energy = []
@@ -31,7 +31,7 @@ with open(file, 'r') as fd:
             while True:
                 try:
                     line = fd.readline().split()
-                    step.append(int(line[0])/100)
+                    step.append(int(line[0]))
                     energy.append(float(line[4]))
                     pressure.append(float(line[5]))
                 except:
@@ -52,11 +52,11 @@ def move_avg(data, num):
 fig, ax = plt.subplots(1,2)
 
 ax[0].plot(step[1:], energy[1:])
-ax[0].set_xlabel('Time')
+ax[0].set_xlabel('Snapshot')
 ax[0].set_ylabel('Energy')
 
 ax[1].plot(step[1:], pressure[1:])
-ax[1].set_xlabel('Time')
+ax[1].set_xlabel('Snapshot')
 ax[1].set_ylabel('Pressure')
 
 energy2 = savgol_filter(energy[1:], 51, 2)
@@ -64,11 +64,11 @@ pressure2 = savgol_filter(pressure[1:], 51, 2)
 ax[0].plot(step[1:], energy2, 'k-')
 ax[1].plot(step[1:], pressure2, 'k-')
 
-# num = 30
-# ene_avg = move_avg(energy[1:], num)
-# pre_avg = move_avg(pressure[1:], num)
-#
-# ax[0].plot(step[1:-num], ene_avg, 'k-')
-# ax[1].plot(step[1:-num], pre_avg, 'k-')
+num = 1000
+ene_avg = move_avg(energy[1:], num)
+pre_avg = move_avg(pressure[1:], num)
+
+ax[0].plot(step[1:-num], ene_avg, 'g-')
+ax[1].plot(step[1:-num], pre_avg, 'g-')
 
 plt.show()

@@ -7,6 +7,8 @@ restart.*
 
 *.csv
 
+remote/*
+
 */gif/
 */gif2
 *.gif

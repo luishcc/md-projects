@@ -1,0 +1,23 @@
+
+tolerance 0.7
+#discale 1.5
+
+#movebadrandom
+
+nloop0 30
+
+output cylinder_3000.xyz
+filetype xyz
+
+structure surfactant.xyz
+  number 3000
+  atoms 1
+    inside box -10 -10 1 10 10 29
+    inside cylinder 0. 0. 0. 0. 0. 1. 5.4 30
+    outside cylinder 0. 0. 0. 0. 0. 1. 5.2 30
+  end atoms
+  atoms 4
+    inside box -10 -10 1 10 10 29
+    outside cylinder 0. 0. 0. 0. 0. 1. 6.2 30
+  end atoms
+end structure
