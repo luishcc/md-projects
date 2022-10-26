@@ -6,6 +6,7 @@ info.*
 restart.*
 
 *.csv
+*.pdf
 
 remote/*
 

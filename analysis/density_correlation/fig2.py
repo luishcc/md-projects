@@ -61,7 +61,7 @@ xr8 = [301, 603, 1206, None]
 r10 = [0.010638, 0.010610]
 r10 = [0.010638, 0.010610]
 xr10 = [376, 753]
-xr10 = [376, 753, None, None]
+xr10 = [376, 753, None, 3016]
 
 xrr = [xr6, xr8, xr10]
 
@@ -80,7 +80,7 @@ grid = 1
 n=0
 
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
-path_to_data2 = '/home/luishcc/Desktop/'
+path_to_data2 = '/home/luishcc/md-projects/remote/'
 
 data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n+1}'
 dir = path_to_data + data_case_dir
@@ -155,6 +155,8 @@ ri = [4.8, 4.8, 4.7, 4.7, 4.6, 4.4]
 #################################################
 
 fig, [ax1, ax] = plt.subplots(2,1, gridspec_kw={'height_ratios': [2, 1]})
+fig.subplots_adjust(hspace=.35)
+
 
 ax2 = plt.axes([0,0,1,1])
 ip = InsetPosition(ax1, [0.5,0.42,0.45,0.4])
@@ -182,8 +184,8 @@ ax1.set_ylabel(r'$\hat{G}(r,q)$')
 
 # ax2.set_ylim(0.3,0.8)
 ax2.set_xlim(0,0.2)
-ax2.set_xlabel(r'$\delta z/L$')
-ax2.set_ylabel(r'$G(r,\delta z)$')
+ax2.set_xlabel(r'$\delta_z/L$')
+ax2.set_ylabel(r'$G(r,\delta_z)$')
 
 
 red = np.array([6,8,10]) * 2*np.pi *0.88
@@ -221,7 +223,7 @@ for iter1, r in enumerate(R):
     ax.errorbar(x_plot, q, yerr = np.sqrt(q_var), fmt=plot_markers[iter1],ecolor = 'black' ,markersize=6.5, color=plot_colors2[iter1], capsize= 2, capthick=1, label=f'$R_0={r}$',
     markerfacecolor='none')
 
-ax.plot([180,1850], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
+ax.plot([100,3100], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
 
 #ax.plot(x_plot, [i*red[0] for i in r6], 'ko--', markersize=7.5, markerfacecolor='none', label=r'$R_0=6$')
 
@@ -231,8 +233,15 @@ ax.plot([180,1850], [func(oh_data[0])]*2, color='black', linestyle='--', label='
 
 ax.set_ylim(0.3,0.76)
 #ax.legend(loc=(0.55, 0.05), ncol=3)
-ax.legend(loc='lower right', ncol=2)
-ax.set_xlabel(r'$L$ $[r_c]$' )
+
+from matplotlib import container
+
+handles, labels = ax.get_legend_handles_labels()
+handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
+ax.legend(handles, labels, loc='lower right', ncol=2)
+
+#ax.legend(loc='lower right', ncol=2)
+ax.set_xlabel(r'$L$' )
 
 # Some ad hoc tweaks.
 
