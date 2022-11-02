@@ -1,0 +1,45 @@
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.3 bin
+neigh_modify        every 1 check yes
+
+atom_style	        mdpd
+
+variable Lz equal 60
+
+region     mdpd     block -10 10  -10 10  20 40 units box
+create_box          1 mdpd
+
+region     slab     block -10 10  -10 10  20 40
+create_atoms        1 random 51000 2021 slab
+
+pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+pair_coeff          1 1 mdpd/rhosum  0.75
+pair_coeff          1 1 mdpd         -40 25 18.0 1.0 0.75
+mass                1 1.0
+
+#
+compute             mythermo all temp
+# compute             myP all pressure mythermo
+#
+#
+# variable gamma equal "(v_Lz*0.5) * (pzz - (pxx + pyy)*0.5)"
+#
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+# thermo_style custom v_gamma pxx pyy pzz
+
+velocity            all create 1.0 2093 loop local dist gaussian
+comm_modify         vel yes
+fix         mvv     all mvv/dpd 0.65
+
+fix 1 all npt temp 1 1 0.1 iso 0.0 0.0 1.0
+
+dump        mydump  all atom 100 sim_npt.lammpstrj
+
+timestep            0.01
+run                 20000
+
+write_data initial_npt.data
