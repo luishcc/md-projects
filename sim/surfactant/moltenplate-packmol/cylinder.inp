@@ -6,18 +6,18 @@ tolerance 0.9
 
 nloop0 30
 
-output cylinder_12_6000.xyz
+output cylinder_24_12000.xyz
 filetype xyz
 
 structure surfactant.xyz
-  number 6000
+  number 12000
   atoms 1
-    inside box -30 -30 1 30 30 29
-    inside cylinder 0. 0. 0. 0. 0. 1. 11.4 30
-    outside cylinder 0. 0. 0. 0. 0. 1. 11.2 30
+    inside box -50 -50 1 50 50 29
+    inside cylinder 0. 0. 0. 0. 0. 1. 23.4 30
+    outside cylinder 0. 0. 0. 0. 0. 1. 23.2 30
   end atoms
   atoms 4
-    inside box -30 -30 1 30 30 29
-    outside cylinder 0. 0. 0. 0. 0. 1. 12.2 30
+    inside box -50 -50 1 50 50 29
+    outside cylinder 0. 0. 0. 0. 0. 1. 24.2 30
   end atoms
 end structure

@@ -10,7 +10,7 @@ gamma = []
 i=0
 flag = True
 with open(file, 'r') as fd:
-    for _ in range(30):
+    for _ in range(114):
         fd.readline()
     while flag:
         print(i)
@@ -25,6 +25,8 @@ with open(file, 'r') as fd:
             continue
         if a == 'v_gamma':
             print('TRUE')
+            for i in range(30):
+                fd.readline()
             while True:
                 try:
                     line = fd.readline().split()
@@ -36,3 +38,7 @@ with open(file, 'r') as fd:
             break
 
 print(sum(gamma)/len(gamma))
+
+fig, ax = plt.subplots(1,1)
+ax.plot(np.linspace(0,1, len(gamma)), gamma)
+plt.show()
