@@ -27,12 +27,12 @@ angle_coeff 2 100 160
 pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
 pair_coeff  *  *   mdpd/rhosum  0.75
 
-pair_coeff  1  1   mdpd  -19.0  25.0  12  1.0  0.75
-pair_coeff  1  2   mdpd  -5.98  25.0  12  1.0  0.75
-pair_coeff  1  3   mdpd  -32.18 25.0  12  1.0  0.75
-pair_coeff  2  2   mdpd  -22.0  25.0  12  1.0  0.75
-pair_coeff  2  3   mdpd  -27.0  25.0  12  1.0  0.75
-pair_coeff  3  3   mdpd  -40.0  25.0  12  1.0  0.75
+pair_coeff  1  1   mdpd  -19.0  25.0  4.5  1.0  0.75
+pair_coeff  1  2   mdpd  -5.98  25.0  4.5  1.0  0.75
+pair_coeff  1  3   mdpd  -32.18 25.0  4.5  1.0  0.75
+pair_coeff  2  2   mdpd  -22.0  25.0  4.5  1.0  0.75
+pair_coeff  2  3   mdpd  -27.0  25.0  4.5  1.0  0.75
+pair_coeff  3  3   mdpd  -40.0  25.0  4.5  1.0  0.75
 
 min_style cg
 minimize 0 0 1000 10000

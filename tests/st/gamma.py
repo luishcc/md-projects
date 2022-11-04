@@ -10,7 +10,7 @@ gamma = []
 i=0
 flag = True
 with open(file, 'r') as fd:
-    for _ in range(114):
+    for _ in range(1100):
         fd.readline()
     while flag:
         print(i)
