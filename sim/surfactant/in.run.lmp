@@ -11,7 +11,7 @@ neigh_modify every 1 delay 0 check yes
 comm_modify vel yes
 
 log test.log
-read_data system_1000.data
+read_data system_3000.data
 
 region  water  cylinder z 0 0 6 INF INF
 #create_atoms 3 random 20000 2021 water
@@ -25,7 +25,7 @@ pair_coeff  *  *   mdpd/rhosum  0.75
 
 # ----------------------------------------
 # 2019 Langmuir Zhou et al (SDS)
-
+#
 pair_coeff  1  1   mdpd  -19.0  25.0  4.5  1.0  0.75
 pair_coeff  1  2   mdpd  -5.98  25.0  4.5  1.0  0.75
 pair_coeff  1  3   mdpd  -32.18 25.0  4.5  1.0  0.75
@@ -52,18 +52,17 @@ angle_coeff 2 100 160
 # pair_coeff  3  3   mdpd  -50.0  25.0  4.5  1.0  0.75
 #
 # bond_style harmonic
-# bond_coeff 1 4 0.89
-# bond_coeff 2 4 1.20
+# bond_coeff 1 400 0.89
+# bond_coeff 2 400 1.20
 #
 # angle_style harmonic
 # angle_coeff 1 100 150
 # angle_coeff 2 100 150
+
 ###########################################################
 
 min_style cg
 minimize 0 0 1000 10000
-
-write_data  test.data
 
 fix         mvv     all mvv/dpd 0.65
 
@@ -72,12 +71,12 @@ thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-thermo_modify	 lost ignore lost/bond ignore
+#thermo_modify	 lost ignore lost/bond ignore
 
-timestep 0.005
+timestep 0.01
 
 dump 2 all atom 100 all-test.lammpstrj
 
-run 10000
+run 100000
 
 #write_data  initial-3000.data
