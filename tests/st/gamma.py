@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 
 
-file = 'log.lammps'
+file = 'A40_B40.log'
 
 gamma = []
 
@@ -20,7 +20,7 @@ with open(file, 'r') as fd:
         try:
             a = line.split()[0]
         except:
-            if i>=1000:
+            if i>=100000:
                 break
             continue
         if a == 'v_gamma':
@@ -34,7 +34,7 @@ with open(file, 'r') as fd:
                 except:
                     flag = False
                     break
-        if i>=1000:
+        if i>=10000:
             break
 
 print(sum(gamma)/len(gamma))

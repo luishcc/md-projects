@@ -7,21 +7,26 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 
-# variable Lz equal 60
-#
-region     mdpd     block -2.5 2.5 -2.5 2.5 0 22 units box
+region     mdpd     block -2.5 2.5 -2.5 2.5 0 25 units box
 create_box          1 mdpd
 
-region     slab      block -2.5 2.5 -2.5 2.5 8.5 13.5
-create_atoms        1 random 1000 2021 slab       # A =-50
-# create_atoms        1 random 51000 2021 slab      # A =-40
 
+variable A equal -40
+variable B equal 40
+variable rd equal 0.75
+variable dt equal 0.01
+
+log A$(abs(v_A))_B$(v_B)_w1.log
+
+
+region     slab      block -2.5 2.5 -2.5 2.5 8.5 13.5
+create_atoms        1 random 1000 2021 slab
 
 # read_data  initial_npt_50.data
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
-pair_coeff          1 1 mdpd         -40 25 4.5 1.0 0.75
+pair_coeff          1 1 mdpd         ${A} ${B} 4.5 1.0 ${rd}
 mass                1 1.0
 
 compute             mythermo all temp
@@ -38,17 +43,14 @@ min_style cg
 minimize 0 0 1000 10000
 
 # compute den all chunk/atom bin/3d z 20 20 x -10 20 y -10 20 discard yes
-# # compute den all chunk/atom bin/cylinder z lower 4 0 0 0 6 4 discard yes
 # fix den all ave/chunk 1 100 100 den density/number file den.txt
 
-dump        mydump  all atom 1000 sim.lammpstrj
+dump        mydump  all atom 10000 A$(abs(v_A))_B$(v_B)_w1.lammpstrj
 
-timestep            0.01
-run                 100000
-
+timestep            ${dt}
+run                 500000
 
 compute             myP all pressure mythermo
-
 
 variable gamma equal "(22*0.5) * (pzz - (pxx + pyy)*0.5)"
 
@@ -57,4 +59,4 @@ thermo_modify       temp mythermo
 thermo_modify       flush yes
 thermo_style custom v_gamma pxx pyy pzz temp
 
-run                 500000
+run                 1000000
