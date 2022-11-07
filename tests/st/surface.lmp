@@ -7,7 +7,7 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 
-region     mdpd     block -2.5 2.5 -2.5 2.5 0 25 units box
+region     mdpd     block -2.5 2.5 -2.5 2.5 0 22 units box
 create_box          1 mdpd
 
 
