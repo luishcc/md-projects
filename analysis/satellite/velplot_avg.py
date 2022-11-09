@@ -19,11 +19,13 @@ from mdpkg.grid import Grid
 # dir = '/home/luishcc/testdata'
 # dir = '/home/luishcc/md-projects/tests/rerun'
 #dir = '/home/luis/md-projects/sim/satellite'
-dir = os.getcwd()
+dir = '/home/luishcc/hdd/super_download/satellite_A80_l1'
+
+# dir = os.getcwd()
 
 
-vel_file = 'dump.vel_14_50'
-trj_file = 'thread_14_50.lammpstrj'
+vel_file = 'dump.vel_14_80'
+trj_file = 'thread_14_80.lammpstrj'
 
 #
 # velocity_file = 'dump.vel'
@@ -94,11 +96,11 @@ while count + begin_snap < end_snap:
             print(trj.snap.time)
 
             coo0, coo1, coo2 = run2()
-            
+
             coo0 = coo0.todense()
             coo1 = coo1.todense()
             coo2 = coo2.todense()
-        
+
             lst.append([coo0, coo1, coo2])
             len_coo.append(coo0.shape[1])
 
@@ -173,4 +175,3 @@ while count + begin_snap < end_snap:
 
 
 # run_case(n, iter, skip, max)
-

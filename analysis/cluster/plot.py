@@ -1,43 +1,50 @@
-import pandas as pd
+import numpy as np
+
+import matplotlib as mpl
+
+dpi = 1600
+side = 7
+rc_fonts = {
+    "font.family": "serif",
+    "font.size": 12,
+    'figure.figsize': (0.8*side, 0.6*side),
+    "text.usetex": True
+    }
+mpl.rcParams.update(rc_fonts)
+
 import matplotlib.pyplot as plt
 
+fig, ax0 = plt.subplots(ncols=1, nrows=1)
+
+
+import pandas as pd
 
 R = 6
 ratio = 48
-A = -60
-snap = 150
+A = -70
+snap = 57
 
-file = f'~/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
-# file = 'a.csv'
-
+# file = f'~/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
+file = f'~/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
 
 df = pd.read_csv(file)
-
-print(df.shape)
-
-df.drop(df[df['size'] <= 1].index, inplace=True)
-# df.drop(df[df['radius'] > 5].index, inplace=True)
-# df.drop(df[df['size'] > 1000].index, inplace=True)
-# df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
-# df.drop(df[df['asphericity'] > 3].index, inplace=True)
-
-print(df.shape)
-
-
-# df['radius'].plot(marker='.', linestyle='none')
-# df['radius'].plot.kde(bw_method=0.1)
-# df['size'].plot.kde(bw_method=0.01)
-# df['radius'].plot.hist(bins=50, alpha=0.5)
-# df['size'].plot.hist(bins=50, alpha=0.5)
-df['anisotropy'].plot.hist(bins=50, alpha=0.5)
-# df['asphericity'].plot.hist(bins=50, alpha=0.5)
-# df['acylindricity'].plot.hist(bins=20, alpha=0.5)
+df.drop(df[df['size'] <= 3].index, inplace=True)
+df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
+df['radius'] = df['radius'].multiply(np.sqrt(5/3))
+df['radius'].plot.hist(bins=100, alpha=0.4, ax=ax0, density=True, color='b')
+df['radius'].plot.kde(bw_method=0.1, ax=ax0, color='k')
+ax0.set_xlim(0,16)
+ax0.set_xlabel('$R_D$')
+ax0.set_ylabel('Distribution Density')
+ax0.annotate('', xy=(3.7, 0.165), xytext=(1.9,0.14),
+            arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
+            )
+ax0.annotate('', xy=(6.4,0.292), xytext=(8.76,0.26),
+            arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
+            )
+ax0.annotate('Main Droplets', xy=(3.5, 0.3))
+ax0.annotate('Satellite Droplets', xy=(3, 0.17))
 
 
-# plt.title(f'Droplet Size Distribution, A={A}, snapshot={snap}')
-plt.title(f'Anisotropy, A={A}, snapshot={snap}')
-# plt.xlim(0, 4)
-# plt.ylim(0, 0.28)
-plt.xlabel('Anisotropy')
-plt.grid(True)
+
 plt.show()

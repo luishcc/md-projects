@@ -24,7 +24,7 @@ separation = 5
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
 # path = f'/home/luis/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
-path = f'/home/luis/md-projects/analysis/cluster/break_avg/R{R}_ratio{ratio}_A{abs(A)}/'
+path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
 
 # dir_out = '/'.join([path, 'fig'])
 #
@@ -106,9 +106,11 @@ plt.plot(x, y3, 'k--', label=r'Satellite')
 plt.plot(x, y4, 'b-.', label=r'Main')
 
 plt.scatter(max_snap2, num_drops[max_snap2], color='k')
-plt.scatter(max_snap2, num_satellite[max_snap2], color='k')
+plt.scatter(max_snap3, num_satellite[max_snap3], color='k')
+plt.scatter(max_snap4, num_main[max_snap4], color='k')
 # plt.grid(True)
-plt.legend(loc='upper left', prop={'size': 11.})
+# plt.legend(loc='upper left', prop={'size': 11.})
+plt.legend(loc='upper left')
 # plt.plot(max_snap2, max(num_drops.values()), 'ko')
 # plt.plot(max_snap1, max(num_cluster.values()), 'ko')
 
