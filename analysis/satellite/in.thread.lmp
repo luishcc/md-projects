@@ -1,9 +1,9 @@
 # Script modified from mDPD example folder
 #
 # Break up of fluid thread
-processors 2 2 2
+processors 2 2 3
 
-log log_10_90
+log log_14_80
 
 
 units 		          lj
@@ -22,12 +22,12 @@ atom_style	        mdpd
 #region     tube     cylinder z 0 0 v_Radius INF INF
 #create_atoms        1 region tube
 
-read_data           initial_perturbed_10_90.data
+read_data           initial_perturbed_14_80.data
 
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
-pair_coeff          1 1 mdpd         -90 25 18.0 1.0 0.75
+pair_coeff          1 1 mdpd         -80 25 18.0 1.0 0.75
 mass                1 1
 
 compute             mythermo all temp
@@ -42,11 +42,11 @@ fix         mvv     all mvv/dpd 0.65
 
 timestep            0.01
 
-dump        mydump  all atom 1000 thread_10_90.lammpstrj
+dump        mydump  all atom 100 thread_14_80.lammpstrj
 dump_modify mydump scale no
 
-dump force all custom 1000 dump.force_10_90 id fx fy fz
-dump vel all custom 1000 dump.vel_10_90 id vx vy vz
+dump force all custom 100 dump.force_14_80 id fx fy fz
+dump vel all custom 100 dump.vel_14_80 id vx vy vz
 #dump full all custom 100 dump.all id x y z vx vy vz fx fy fz
 
-run                 1000000
+run                 300000
