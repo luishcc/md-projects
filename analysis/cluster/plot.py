@@ -45,6 +45,7 @@ ax0.annotate('', xy=(6.4,0.292), xytext=(8.76,0.26),
 ax0.annotate('Main Droplets', xy=(3.5, 0.3))
 ax0.annotate('Satellite Droplets', xy=(3, 0.17))
 
+plt.savefig(f'dis.png', transparent=True, dpi=1600)
 
 
 plt.show()

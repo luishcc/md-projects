@@ -8,11 +8,11 @@ bb = [9.545, 9.589, 9.923, 10.649, 10.969, 11.335]
 cc = [1.248, 1.151, 1.234, 1.109, 1.222, .932]
 
 # Main droplet break_avg_peak
-bb2 = [10.064, 10.136, 10.647, 11.33, 11.606, 11.765]
+# bb = [10.064, 10.136, 10.647, 11.33, 11.606, 11.765]
 # cc2 = [1.42, 1.42, 1.4, 1.24, 1.14, 1.02]
 #
 # # Main droplet normal_avg
-# bb3 = [9.547, 9.541, 10.042, 10.722, 10.819, 11.4]
+# bb = [9.547, 9.641, 10.042, 10.722, 10.819, 11.4]
 # cc3 = [1.278, 1.111, 1.234, 1.12, 1.322, .876]
 
 
@@ -104,7 +104,7 @@ dv = abs(wave[-1]-wave[0])
 pdv = 0.3 * dv
 x = np.linspace(wave[0]+pdv, wave[-1]-pdv, 100)
 ax1.plot(x, pred4(x), 'k--', label='Theory')
-ax1.plot(a2, fpow(a2, *pars2), 'b-', label='$y=7x^{-0.5}$')
+# ax1.plot(a2, fpow(a2, *pars2), 'b-', label='$y=7x^{-0.5}$')
 ax1.set_xlabel('$\chi$')
 ax1.set_ylabel('$R_D$')
 from matplotlib import container
@@ -113,6 +113,6 @@ handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in ha
 ax1.legend(handles, labels, loc='lower left', ncol=1)
 
 
-
+plt.savefig(f'sat_50.png', transparent=True, dpi=1600)
 
 plt.show()

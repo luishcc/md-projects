@@ -19,13 +19,12 @@ from mdpkg.grid import Grid
 # dir = '/home/luishcc/testdata'
 # dir = '/home/luishcc/md-projects/tests/rerun'
 #dir = '/home/luis/md-projects/sim/satellite'
-dir = '/home/luishcc/hdd/super_download/satellite_A80_l1'
+# dir = '/home/luishcc/hdd/super_download/satellite_A80_l1'
 
-# dir = os.getcwd()
+dir = os.getcwd()
 
-
-vel_file = 'dump.vel_14_80'
-trj_file = 'thread_14_80.lammpstrj'
+vel_file = 'dump.vel_14_50_2'
+trj_file = 'thread_14_50_2.lammpstrj'
 
 #
 # velocity_file = 'dump.vel'
@@ -77,19 +76,18 @@ def run2():
     coo2 = coo_matrix((d[2], (idr, idz)))
     return coo0, coo1, coo2
 
-begin_snap = 320
+begin_snap = 300
 trj.skip_next(begin_snap)
 end = False
 end_snap = 500
 
 count = 0
 while count + begin_snap < end_snap:
-    count += 1
     try:
         lst = []
         len_coo = []
         for i in range(4):
-
+            count+=1
             trj.read_next()
             trj.read_velocity('/'.join([dir, vel_file]), trj.snap)
             grd = Grid(trj.snap, size = grid)
@@ -165,7 +163,7 @@ while count + begin_snap < end_snap:
         plt.show()
         break
     if not end:
-        plt.savefig(f'sat_v_avg/{trj.snap.time}.png', dpi=100)
+        plt.savefig(f'sat_v_avg_50_2/{trj.snap.time}.png', dpi=100)
         plt.close()
 
 

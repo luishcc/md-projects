@@ -19,18 +19,16 @@ from scipy import stats
 
 R = 6
 ratio = 48
-A = -70
-time = 70
+A = -90
+time = 84
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
 path = f'/home/luis/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
-path = f'/home/luis/md-projects/analysis/cluster/break_avg/R{R}_ratio{ratio}_A{abs(A)}/'
+path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}/'
 dir_out = path + 'fig'
 
 if not os.path.isdir(dir_out):
     os.mkdir(dir_out)
-
-
 
 
 for file in os.scandir(path):

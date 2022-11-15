@@ -139,6 +139,8 @@ print(max_snap3)
 
 # plt.savefig(f'{case}.png', format='png')
 # plt.close()
+plt.savefig(f'time.png', transparent=True, dpi=1600)
+
 plt.show()
 
 exit()

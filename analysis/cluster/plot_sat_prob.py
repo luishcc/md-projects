@@ -104,6 +104,7 @@ ax2.set_ylabel('$N_{satellite}/N_{total}$')
 ax2.set_xlabel('Oh')
 
 
+plt.savefig(f'prob.png', transparent=True, dpi=1600)
 
 # plt.savefig('ssa.pdf', bbox_inches='tight', dpi=dpi )
 

@@ -40,10 +40,12 @@ from scipy.fft import rfft, rfftfreq
 # velocity_file = 'dump.vel'
 # trj_file = 'thread.lammpstrj'
 
+# dir = '/home/luishcc/hdd/satellite_results'
+
 dir = os.getcwd()
 
-velocity_file = 'dump.vel_14_50'
-trj_file = 'thread_14_50.lammpstrj'
+velocity_file = 'dump.vel_14_50_2'
+trj_file = 'thread_14_50_2.lammpstrj'
 
 grid = 1.5
 
@@ -75,11 +77,12 @@ trj.skip_next(begin_snap)
 end = False
 count = 0
 while count + begin_snap < end_snap:
-    count += 1
+
     try:
         lst = []
         len_coo = []
         for i in range(4):
+            count += 1
             print('reading ', i)
             trj.read_next()
             print('reading vel ', i)
@@ -103,8 +106,8 @@ while count + begin_snap < end_snap:
     coor = (lst[0][0][:,:nn] + lst[1][0][:,:nn] + lst[2][0][:,:nn] + lst[3][0][:,:nn])/4
     cooz = (lst[0][1][:,:nn] + lst[1][1][:,:nn] + lst[2][1][:,:nn] + lst[3][1][:,:nn])/4
 
-    np.savetxt(f'csv/coor-{trj.snap.time}.csv', coor, delimiter=',')
-    np.savetxt(f'csv/cooz-{trj.snap.time}.csv', cooz, delimiter=',')
+    np.savetxt(f'csv_50_2/coor-{trj.snap.time}.csv', coor, delimiter=',')
+    np.savetxt(f'csv_50_2/cooz-{trj.snap.time}.csv', cooz, delimiter=',')
 
     # filter = 20
     # vr = savgol_filter(coo1[:,0], filter, 2, axis=0)
@@ -140,5 +143,5 @@ while count + begin_snap < end_snap:
         plt.show()
         break
     if not end:
-        plt.savefig(f'f2/{trj.snap.time}.png', dpi=250)
+        plt.savefig(f'f2_50_2/{trj.snap.time}.png', dpi=250)
         plt.close()

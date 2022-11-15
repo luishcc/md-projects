@@ -18,8 +18,8 @@ from scipy.fft import rfft, rfftfreq
 dir = os.getcwd()
 
 # force_file = 'dump.force'
-velocity_file = 'dump.vel_14_50'
-trj_file = 'thread_14_50.lammpstrj'
+velocity_file = 'dump.vel_14_80'
+trj_file = 'thread_14_80.lammpstrj'
 
 
 
