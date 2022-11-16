@@ -9,9 +9,9 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes
 
-read_data system_300.data
+read_data system_180.data
 
-variable sc equal 300
+variable sc equal 180
 variable dt equal 0.01
 
 log sc_$(v_sc).log
