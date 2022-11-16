@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 
 
-file = 'sc_50.log'
+file = 'sc_200.log'
 
 gamma = []
 
