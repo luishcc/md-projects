@@ -62,11 +62,12 @@ std_lst = []
 for file in os.scandir(os.getcwd()):
     type = file.name.split('.')[-1]
     name = file.name.split('.')[0]
-    if type != 'log' or name in ['sc_180', 'sc_220']:
+    if type != 'log' or name in ['sc_350']:
+    # if type != 'log':
         continue
     print(file.name)
     sc = int(name.split('_')[-1])
-    surfactant_c.append(sc/100)
+    surfactant_c.append(sc)
     st, std = run_avg(file)
     if sc in [100, 150, 200]:
         st *= 40/22
@@ -80,14 +81,25 @@ tuples = zip(*sort_lst)
 surfactant_c, surface_t, std_lst = [list(tuple) for tuple in tuples]
 
 
+def to_mol(N):
+    NAv = 6.023e23
+    V = 8.17**3 * 1e-24
+    return N/(V*NAv)
+
+# surfactant_c = [to_mol(i*2) for i in surfactant_c]
+surface_t = [(72/7.62)*i for i in surface_t]
+std_lst = [(72/7.62)*i for i in std_lst]
+
+# surfactant_c = [i/100 for i in surfactant_c]
+
 fig, ax = plt.subplots(1,1)
 
-ax.errorbar(surfactant_c, surface_t, yerr = std_lst, fmt='o',
-ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
+# ax.errorbar(surfactant_c, surface_t, yerr = std_lst, fmt='o',
+# ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
 
-ax.plot(surfactant_c, surface_t, 'k-')
-ax.set_xlabel(r'$N_{molecules}/A_s$')
-ax.set_ylabel(r'$\gamma$')
+ax.plot(surfactant_c, surface_t, 'ko-')
+ax.set_xlabel(r'C [$mol/L$]')
+ax.set_ylabel(r'$\gamma$ [mN/m]')
 
 plt.tight_layout()
 plt.savefig('cmc.pdf', dpi=dpi)
