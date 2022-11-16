@@ -1,95 +1,38 @@
-units lj
-dimension 3
-boundary p p p
 
-processors * * 2
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.3 bin
+neigh_modify        every 1 check yes
 
-atom_style hybrid angle mdpd
-neighbor 0.3 bin
-neigh_modify every 1 delay 0 check yes
-comm_modify vel yes
+atom_style	        mdpd
 
-read_data system_350.data
+region     mdpd     block -5 5 -5 5 0 15 units box
+create_box          1 mdpd
 
-variable sc equal 350
-variable dt equal 0.01
+lattice             fcc 7
+region     tube     cylinder z 0 0 2 INF INF
+create_atoms        1 region tube
 
-log sc_$(v_sc).log
-
-
-region     slab      block -5 5 -5 5 15 25
-create_atoms        3 random 6000 2021 slab
-
-
-###########################################################
-# Pair, Bond and Angle Coefficients
-
-pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
-pair_coeff  *  *   mdpd/rhosum  0.75
-
-# ----------------------------------------
-# 2019 Langmuir Zhou et al (SDS)
-#
-pair_coeff  1  1   mdpd  -19.0  25.0  4.5  1.0  0.75
-pair_coeff  1  2   mdpd  -5.98  25.0  4.5  1.0  0.75
-pair_coeff  1  3   mdpd  -32.18 25.0  4.5  1.0  0.75
-pair_coeff  2  2   mdpd  -22.0  25.0  4.5  1.0  0.75
-pair_coeff  2  3   mdpd  -27.0  25.0  4.5  1.0  0.75
-pair_coeff  3  3   mdpd  -40.0  25.0  4.5  1.0  0.75
-
-bond_style harmonic
-bond_coeff 1 400 0.64  # 4 - 400
-bond_coeff 2 400 0.64  # 4 - 400
-
-angle_style harmonic
-angle_coeff 1 100 160
-angle_coeff 2 100 160
-
-# ----------------------------------------
-# 2013 Ghoufi et al (SDS)
-
-# pair_coeff  1  1   mdpd  -50.0  25.0  4.5  1.0  0.75
-# pair_coeff  1  2   mdpd  -33.1  25.0  4.5  1.0  0.75
-# pair_coeff  1  3   mdpd  -54.6  25.0  4.5  1.0  0.75
-# pair_coeff  2  2   mdpd  -50.0  25.0  4.5  1.0  0.75
-# pair_coeff  2  3   mdpd  -36.7  25.0  4.5  1.0  0.75
-# pair_coeff  3  3   mdpd  -50.0  25.0  4.5  1.0  0.75
-#
-# bond_style harmonic
-# bond_coeff 1 400 0.89
-# bond_coeff 2 400 1.20
-#
-# angle_style harmonic
-# angle_coeff 1 100 150
-# angle_coeff 2 100 150
-
-###########################################################
-
-
-dump        mydump  all atom 10000 sim_sc_$(v_sc).lammpstrj
-
-min_style cg
-minimize 0 0 1000 10000
-
-
-fix         mvv     all mvv/dpd 0.65
+pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+pair_coeff          1 1 mdpd/rhosum  0.75
+pair_coeff          1 1 mdpd         -40 25 18.0 1.0 0.75
+mass                1 1.0
 
 compute             mythermo all temp
 thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
-# thermo_modify	 lost ignore lost/bond ignore
 
-timestep            ${dt}
-run                 500000
+velocity            all create 1.0 2093 loop local dist gaussian
+comm_modify         vel yes
+fix         mvv     all mvv/dpd 0.65
 
-compute             myP all pressure mythermo
+dump        mydump  all atom 100 test.lammpstrj
+dump_modify mydump scale no
 
-variable gamma equal "((zhi-zlo)*0.5) * (pzz - (pxx + pyy)*0.5)"
+dump vel all custom 100 dump.vel id vx vy vz
 
-thermo              100
-thermo_modify       temp mythermo
-thermo_modify       flush yes
-thermo_style custom v_gamma pxx pyy pzz temp
 
-run                 1000000
+timestep            0.01
+run                 5000
