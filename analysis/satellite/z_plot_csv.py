@@ -8,7 +8,7 @@ dpi = 1600
 side = 7
 rc_fonts = {
     "font.family": "serif",
-    "font.size": 12,
+    "font.size": 12*2,
     'figure.figsize': (0.8*side, 0.4*side),
     "text.usetex": True
     }
@@ -47,13 +47,15 @@ ax.plot(x, lst[1], 'k-', label=r'$t_3$')
 ax.plot(x, lst[0], 'g-.', label=r'$t_2$')
 ax.plot(x, lst[2], 'b--', label=r'$t_1$')
 
-ax.legend(loc='lower right')
+ax.legend(loc='upper left', ncol=3, handlelength=1, borderaxespad=0.2,
+        columnspacing=1, fontsize=18)
 ax.set_xlabel(r'$x/L$')
 ax.set_ylabel(r'$v_z$')
+ax.annotate(r'$Oh=0.704 $', xy=(0.05, -0.5))
 # ax.tick_params(axis='x', which='both', bottom=False,
 #                 top=False, labelbottom=False)
 
-plt.savefig('80.png', bbox_inches='tight', dpi=dpi )
+plt.savefig('80.pdf', bbox_inches='tight', dpi=2*dpi )
 
 
-plt.show()
+# plt.show()
