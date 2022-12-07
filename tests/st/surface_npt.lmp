@@ -7,15 +7,15 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 
-region     mdpd     block -10 10  -10 10  20 40 units box
+region     mdpd     block 0 15  0 15  0 16  units box
 create_box          1 mdpd
 
-region     slab     block -10 10  -10 10  20 40
-create_atoms        1 random 51000 2021 slab
+# region     slab     block 0 16  0 16  0 200
+create_atoms        1 random 51000 2021 mdpd
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
-pair_coeff          1 1 mdpd         -40 25 4.5.0 1.0 0.75
+pair_coeff          1 1 mdpd         -300 25 4.5 1.0 0.75
 mass                1 1.0
 
 
@@ -31,12 +31,12 @@ fix         mvv     all mvv/dpd 0.65
 
 fix 1 all npt temp 1.0 1.0 0.1 iso 0.0 0.02 10
 
-dump        mydump  all atom 100 sim_npt.lammpstrj
+dump        mydump  all atom 100 sim_npt_22.lammpstrj
 #
 # min_style cg
 # minimize 0 0 1000 10000
 
 timestep            0.01
-run                 1000
+run                 4000
 
 write_data initial_npt_40.data

@@ -98,7 +98,7 @@ fig, ax = plt.subplots(1,1)
 # ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
 
 ax.plot(surfactant_c, surface_t, 'ko-')
-ax.set_xlabel(r'C [$mol/L$]')
+ax.set_xlabel(r'C [$N/A_s$]')
 ax.set_ylabel(r'$\gamma$ [mN/m]')
 
 plt.tight_layout()

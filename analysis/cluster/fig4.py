@@ -18,14 +18,19 @@ a = [0.266, .321, .451, .704, .901, 1.137]
 
 # Break_avg
 # Different peaks
-# b = [.355, .252, .233, .218, .139, .146] # sat/main
-b = [.282, .214, .201, .185, .126, .133] # sat/total
-# b = [.200, .148, .163, .149, .086, .085] # sat/total
+b = [.355, .252, .233, .218, .139, .146] # sat/main
+# b = [.282, .214, .201, .185, .126, .133] # sat/total
+# b = [.200, .148, .163, .149, .086, .085] # sat/totals
 b_var = [.0053, .0026, .0039, .0057, .0025, .0056]
 # Main droplet peak
 # b = [.205, .151, .163, .152, .088, .093] # sat/total
 
+wave = [.018927425365090515, .017959188701441885, .016553644129911244,
+.014737153310297676, .013920311412504544, .01340404171055144]
+# wave = [1/i for i in wave]
+wave = [i*2*np.pi*4.8 for i in wave]
 
+a=wave
 fit = np.polyfit(a,b, 1)
 scale = (a[-1] - a[0]) * 0.1
 a2 = np.linspace(a[0]-scale, a[-1]+scale, 100)
@@ -66,6 +71,7 @@ for i, j in enumerate(a):
     s4 += (fpow(j, *pars2)-b[i])**2
 
 print(s1, s2, s3, s4)
+print(fit, '\n', fit2)
 print(pars, stdevs)
 print(pars2, stdevs2)
 
@@ -211,9 +217,11 @@ ax1.legend(handles, labels, loc='lower left', ncol=1)
 # ax2.plot(a2, b_fit, 'k--', label='Linear fit')
 # ax2.plot(a2, b_fit2, 'k--', label='Quadratic fit')
 # ax2.plot(a2, fexp(a2, *pars), 'b--', label='exp fit')
-ax2.plot(a2, fpow(a2, *pars2), 'k--', label='$y=0.13x^{-0.5}$')
+# ax2.plot(a2, fpow(a2, *pars2), 'k--', label='$y=0.13x^{-0.5}$')
 # ax2.plot(a, b, 'ko', label='Simulation')
-ax2.errorbar(a, b, yerr = np.sqrt(b_var),
+# ax2.errorbar(a, b, yerr = np.sqrt(b_var),
+# fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
+ax2.errorbar(wave, b, xerr = np.sqrt(q_var)*2*np.pi*4.8, yerr = np.sqrt(b_var),
 fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
 handles, labels = ax2.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
@@ -223,7 +231,7 @@ ax2.set_xlabel('Oh')
 
 
 
-plt.savefig('fig4.pdf', bbox_inches='tight', dpi=dpi )
+# plt.savefig('fig4.pdf', bbox_inches='tight', dpi=dpi )
 
 
 plt.show()

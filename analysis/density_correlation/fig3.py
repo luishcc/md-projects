@@ -74,7 +74,8 @@ plt.legend(loc=0)
 # plt.show()
 plt.close()
 
-fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
+# fig, (ax1, ax2) = plt.subplots(1,2, sharey=True)
+fig, (ax1, ax2) = plt.subplots(1,2)
 # fig, (ax1) = plt.subplots(1,1)
 # fig.set_size_inches(10, 5)
 
@@ -210,11 +211,11 @@ print(fit[0], fit[1])
 
 a2 = np.linspace(0, 2.5, 100)
 
-# ax2.plot(invlr, q, 'ko', label='Simulation')
-ax2.errorbar(invlr, q, yerr = np.sqrt(q_var), fmt='o',ecolor = 'black',
-color='black', label='Simulation', capsize=3, markerfacecolor='none')
+ax2.loglog(invlr, qinv, 'ko', label='Simulation')
+# ax2.errorbar(invlr, q, yerr = np.sqrt(q_var), fmt='o',ecolor = 'black',
+# color='black', label='Simulation', capsize=3, markerfacecolor='none')
 # ax2.plot(a2, [ff1(i) for i in a2], 'k-', label='Linear')
-ax2.plot(a2, [ff2(i) for i in a2], 'k--', label='Fit')
+# ax2.plot(a2, [ff2(i) for i in a2], 'k--', label='Fit')
 # ax2.plot(a2, [fexp(i, *pars) for i in a2], 'b-', label='Exponential')
 # ax2.plot(a2, [fexp2(i, *pars4) for i in a2], 'k-', label='Exponential2')
 # ax2.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
@@ -223,7 +224,7 @@ ax2.set_xlabel(r'$1/l_{\rho}$')
 # ax2.annotate(r'$\chi = \displaystyle \frac{-1.5}{l_{\rho}^2} + \frac{5.4}{l_{\rho}} - 4.2 $', xy=(2, 0.40) )
 # ax2.set_xlim(0,3)
 # ax2.scatter([0],[9.01])
-ax2.scatter([0],[0.697])
+# ax2.scatter([0],[0.697])
 
 ax2.legend()
 
