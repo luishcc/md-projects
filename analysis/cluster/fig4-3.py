@@ -34,7 +34,7 @@ wave = [i*2*np.pi*4.8 for i in wave]
 lt = [.250, .210, .181, .158, .148,  .139]
 
 lv = [0.581, .773, 1.499, 3.484, 6.8, 8.836]
-lv = [4.8/i for i in lv]
+# lv = [4.8/i for i in lv]
 
 rho = [7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
 lr = [np.cbrt(1/i) for i in rho]
@@ -52,8 +52,8 @@ q_var = [3.156327982930347e-06,
 
 a=wave
 # a=lv
-# a = [4.8**2/(i*j) for i, j in zip(lv, lt)]
-a = [3*4.8/(i) for i in lt]
+a = [4.8**2/(i*j) for i, j in zip(lv, lt)]
+# a = [3*4.8/(i) for i in lt]
 # a = [x*(j/i) for x, i, j in zip(wave, lv, lt)]
 # a = [(i/j) for i, j in zip(lt, lv)]
 # a = [4.8/j for x, j in zip(wave, lr)]
