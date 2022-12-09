@@ -81,11 +81,21 @@ fig, (ax1, ax2) = plt.subplots(1,2)
 
 # fig.subplots_adjust(wspace=.1)
 
+lt = [.250, .210, .181, .158, .148,  .139]
+
+lv = [.581, .773, 1.499, 3.484, 6.8, 8.836]
+
 # q = qinv
 # lr = [x**12 for x in lr]
+# lr = [4.8**2/(v*t) for v, t in zip(lv,lt)]
+# lr = [(v/t) for v, t in zip(lv,lt)]
+
+# lr = [4.8/(v) for v in lv]
 fit = np.polyfit(lr, q, 1)
-scale = (lr[-1] - lr[0]) * 0.1
-a2 = np.linspace(lr[0]-scale, lr[-1]+scale, 100)
+# scale = abs(lr[-1] - lr[0]) * 0.5
+scale = 0
+# a2 = np.linspace(lr[0]-scale, lr[-1]+scale, 100)
+a2 = np.linspace(lr[-1]-scale, lr[0]+scale, 100)
 b_fit = [fit[0]*i + fit[1] for i in a2 ]
 
 fit2 = np.polyfit(lr, q, 2)
@@ -148,26 +158,27 @@ print(fit[0], fit[1])
 
 ax1.set_ylabel(r'$\chi$')
 
-a2 = np.linspace(0.4, 0.8, 100)
+# a2 = np.linspace(0.4, 0.8, 100)
 ax1.plot([a2[0],a2[-1]], [0.697, 0.697], 'k--', label=r'$0.697$ (Rayleigh mode)')
 # ax1.plot(lr, q, 'ko', label='Simulation')
 ax1.errorbar(lr, q, yerr = np.sqrt(q_var), fmt='o',ecolor = 'black',
 color='black', label='Simulation', capsize=3, markerfacecolor='none')
-# ax1.plot(a2, [ff1(i) for i in a2], 'k-', label='Linear')
-ax1.plot(a2, [ff2(i) for i in a2], 'b--', label=r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $')
-# ax1.plot(a2, [fexp(i, *pars) for i in a2], 'b-', label='Exponential')
-ax1.plot(a2, [fexp2(i, *pars4) for i in a2], 'g--', label=r'$\chi = 0.701 - 1350e^{-18l_{\rho}}$')
-# ax1.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
+ax1.plot(a2, [ff1(i) for i in a2], 'k-', label='Linear')
+ax1.plot(a2, [ff2(i) for i in a2], 'b--', label=r'Quad')
+ax1.plot(a2, [fexp(i, *pars) for i in a2], 'b-', label='Exponential')
+ax1.plot(a2, [fexp2(i, *pars4) for i in a2], 'g--', label=r'exp2')
+ax1.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
 # ax1.plot(a2, [flog(i, *pars3) for i in a2], 'b--', label='Log')
 ax1.set_xlabel(r'$l_{\rho}$')
 ax1.plot([0,1], [0,0], 'k-')
-ax1.set_xlim(0.405, 0.7)
+# ax1.set_xlim(0.405, 0.7)
 ax1.set_ylim(0., 0.8)
 ax1.legend()
 # ax1.annotate(r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $', xy=(0.48, 0.40) )
 
 
 # invlr = [x**11 for x in invlr]
+invlr = [1/x for x in lr]
 # qinv.append(9.01)
 # invlr.append(0)
 # q_var.append(0)
@@ -202,29 +213,29 @@ for i, j in enumerate(invlr):
     s5 += (fpow(j, *pars3)-q[i])**2
 
 print(s1, s2, s3, s4, s5)
-print(pars, stdevs)
-print(pars2, stdevs2)
-print(pars3, stdevs3)
+print('exp ', pars, stdevs)
+print('pow ', pars2, stdevs2)
+print('log ', pars3, stdevs3)
 print()
 print(fit2[0], fit2[1], fit2[2])
 print(fit[0], fit[1])
 
-a2 = np.linspace(0, 2.5, 100)
+a2 = np.linspace(0, 20, 100000)
 
-ax2.loglog(invlr, qinv, 'ko', label='Simulation')
+ax2.loglog(invlr, q, 'ko', label='Simulation')
 # ax2.errorbar(invlr, q, yerr = np.sqrt(q_var), fmt='o',ecolor = 'black',
 # color='black', label='Simulation', capsize=3, markerfacecolor='none')
 # ax2.plot(a2, [ff1(i) for i in a2], 'k-', label='Linear')
-# ax2.plot(a2, [ff2(i) for i in a2], 'k--', label='Fit')
+# ax2.plot(a2, [ff2(i) for i in a2], 'k--', label='Fit22')
 # ax2.plot(a2, [fexp(i, *pars) for i in a2], 'b-', label='Exponential')
 # ax2.plot(a2, [fexp2(i, *pars4) for i in a2], 'k-', label='Exponential2')
-# ax2.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
+ax2.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
 # ax2.plot(a2, [flog(i, *pars3) for i in a2], 'b--', label='Log')
 ax2.set_xlabel(r'$1/l_{\rho}$')
 # ax2.annotate(r'$\chi = \displaystyle \frac{-1.5}{l_{\rho}^2} + \frac{5.4}{l_{\rho}} - 4.2 $', xy=(2, 0.40) )
 # ax2.set_xlim(0,3)
 # ax2.scatter([0],[9.01])
-# ax2.scatter([0],[0.697])
+ax2.plot([0,20],[0.697]*2, 'g--')
 
 ax2.legend()
 
