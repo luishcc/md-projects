@@ -10,10 +10,11 @@ neigh_modify        every 1 check yes
 
 atom_style	        mdpd
 
-variable Radius equal 6.0
-variable WaveNumber equal 6
+variable Radius equal 6
+variable WaveNumber equal 48
 variable WaveLength equal 2*PI*v_Radius*v_WaveNumber
 print ${WaveLength}
+variable Radius equal 4.8
 
 
 region     mdpd     block -18 18 -18 18 0 ${WaveLength} units box
@@ -25,7 +26,7 @@ create_atoms        1 region tube
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
-pair_coeff          1 1 mdpd         -50 25 18.0 1.0 0.75
+pair_coeff          1 1 mdpd         -50 25 4.5 1.0 0.75
 mass                1 1.0
 
 compute             mythermo all temp
@@ -37,14 +38,17 @@ velocity            all create 1.0 2093 loop local dist gaussian
 comm_modify         vel yes
 fix         mvv     all mvv/dpd 0.65
 
+min_style cg
+minimize 0 0 1000 10000
+
 #compute     clt      all aggregate/atom 1.
 
-#dump        mydump  all atom 100 threads.lammpstrj
+dump        mydump  all atom 100 threads4-1.lammpstrj
 
 #dump cluster       all custom 2500 dump.cl c_clt
 
 
 timestep            0.01
-run                 16000
-write_restart restart.thread
-write_dump all atom dump.atom modify scale no
+run                 15000
+# write_restart restart.thread
+# write_dump all atom dump.atom modify scale no

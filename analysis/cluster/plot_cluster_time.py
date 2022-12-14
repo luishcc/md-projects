@@ -16,14 +16,14 @@ import os
 import numpy as np
 
 
-R = 6
+R = 2
 ratio = 48
-A = -70
+A = -50
 
-separation = 5
+separation = 2
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
-# path = f'/home/luis/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
+# path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
 path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
 
 # dir_out = '/'.join([path, 'fig'])
@@ -36,6 +36,10 @@ num_main = {}
 num_satellite = {}
 num_drops = {}
 
+num_cluster2 = {}
+num_main2 = {}
+num_satellite2 = {}
+num_drops2 = {}
 
 for file in os.scandir(path):
 
@@ -53,6 +57,8 @@ for file in os.scandir(path):
     # df.drop(df[df['size'] > 1000].index, inplace=True)
     df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
     # df.drop(df[df['asphericity'] > 3].index, inplace=True)
+    df['radius'] = df['radius'].multiply(np.sqrt(5/3))
+
 
     satellite = df[df['radius'] < separation]
     main = df[df['radius'] > separation]
@@ -66,10 +72,15 @@ for file in os.scandir(path):
     # num_main[name] = main.shape[0] / (30 * 1810)
     # num_satellite[name] = satellite.shape[0] / (30 * 1810)
 
-    num_cluster[name] = df.shape[0] / (30 * 2*np.pi*4.8)
-    num_drops[name] = df.shape[0]  / (30 * 2*np.pi*4.8)
-    num_main[name] = main.shape[0] / (30 * 2*np.pi*4.8)
-    num_satellite[name] = satellite.shape[0] / (30 * 2*np.pi*4.8)
+    num_cluster[name] = df.shape[0] / (30 * 2*np.pi*R*0.8)
+    num_drops[name] = df.shape[0]  / (30 * 2*np.pi*R*0.8)
+    num_main[name] = main.shape[0] / (30 * 2*np.pi*R*0.8)
+    num_satellite[name] = satellite.shape[0] / (30 * 2*np.pi*R*0.8)
+
+    num_cluster2[name] = df.shape[0]
+    num_drops2[name] = df.shape[0]
+    num_main2[name] = main.shape[0]
+    num_satellite2[name] = satellite.shape[0]
     print()
 
 
@@ -115,8 +126,8 @@ plt.legend(loc='upper left')
 # plt.plot(max_snap1, max(num_cluster.values()), 'ko')
 
 print()
-print('PERCENT: ', max(num_satellite.values())/max(num_drops.values()))
-# print('PERCENT: ', num_satellite[max_snap2]/max(num_drops.values()))
+print('PERCENT: ', max(num_satellite2.values())/max(num_drops2.values()))
+# print('PERCENT: ', num_satellite2[max_snap2]/max(num_drops2.values()))
 print(max_snap3)
 #
 # ax2 = plt.subplot(2,1,2, sharex=ax1)
@@ -139,7 +150,7 @@ print(max_snap3)
 
 # plt.savefig(f'{case}.png', format='png')
 # plt.close()
-plt.savefig(f'time.png', transparent=True, dpi=1600)
+# plt.savefig(f'time.png', transparent=True, dpi=1600)
 
 plt.show()
 

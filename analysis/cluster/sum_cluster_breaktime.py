@@ -9,6 +9,8 @@ from mdpkg.rwfile import read_dat, Dat
 
 path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
+# path_to_data = '/home/luishcc/hdd/'
+
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
@@ -17,9 +19,9 @@ def get_snap(dir):
         snap = int(fd.readline())
     return snap
 
-R = 6
+R = 2
 ratio = 48
-A = -90
+A = -50
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
@@ -43,7 +45,8 @@ def run_snap(n, break_lst):
     try:
         combined_csv = pd.concat([pd.read_csv(f) for f in file_list ])
         combined_csv.to_csv(f'{n}.csv', index=False)
-    except:
+    except Exception as e:
+        print(e)
         return
 
 list_times = []

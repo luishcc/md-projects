@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 
 
-file = 'A50_B25_w1.log'
+file = 'A60_B25__KbT1.5.log'
 
 gamma = []
 
 i=0
 flag = True
 with open(file, 'r') as fd:
-    for _ in range(1100):
+    for _ in range(620):
         fd.readline()
     while flag:
         print(i)

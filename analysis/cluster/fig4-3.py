@@ -53,9 +53,9 @@ q_var = [3.156327982930347e-06,
 a=wave
 # a=lv
 # a = [4.8**2/(i*j) for i, j in zip(lv, lt)]
-# a = [3*4.8/(i) for i in lt]
+a = [3*4.8/(i) for i in lt]
 # a = [x*(j/i) for x, i, j in zip(wave, lv, lt)]
-a = [(i/j) for i, j in zip(lt, lv)]
+# a = [(i/j) for i, j in zip(lt, lv)]
 # a = [4.8/j for x, j in zip(wave, lr)]
 # a = lr
 
