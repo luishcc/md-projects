@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 from mdpkg.rwfile import read_dat, Dat
 
 path_to_save = os.getcwd()
-path_to_data = '/home/luishcc/hdd/free_thread_results/'
-# path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/free_thread_results/'
+path_to_data = '/home/luishcc/hdd/'
 
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
-R = 4
+R = 6
 ratio = 48
 A = -50
 
@@ -24,7 +24,9 @@ final = 600
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 dir_in = path_to_data + sim_case
-dir_out = '/'.join([path_to_save, sim_case])
+
+sim_case2 = f'R{R}_ratio{ratio}_A{abs(A+1)}'
+dir_out = '/'.join([path_to_save, sim_case2])
 
 if not os.path.isdir(dir_out):
     os.mkdir(dir_out)

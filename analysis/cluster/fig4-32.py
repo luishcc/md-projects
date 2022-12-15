@@ -7,41 +7,43 @@ import numpy as np
 ################################################################################
 
 # a = [50,60,70,80,85,90]
-a = [.311, .311, 0.206, 0.230, 0.266, .321, .451, .704, .901, 1.137]; xlabel = '$Oh$'
+a = [.538, .380, .311, 0.206, 0.230, 0.266, .321, .451, .704, .901, 1.137]; xlabel = '$Oh$'
 
 # normal avg
 # Different peaks
-b = [.074, .160, .406, .380, .296, .215, .210, .196, .135, .130] # sat/main
+b = [.074, .160, .285, .406, .380, .296, .215, .210, .196, .135, .130] # sat/main
 
 # Break_avg
 # Different peaks
-# b = [.076, .180, .411, .389, .282, .213, .200, .183, .126, .133] # sat/main
+b = [.069, .180, .276, .411, .389, .282, .213, .200, .183, .126, .133] # sat/main
 
-b_var = [.00, .00, .004, .006, .0053, .0026, .0039, .0057, .0025, .0056]
+b_var = [.00, .00, 00, .004, .006, .0053, .0026, .0039, .0057, .0025, .0056]
 
 
-wave = [.018927425365090515, .018927425365090515,
+wave = [.1, .1, .1,
 .011887547350585061, .01338236354459586,
 .018927425365090515, .017959188701441885, .016553644129911244,
 .014737153310297676, .013920311412504544, .01340404171055144]
 
-radii = [2, 4, 10, 8, 6, 6, 6, 6, 6, 6]
+radii = [2, 4, 6, 10, 8, 6, 6, 6, 6, 6, 6]
 radii = [r*0.8 for r in radii]
 
 wavelen = [1/i for i in wave]
 red_wavenum = [i*2*np.pi*r for i,r in zip(wave,radii)]
 
 
-lt = [.277, .277, .250, .250, .250, .210, .181, .158, .148, .139]
+lt = [.277, .277, .277, .250, .250, .250, .210, .181, .158, .148, .139]
 
-lv = [.581, .581, 0.426, 0.426, 0.426, .617, 1.224, 2.97, 4.87, 7.75]
+lv = [.581, .581, .581, .426, .426, .426, .617, 1.224, 2.97, 4.87, 7.75]
 # lv = [4.8/i for i in lv]
 
-rho = [6.95, 6.95, 7.65, 7.65, 7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
+rho = [6.95, 6.95, 6.95, 7.65, 7.65, 7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
 lr = [np.cbrt(1/i) for i in rho]
 
 
-q_var = [0, 0, 3.990705611232144e-06, 2.408162556723014e-06,
+q_var = [0, 0, 0,
+3.990705611232144e-06,
+2.408162556723014e-06,
 3.156327982930347e-06,
 2.328394395880221e-06,
 1.8893985765694086e-06,
@@ -57,6 +59,7 @@ q_var = [0, 0, 3.990705611232144e-06, 2.408162556723014e-06,
 # a = lv ; xlabel = '$L_v$'
 # a = lt ; xlabel = '$L_t$'
 # a = lr ; xlabel = '$L_r$'
+# a = radii ; xlabel = '$R_0$'
 
 # a = [1/i**2 for i in a] ; xlabel = '$Oh^{-2}$'
 
@@ -64,12 +67,13 @@ q_var = [0, 0, 3.990705611232144e-06, 2.408162556723014e-06,
 # a = [(i/j) for i, j in zip(lr, lv)]; xlabel = '$L_r/L_T$'
 # a = [r/(i) for i,r in zip(lt,radii)]; xlabel = '$R_0/L_T$'
 # a = [r/(i) for i,r in zip(lv,radii)]; xlabel = '$R_0/L_v$'
+# a = [r/(i) for i,r in zip(lr,radii)]; xlabel = '$R_0/L_r$'
 
 
 # a = [r**2/(i*j) for r, i, j in zip(radii, lv, lt)]; xlabel = '$R_0^{2}/L_vL_T$'
-a = [(r**2/(i*j))**0.5 for r, i, j in zip(radii, lv, lt)]; xlabel = '$R_0/\sqrt{L_vL_T}$'
-a = [(r**3/(i*j*p))**0.5 for r, i, j, p in zip(radii, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
-a = [(r*x**2/(i*j*p))**0.25 for r, x, i, j, p in zip(radii, wavelen, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
+# a = [(r**2/(i*j))**0.25 for r, i, j in zip(radii, lv, lt)]; xlabel = '$R_0/\sqrt{L_vL_T}$'
+a = [(r**3/(i*j*p))**0.333 for r, i, j, p in zip(radii, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
+# a = [(r*x**2/(i*j*p))**0.25 for r, x, i, j, p in zip(radii, wavelen, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
 # a = [((j/i)/x) for x, i, j in zip(wavelen, lv, lt)] ; xlabel = '$L_v/\lambda L_T$'
 # a = [((j/i)*x) for x, i, j in zip(wavelen, lv, lt)] ; xlabel = '$\lambda L_v/ L_T$'
 # a = [(x**2/(i*j))**0.5 for x, i, j in zip(wavelen, lv, lt)] ; xlabel = '$\lambda^2/ L_v L_T$'

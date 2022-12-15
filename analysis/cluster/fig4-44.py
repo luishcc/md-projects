@@ -1,44 +1,38 @@
 import numpy as np
 
 
-
-
 ################################################################################
 ################################################################################
 
-# a = [50,60,70,80,85,90]
-a = [.311, .311, .266, .266, .266]; xlabel = '$Oh$'
+a = [.538, .380, .311, 0.206, 0.230, 0.266]; xlabel = '$Oh$'
 
-b = [.076, .180, .411, .389, .296] # sat/main
+b = [.076, .180, .285, .411, .389, .296] # sat/main
 
 # Break_avg
-# Different peaks
-# b = [.411, .389, .355, .252, .233, .218, .139, .146] # sat/main
-b_var = [.00, .00, .004, .006, .0053]
+# b = [.069, .180, .276,  .406, .380, .282] # sat/main
 
-wave = [1, 1, .011887547350585061, .01338236354459586,
+b_var = [.00, .00, 0, .004, .006, .0053]
+
+wave = [1, 1, 1, .011887547350585061, .01338236354459586,
 .018927425365090515]
 
-radii = [2, 4, 10, 8, 6 ]
+radii = [2, 4, 6, 10, 8, 6 ]
 radii = [r*0.8 for r in radii]
 
 wavelen = [1/i for i in wave]
 red_wavenum = [i*2*np.pi*r for i,r in zip(wave,radii)]
 
+lt = [.277, .277, .277, .250, .250, .250]
 
-lt = [.277, .277, .250, .250, .250]
+lv = [.581, .581, .581, .426, .426, .426]
 
-lv = [.581, .581, 0.426, 0.426, 0.426]
-# lv = [4.8/i for i in lv]
-
-rho = [6.95, 6.95, 7.65, 7.65, 7.65]
+rho = [6.95, 6.95, 6.95, 7.65, 7.65, 7.65]
 lr = [np.cbrt(1/i) for i in rho]
 
 
-q_var = [0, 0, 3.990705611232144e-06, 2.408162556723014e-06,
+q_var = [0, 0, 0, 3.990705611232144e-06, 2.408162556723014e-06,
 3.156327982930347e-06]
 # q_var = [i*2*np.pi*r*0.8 for i,r in zip(q_var,radii)]
-
 
 
 # a = wavelen ; xlabel = '$\lambda$'
@@ -47,14 +41,17 @@ q_var = [0, 0, 3.990705611232144e-06, 2.408162556723014e-06,
 # a = lt ; xlabel = '$L_t$'
 # a = lr ; xlabel = '$L_r$'
 
-# a = [1/i**2 for i in a] ; xlabel = '$Oh^{-2}$'
+a = [1/i**2 for i in a] ; xlabel = '$Oh^{-2}$'
 
 # a = [(i/j) for i, j in zip(lt, lv)]; xlabel = '$L_v/L_T$'
 # a = [(i/j) for i, j in zip(lr, lv)]; xlabel = '$L_r/L_T$'
 # a = [r/(i) for i,r in zip(lt,radii)]; xlabel = '$R_0/L_T$'
 # a = [r/(i) for i,r in zip(lv,radii)]; xlabel = '$R_0/L_v$'
+# a = [(r/(i))**0.5 for i,r in zip(lr,radii)]; xlabel = '$R_0/L_r$'
 
-a = [r**1 for r in radii]; xlabel = '$R_0$'
+# a = [(r)/(i) for r, i, j in zip(radii, lv, lt)] ; xlabel = '$RL_T/L_v$'
+
+# a = [r**1 for r in radii]; xlabel = '$R_0$'
 
 # a = [r**2/(i*j) for r, i, j in zip(radii, lv, lt)]; xlabel = '$R_0^{2}/L_vL_T$'
 # a = [(r**2/(i*j))**0.5 for r, i, j in zip(radii, lv, lt)]; xlabel = '$R_0/\sqrt{L_vL_T}$'
@@ -153,9 +150,9 @@ fig, axs = plt.subplots(ncols=1, nrows=1)
 ax2 = axs
 
 
-ax2.loglog(a2, b_fit, 'k--', label='Linear fit')
+ax2.plot(a2, b_fit, 'k--', label='Linear fit')
 ax2.plot(a2, b_fit2, 'b--', label='Quadratic fit')
-# ax2.plot(a2, fexp2(a2, *pars4), 'y--', label='exp fit')
+ax2.plot(a2, fexp2(a2, *pars4), 'y--', label='exp fit')
 ax2.plot(a2, fpow(a2, *pars2), 'g--', label='pow')
 # ax2.plot(a, b, 'ko', label='Simulation')
 ax2.errorbar(a, b, xerr = np.sqrt(q_var)*2*np.pi*4.8, yerr = np.sqrt(b_var),

@@ -16,15 +16,15 @@ import os
 import numpy as np
 
 
-R = 2
+R = 6
 ratio = 48
 A = -50
 
-separation = 2
+separation = 5
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
-# path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
-path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
+path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
+# path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
 
 # dir_out = '/'.join([path, 'fig'])
 #
