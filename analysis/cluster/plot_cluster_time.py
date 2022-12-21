@@ -16,15 +16,15 @@ import os
 import numpy as np
 
 
-R = 6
+R = 4
 ratio = 48
-A = -50
+A = -79
 
-separation = 5
+separation = 2.5
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
-path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
-# path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
+# path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
+path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
 
 # dir_out = '/'.join([path, 'fig'])
 #
@@ -128,7 +128,7 @@ plt.legend(loc='upper left')
 print()
 print('PERCENT: ', max(num_satellite2.values())/max(num_drops2.values()))
 # print('PERCENT: ', num_satellite2[max_snap2]/max(num_drops2.values()))
-print(max_snap3)
+print(max_snap3, max_snap4)
 #
 # ax2 = plt.subplot(2,1,2, sharex=ax1)
 #

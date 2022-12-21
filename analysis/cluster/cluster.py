@@ -15,16 +15,16 @@ from mdpkg.rwfile import read_dat, Dat
 # dir = '/home/luishcc/hdd/free_thread_results/R6_ratio6_A50-4/'
 file = '/thread.lammpstrj'
 
-path_to_data = '/home/luishcc/hdd/free_thread_results/'
-# path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/free_thread_results/'
+path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/test/'
 
 
-R = 6
+R = 2
 ratio = 48
-A = -50
+A = -80
 
-initial_snap = 90
+initial_snap = 0
 final_step = 600
 
 

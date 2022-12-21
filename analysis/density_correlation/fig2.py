@@ -80,7 +80,7 @@ grid = 1
 n=0
 
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
-path_to_data2 = '/home/luishcc/md-projects/remote/'
+path_to_data2 = '/home/luishcc/md-projects/analysis/density_correlation/peak/'
 
 data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n+1}'
 dir = path_to_data + data_case_dir
@@ -154,7 +154,7 @@ ri = [4.8, 4.8, 4.7, 4.7, 4.6, 4.4]
 
 #################################################
 
-fig, [ax1, ax] = plt.subplots(2,1, gridspec_kw={'height_ratios': [2, 1]})
+fig, [ax1, ax] = plt.subplots(2,1, gridspec_kw={'height_ratios': [3, 1]})
 fig.subplots_adjust(hspace=.35)
 
 
@@ -173,7 +173,7 @@ for i in range(len(plot_interval)):
     ax2.plot([xi/1809 for xi in x], avg_c[:, i], plot_colors[i], label=f'$r={plot_interval[i]}$', linestyle=plot_style[i], linewidth=1.5)
     ax1.plot(xx[skip_f:], avg_f[skip_f:, i],  plot_colors[i], label=f'$r={plot_interval[i]}$' ,  markerfacecolor='none', linestyle=plot_style[i], linewidth=1.5)
 
-ax1.legend(loc='upper right', ncol=3)
+ax1.legend(loc='upper right', ncol=3, handletextpad=.2, columnspacing=1, frameon=False)
 #ax2.legend(loc='upper right', ncol=3)
 
 
@@ -194,10 +194,13 @@ red = np.array([6,8,10]) * 2*np.pi *0.88
 ax.set_ylabel(r'$\chi$')
 
 R = [6, 8, 10]
+R = [6]
+R2 = [4.8, 7, 8.5]
 ratio = [6, 12, 24, 48]
 
 A = 50
 scale_r = 0.8
+scale_r = 1
 
 
 
@@ -212,18 +215,22 @@ for iter1, r in enumerate(R):
             with open(file, 'r') as fd:
                 fd.readline()
                 line = fd.readline().split(',')
-                q.append(float(line[0]) * 2 * np.pi * r * scale_r)
-                q_var.append(float(line[1]) * ( 2 * np.pi * r * scale_r)**2)
+                # q.append(float(line[0]) * 2 * np.pi * r * scale_r)
+                # q_var.append(float(line[1]) * ( 2 * np.pi * r * scale_r)**2)
+                q.append(float(line[0]) * 2 * np.pi * R2[iter1])
+                q_var.append(float(line[1]) * ( 2 * np.pi * R2[iter1])**2)
 #                x_plot.append(rat)
                 x_plot.append(xrr[iter1][iter2])
-        except:
+        except Exception as e:
+            print(e)
             continue
     print(xrr[iter1], q, q_var)
 
-    ax.errorbar(x_plot, q, yerr = np.sqrt(q_var), fmt=plot_markers[iter1],ecolor = 'black' ,markersize=6.5, color=plot_colors2[iter1], capsize= 2, capthick=1, label=f'$R_0={r}$',
+    ax.errorbar(x_plot, q, yerr = np.sqrt(q_var), fmt=plot_markers[iter1],ecolor = 'black' ,markersize=6.5, color=plot_colors2[iter1], capsize= 2, capthick=1, label='Simulation',#label=f'$R_0={r}$',
     markerfacecolor='none')
 
-ax.plot([100,3100], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
+# ax.plot([100,3100], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
+ax.plot([100,2100], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
 
 #ax.plot(x_plot, [i*red[0] for i in r6], 'ko--', markersize=7.5, markerfacecolor='none', label=r'$R_0=6$')
 
@@ -238,7 +245,7 @@ from matplotlib import container
 
 handles, labels = ax.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-ax.legend(handles, labels, loc='lower right', ncol=2)
+ax.legend(handles, labels, loc='lower right', ncol=2, handletextpad=.2, columnspacing=1, frameon=False)
 
 #ax.legend(loc='lower right', ncol=2)
 ax.set_xlabel(r'$L$' )

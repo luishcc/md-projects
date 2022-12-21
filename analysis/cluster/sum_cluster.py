@@ -10,13 +10,15 @@ from mdpkg.rwfile import read_dat, Dat
 path_to_save = os.getcwd()
 # path_to_data = '/home/luishcc/hdd/free_thread_results/'
 path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/free_new/'
+
 
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
-R = 6
+R = 2
 ratio = 48
-A = -50
+A = -80
 
 initial = 0
 final = 600

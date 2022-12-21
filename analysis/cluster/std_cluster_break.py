@@ -9,6 +9,7 @@ from mdpkg.rwfile import read_dat, Dat
 
 path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
+path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
@@ -17,12 +18,14 @@ def get_snap(dir):
         snap = int(fd.readline())
     return snap
 
-R = 6
+R = 2
 ratio = 48
-A = -60
+A = -80
 
-snap_time_t = 97
-snap_time_s = 61
+snap_time_t = 33
+snap_time_s = 18
+
+separation = 4
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
@@ -56,7 +59,6 @@ while os.path.isdir(ff):
     df2.drop(df[df['size'] <= 1].index, inplace=True)
     df2.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
 
-    separation = 5
     satellite = df[df['radius'] < separation]
 
     num_total = df.shape[0] / (2*np.pi*4.8)

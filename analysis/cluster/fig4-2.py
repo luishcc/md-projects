@@ -1,10 +1,11 @@
 import numpy as np
 
 
-end = 1
+
 
 ################################################################################
 ################################################################################
+end = 1
 
 a = [.538, .380, .311,  # A=-50 new W_p
      .621, .439, .359,  # A=-60 new W_p
@@ -91,7 +92,6 @@ q_var = [0, 0, 0,
 # q_var = [i*2*np.pi*r*0.8 for i,r in zip(q_var,radii)]
 
 
-
 # a = wavelen ; xlabel = '$\lambda$'
 # a = red_wavenum ; xlabel = '$\chi$'
 # a = lv ; xlabel = '$L_v$'
@@ -114,7 +114,7 @@ a = [((i/r)**.5*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = '$Oh T
 # a = [(r**2/(i*j))**-1 for r, i, j in zip(radii, lv, lt)]; xlabel = r'$ {L_vL_T}/{R_0^2} = Oh^2Th $'
 # a = [(r**2/(i*j))**-0.5 for r, i, j in zip(radii, lv, lt)]; xlabel = '$\sqrt{L_vL_T}/R_0$'
 # a = [((i*j/r**2))**0.5 for r, i, j in zip(radii, lv, lt)]; xlabel = '$L_vL_T/R_0^2$'
-# a = [(r**3/(i*j*p))**0.5 for r, i, j, p in zip(radii, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
+# a = [(r**3/(i*j*p))**1 for r, i, j, p in zip(radii, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
 
 # a = [(r*x**2/(i*j*p))**0.25 for r, x, i, j, p in zip(radii, wavelen, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
 # a = [((j/i)/x) for x, i, j in zip(wavelen, lv, lt)] ; xlabel = '$L_v/\lambda L_T$'
@@ -191,53 +191,165 @@ print(pars3, stdevs3)
 print(pars4, stdevs4)
 
 
-import matplotlib as mpl
-from matplotlib import container
+#############################
+#############################
 
+
+# aa = [50,60,70,80,85,90]
+aa = [0.266, .321, .451, .704, .901, 1.137]
+
+# Main droplet break_avg
+# bb = [9.545, 9.589, 9.923, 10.649, 10.969, 11.335]
+
+cc = [1.248, 1.151, 1.234, 1.109, 1.222, .932]
+
+# Main droplet break_avg_peak
+# bb2 = [10.064, 10.136, 10.647, 11.33, 11.606, 11.765]
+# cc2 = [1.42, 1.42, 1.4, 1.24, 1.14, 1.02]
+#
+# # Main droplet normal_avg
+bb = [9.547, 9.741, 10.042, 10.722, 10.819, 11.4]
+# cc3 = [1.278, 1.111, 1.234, 1.12, 1.322, .876]
+
+
+wave = [.018927425365090515, .017959188701441885, .016553644129911244,
+.014737153310297676, .013920311412504544, .01340404171055144]
+# wave = [1/i for i in wave]
+wave = [i*2*np.pi*4.8 for i in wave]
+
+q_var = [3.156327982930347e-06,
+2.328394395880221e-06,
+1.8893985765694086e-06,
+2.054396275751638e-06,
+3.954677744054939e-06,
+9.193559899539904e-06]
+# q_var = [i*2*np.pi*4.8 for i in q_var]
+
+
+# ffit = np.polyfit(aa,bb, 1)
+# bb_fit = [fit[0]*i + fit[1] for i in aa ]
+#
+# aa2 = np.linspace(aa[0], aa[-1], 100)
+# ffit2 = np.polyfit(aa, bb, 2)
+# bb_fit2 = [fit2[0]*i**2 + fit2[1]*i +fit2[2] for i in aa2 ]
+
+
+def pred(x):
+    scale = 0.8
+    return np.cbrt(0.75*(6*scale)**2*x-1.2**3)
+    # return np.cbrt(0.75*(6*1)**2*x-8.6**3)
+
+def pred2(x):
+    scale = 1.012
+    return 0.75*(6*scale)**2*x-8.7**3
+
+def pred3(x):
+    scale = 0.8
+    return np.cbrt(0.75*(6*scale)**2/x)
+
+def pred4(x):
+    scale = 0.8
+    return (6*scale)*np.cbrt(1.5*np.pi/x)
+
+
+##########################################
+##########################################
+
+
+import matplotlib as mpl
 
 dpi = 1600
 side = 7
 rc_fonts = {
     "font.family": "serif",
-    "font.size": 12*2,
-    'figure.figsize': (1.1*side, 1.1*side),
+    "font.size": 12,
+    'figure.figsize': (0.8*side, 1.1*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
 
 import matplotlib.pyplot as plt
 
-fig, axs = plt.subplots(ncols=1, nrows=1)
+fig, axs = plt.subplots(ncols=1, nrows=3)
 # gs = axs[0, 0].get_gridspec()
 # for ax in axs[0, :]:
 #     ax.remove()
 # axbig = fig.add_subplot(gs[0, :])
 
+fig.subplots_adjust(hspace=.4)
+fig.subplots_adjust(wspace=.4)
 
 # fig.tight_layout()
 
-ax2 = axs
+ax0 = axs[0]
+ax1 = axs[1]
+ax2 = axs[2]
 
+##########################################
+import pandas as pd
 
-# ax2.loglog(a2, b_fit, 'k--', label='Linear fit')
-# ax2.plot(a2, b_fit2, 'k--', label='Quadratic fit')
-# ax2.plot(a2, fexp(a2, *pars), 'r--', label='exp ')
-ax2.loglog(a2, flog(a2, *pars3), 'b--', label='Log Fit')
-# ax2.plot(a2, fexp2(a2, *pars4), 'y--', label='exp2')
-ax2.plot(a2, fpow(a2, *pars2), 'g--', label='pow')
-# ax2.plot(a, b, 'ko', label='Simulation')
-ax2.errorbar(a[:-end], b[:-end], yerr = np.sqrt(b_var[:-end])*0,
+R = 6
+ratio = 48
+A = -50
+snap = 100
+
+# file = f'~/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
+file = f'~/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
+
+df = pd.read_csv(file)
+df.drop(df[df['size'] <= 3].index, inplace=True)
+df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
+df['radius'] = df['radius'].multiply(np.sqrt(5/3))
+df['radius'].plot.hist(bins=100, alpha=0.4, ax=ax0, density=True, color='b')
+df['radius'].plot.kde(bw_method=0.1, ax=ax0, color='k')
+ax0.set_xlim(0,16)
+ax0.set_xlabel('$R_D$')
+ax0.set_ylabel('Distribution Density')
+ax0.annotate('', xy=(2.8, 0.13), xytext=(1.6,0.12),
+            arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
+            )
+ax0.annotate('', xy=(6.4,0.28), xytext=(8.76,0.26),
+            arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
+            )
+ax0.annotate('Main Droplets', xy=(3.5, 0.3))
+ax0.annotate('Satellite Droplets', xy=(3, 0.12))
+
+##########################################
+
+ax1.errorbar(wave, bb, xerr = np.sqrt(q_var)*2*np.pi*4.8, markerfacecolor='none',
 fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
+dv = abs(wave[-1]-wave[0])
+pdv = 0.3 * dv
+x = np.linspace(wave[0]+pdv, wave[-1]-pdv, 100)
+ax1.plot(x, pred4(x), 'k--', label='Theory')
+ax1.set_xlabel('$\chi$')
+ax1.set_ylabel('$R_D$')
+from matplotlib import container
+handles, labels = ax1.get_legend_handles_labels()
+handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
+ax1.legend(handles, labels, loc='lower left', ncol=1, frameon=False)
+
+
+
+# ax2.plot(a2, b_fit, 'k--', label='Linear fit')
+# ax2.plot(a2, b_fit2, 'k--', label='Quadratic fit')
+# ax2.plot(a2, fexp(a2, *pars), 'b--', label='exp fit')
+# ax2.loglog(a2, flog(a2, *pars3), 'k--', label='Log Fit')
+ax2.semilogx(a2, fpow(a2, *pars2), 'k--', label='Power Law')
+# ax2.plot(a, b, 'ko', label='Simulation')
+# ax2.errorbar(a, b, yerr = np.sqrt(b_var),
+# fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
+ax2.errorbar(a, b, yerr = np.sqrt(b_var),
+fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation', markerfacecolor='none')
 handles, labels = ax2.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-ax2.legend(handles, labels, loc=0, ncol=1)
+ax2.legend(handles, labels, loc=0, ncol=1, frameon=False)
 ax2.set_ylabel('$N_{satellite}/N_{main}$')
 ax2.set_xlabel(xlabel)
-# ax2.set_xlabel(r'$3R_0/l_T$')
 
 
 
-# plt.savefig('fig4.pdf', bbox_inches='tight', dpi=dpi )
+plt.savefig('fig4.pdf', bbox_inches='tight', dpi=dpi )
 
 
 plt.show()
