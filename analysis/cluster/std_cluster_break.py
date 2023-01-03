@@ -20,12 +20,12 @@ def get_snap(dir):
 
 R = 2
 ratio = 48
-A = -80
+A = -85
 
-snap_time_t = 33
-snap_time_s = 18
+snap_time_t = 31
+snap_time_s = 15
 
-separation = 4
+separation = 1.7
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 

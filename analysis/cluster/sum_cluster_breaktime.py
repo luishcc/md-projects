@@ -22,7 +22,7 @@ def get_snap(dir):
 
 R = 2
 ratio = 48
-A = -80
+A = -90
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 

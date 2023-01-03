@@ -10,6 +10,8 @@ a = [.538, .380, .311,  # A=-50 new W_p
      .621, .439, .359,  # A=-60 new W_p
      .864, .611,        # A=-70 new W_p
      1.32, .933,        # A=-80 new W_p
+     1.66, 1.18,        # A=-85 new W_p
+     2.01,              # A=-90 new W_p
      .206, .230, .266, .321, .451, .704, .901, 1.137]; xlabel = '$Oh$'
 
 # normal avg
@@ -18,6 +20,8 @@ b = [.074, .160, .285,
      .046, .139, .220,
      .049, .133,
      .026, .110,
+     .038, .095,
+     .0,
      .406, .380, .296, .215, .210, .196, .135, .130] # sat/main
 
 
@@ -27,12 +31,16 @@ b = [.074, .160, .285,
 #      .046, .144, .229,
 #      .049, .137,
 #      .026, .106,
+#      .038, .093,
+#      .0,
 #      .411, .389, .282, .213, .200, .183, .126, .133] # sat/main
 
 b_var = [.003, .005, .006,
          .002, .007, .006,
          .003, .004,
          .001, .004,
+         .004, .0,
+         .000,
          .004, .006, .0053, .0026, .0039, .0057, .0025, .0056]
 
 
@@ -40,6 +48,8 @@ wave = [.1, .1, .1,
         .1, .1, .1,
         .1, .1,
         .1, .1,
+        .1, .1,
+        .1,
 .011887547350585061, .01338236354459586,
 .018927425365090515, .017959188701441885, .016553644129911244,
 .014737153310297676, .013920311412504544, .01340404171055144]
@@ -48,6 +58,8 @@ radii = [2, 4, 6,
          2, 4, 6,
          2, 4,
          2, 4,
+         2, 4,
+         2,
          10, 8, 6, 6, 6, 6, 6, 6]
 # radii = [r*0.8 for r in radii]
 
@@ -59,12 +71,16 @@ lt = [.277, .277, .277,
       .227, .227, .227,
       .193, .193,
       .166, .166,
+      .154, .154,
+      .145,
       .250, .250, .250, .210, .181, .158, .148, .139]
 
 lv = [.581, .581, .581,
       .773, .773, .773,
       1.499, 1.499,
       3.484, 3.484,
+      5.545, 5.545,
+      8.839,
       .426, .426, .426, .617, 1.224, 2.97, 4.87, 7.75]
 # lv = [4.8/i for i in lv]
 
@@ -72,6 +88,8 @@ rho = [6.95, 6.95, 6.95,
        7.7, 7.7, 7.7,
        8.4, 8.4,
        9.1, 9.1,
+       9.5, 9.5,
+       9.8,
        7.65, 7.65, 7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
 lr = [np.cbrt(1/i) for i in rho]
 
@@ -80,6 +98,8 @@ q_var = [0, 0, 0,
          0, 0, 0,
          0, 0,
          0, 0,
+         0, 0,
+         0,
 3.990705611232144e-06,
 2.408162556723014e-06,
 3.156327982930347e-06,
@@ -114,7 +134,7 @@ a = [((i/r)**.5*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = '$Oh T
 # a = [(r**2/(i*j))**-1 for r, i, j in zip(radii, lv, lt)]; xlabel = r'$ {L_vL_T}/{R_0^2} = Oh^2Th $'
 # a = [(r**2/(i*j))**-0.5 for r, i, j in zip(radii, lv, lt)]; xlabel = '$\sqrt{L_vL_T}/R_0$'
 # a = [((i*j/r**2))**0.5 for r, i, j in zip(radii, lv, lt)]; xlabel = '$L_vL_T/R_0^2$'
-# a = [(r**3/(i*j*p))**0.5 for r, i, j, p in zip(radii, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
+# a = [(r**3/(i*j*p))**-1 for r, i, j, p in zip(radii, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
 
 # a = [(r*x**2/(i*j*p))**0.25 for r, x, i, j, p in zip(radii, wavelen, lv, lt, lr)]; xlabel = '$R_0/\sqrt[3]{L_vL_TL_r}$'
 # a = [((j/i)/x) for x, i, j in zip(wavelen, lv, lt)] ; xlabel = '$L_v/\lambda L_T$'
@@ -125,6 +145,11 @@ a = [((i/r)**.5*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = '$Oh T
 
 # a = [x/i for x, i in zip(wave, lv)] ; xlabel = '$L_v/\lambda$'
 # a = [r/x for x, r in zip(wave, radii)]; xlabel = '$R_0/\chi$'
+
+type_plt = ''
+# type_plt = 'loglog'
+# type_plt = 'semilogx'
+# type_plt = 'semilogy'
 
 
 scale = (max(a[:-end]) - min(a[:-end])) * 0.1
@@ -219,14 +244,25 @@ fig, axs = plt.subplots(ncols=1, nrows=1)
 ax2 = axs
 
 
+if type_plt == 'loglog':
+    ax2.loglog(a2, fpow(a2, *pars2), 'g--', label='pow')
+elif type_plt == 'semilogx':
+    ax2.semilogx(a2, fpow(a2, *pars2), 'g--', label='pow')
+elif type_plt == 'semilogy':
+    ax2.semilogy(a2, fpow(a2, *pars2), 'g--', label='pow')
+else:
+    ax2.plot(a2, fpow(a2, *pars2), 'g--', label='pow')
+
+yerr = np.sqrt(b_var[:-end])*1
+
 # ax2.loglog(a2, b_fit, 'k--', label='Linear fit')
 # ax2.plot(a2, b_fit2, 'k--', label='Quadratic fit')
 # ax2.plot(a2, fexp(a2, *pars), 'r--', label='exp ')
-ax2.loglog(a2, flog(a2, *pars3), 'b--', label='Log Fit')
+# ax2.plot(a2, flog(a2, *pars3), 'b--', label='Log Fit')
 # ax2.plot(a2, fexp2(a2, *pars4), 'y--', label='exp2')
-ax2.plot(a2, fpow(a2, *pars2), 'g--', label='pow')
+# ax2.plot(a2, fpow(a2, *pars2), 'g--', label='pow')
 # ax2.plot(a, b, 'ko', label='Simulation')
-ax2.errorbar(a[:-end], b[:-end], yerr = np.sqrt(b_var[:-end])*0,
+ax2.errorbar(a[:-end], b[:-end], yerr = yerr,
 fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
 handles, labels = ax2.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]

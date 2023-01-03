@@ -19,11 +19,11 @@ fig, ax0 = plt.subplots(ncols=1, nrows=1)
 
 import pandas as pd
 
-R = 4
+R = 2
 ratio = 48
-A = -79
+A = -89
 
-snap = 99
+snap = 80
 
 file = f'~/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
 # file = f'~/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
@@ -32,7 +32,7 @@ df = pd.read_csv(file)
 df.drop(df[df['size'] <= 2].index, inplace=True)
 df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
 df['radius'] = df['radius'].multiply(np.sqrt(5/3))
-df['radius'].plot.hist(bins=50, alpha=0.4, ax=ax0, density=True, color='b')
+df['radius'].plot.hist(bins=200, alpha=0.4, ax=ax0, density=True, color='b')
 # df['radius'].plot.kde(bw_method=0.1, ax=ax0, color='k')
 
 # main = df[df['radius'] > 5]

@@ -18,7 +18,7 @@ path_to_data = '/home/luishcc/hdd/'
 
 R = 2
 ratio = 48
-A = -80
+A = -90
 
 initial = 0
 final = 600
