@@ -18,9 +18,9 @@ import numpy as np
 
 R = 2
 ratio = 48
-A = -89
+A = -40
 
-separation = 2
+separation = 1.7
 
 case = f'R{R}_ratio{ratio}_A{abs(A)}'
 # path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'

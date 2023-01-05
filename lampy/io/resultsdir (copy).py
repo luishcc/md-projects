@@ -8,13 +8,13 @@ cwd = os.getcwd()
 
 
 def make_dir(_name, _number_from):
-    dir = '/' + f'{_number_from}'
+    dir = '/' + _name + f'-{_number_from}'
     i = _number_from
-    while os.path.isdir(cwd + '/'+ _name + dir):
-      dir = '/' + str(i)
+    while os.path.isdir(cwd + dir):
+      dir = dir.split('-')[0] + '-'+str(i)
       i+=1
 
-    results_path = cwd +'/' + _name + dir
+    results_path = cwd + dir
     os.mkdir(results_path)
     return results_path
 
@@ -29,9 +29,8 @@ def save_files(_name, _info, _number_from=1):
     for data in _info.items():
         _file1.write(f'{data[0]}:{data[1]}\n')
     _file1.close()
-    
-    print(_path)
-    return _path
+
+    return _path.split('/')[-1]
 
 
 
