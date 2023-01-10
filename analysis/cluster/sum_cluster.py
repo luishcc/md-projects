@@ -10,7 +10,7 @@ from mdpkg.rwfile import read_dat, Dat
 path_to_save = os.getcwd()
 # path_to_data = '/home/luishcc/hdd/free_thread_results/'
 path_to_data = '/home/luishcc/hdd/'
-# path_to_data = '/home/luishcc/hdd/free_new/'
+# path_to_data = '/home/luishcc/hdd/free_thread_new/'
 
 
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
@@ -18,7 +18,7 @@ path_to_data = '/home/luishcc/hdd/'
 
 R = 2
 ratio = 48
-A = -40
+A = -95
 
 initial = 0
 final = 600
@@ -27,7 +27,7 @@ sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 
 dir_in = path_to_data + sim_case
 
-sim_case2 = f'R{R}_ratio{ratio}_A{abs(A+1)}'
+# sim_case2 = f'R{R}_ratio{ratio}_A{abs(A+1)}'
 
 dir_out = '/'.join([path_to_save, sim_case])
 
@@ -37,7 +37,7 @@ if not os.path.isdir(dir_out):
 os.chdir(dir_out)
 
 def path_to_file(case, snap):
-    return dir_in + '-' + str(case) + f'/cluster/{snap}.csv'
+    return dir_in + '/' + str(case) + f'/cluster/{snap}.csv'
 
 def run_snap(_snap):
     case = 1

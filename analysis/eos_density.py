@@ -32,13 +32,13 @@ def oh_number(rho, mu, sigma, l):
   return mu/np.sqrt(rho*sigma*l)
 
 
-# func1 = lambda x: eos_warren(-40, 25, x)
-func1 = lambda x: eos_jamali(-90, 25, x, paper=1)
+func1 = lambda x: eos_warren(-90, 25, x)
+# func1 = lambda x: eos_jamali(-90, 25, x, paper=1)
 density = fsolve(func1, 9)
 print(density)
 # print( sigma_fit(-40,25, density))
 
-exit()
+# exit()
 
 mu = [7.22, 10.76, 18.31, 33.9, 64.01]
 
@@ -59,7 +59,7 @@ for a, m in zip(np.linspace(-50, -90, 5), mu):
 
 density = np.linspace(1, 11, 100)
 plt.figure()
-for a in np.linspace(-50, -50, 1):
+for a in np.linspace(-80, -80, 1):
   plt.plot(density, [eos_warren(a,25,r) for r in density], 'k-', label = a)
   plt.plot(density, [eos_jamali(a,25,r) for r in density], 'b--', label = a)
   plt.plot(density, [eos_jamali(a,25,r, paper=False) for r in density], 'r.', label = a)

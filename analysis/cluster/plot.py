@@ -21,12 +21,12 @@ import pandas as pd
 
 R = 2
 ratio = 48
-A = -40
+A = -95
 
-snap = 30
+snap = 5
 
 file = f'~/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
-# file = f'~/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
+file = f'~/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}/{snap}.csv'
 
 df = pd.read_csv(file)
 df.drop(df[df['size'] <= 2].index, inplace=True)

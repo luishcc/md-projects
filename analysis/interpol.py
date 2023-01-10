@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 
 x = [-50, -60, -70, -80, -90]
 y = [7.22, 10.76, 18.31, 33.90, 64.01]
+# y = [6.9, 7.7, 8.4, 9.1, 9.8]
+
 
 
 fit = np.polyfit(x,y,2)
@@ -24,6 +26,6 @@ ax.plot(x,y, 'ko')
 # ax.plot(x2, y_fit, 'b--')
 ax.plot(x2, fexp(x2, *pars), 'r--')
 
-print(fexp(-40, *pars))
+print(fexp(-95, *pars))
 
 plt.show()

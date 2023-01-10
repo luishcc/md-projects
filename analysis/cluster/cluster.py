@@ -20,16 +20,17 @@ path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/test/'
 
 
-R = 4
+R = 2
 ratio = 48
-A = -40
+A = -95
 
-initial_snap = 0
+initial_snap = 10
 final_step = 600
 
 
-n = 1
-data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
+n = 15
+# data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
+data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}/{n}'
 
 dir = path_to_data + data_case_dir
 save_dir = dir + f'/cluster'
@@ -101,7 +102,7 @@ while os.path.isdir(dir):
         # print()
 
     n += 1
-    data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
+    data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}/{n}'
     dir = path_to_data + data_case_dir
     save_dir = dir + f'/cluster'
 

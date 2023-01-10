@@ -9,8 +9,8 @@ from mdpkg.rwfile import read_dat, Dat
 
 path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
-path_to_data = '/home/luishcc/hdd/free_thread_new/'
-# path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/free_thread_new/'
+path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
@@ -21,10 +21,10 @@ def get_snap(dir):
 
 R = 2
 ratio = 48
-A = -50
+A = -95
 
-snap_time_t = 28
-snap_time_s = 18
+snap_time_t = 45
+snap_time_s = 5
 
 separation = 1.7
 
@@ -71,7 +71,7 @@ while os.path.isdir(ff):
 
 
     num_total = df.shape[0]
-    num_total = main.shape[0]
+    # num_total = main.shape[0]
     num_satellite = satellite.shape[0]
 
     sum += num_satellite/num_total
