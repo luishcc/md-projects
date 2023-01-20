@@ -10,44 +10,40 @@ def func(x):
     a = 1/(2+b)
     return np.sqrt(a)
 
-A = [50, 60, 70, 80, 85, 90]
-oh_data = [0.266,0.321,0.451,0.704,0.901,1.137]
+A = [40, 50, 60, 70, 80, 85, 90]
+oh_6 = [0.266,0.321,0.451,0.704,0.901,1.137]
+oh_4 = [.233, .380, .439, .611, .933, 1.18, 1.42]
+oh_2 = [.411, .538, .621, .864, 1.32, 1.66, 2.01]
 
 
-path_to_data = '/home/luishcc/hdd/free_thread_old/'
-
-def get_snap(dir):
-    try:
-        with open(dir+'/breaktime.txt', 'r') as fd:
-            snap = int(fd.readline())
-    except:
-        return None
-    return snap
+path_to_data = '/home/luishcc/hdd/free_thread_new/'
 
 
-R = 6
+
+R = 4
 ratio = 48
 
-A = 50
+A = 60
+oh_id = 2
+
 grid = 1
 
 
-ini = 8
-end = 28
+ini = 1
+end = 35
 
 n=0
 
 data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n+1}'
 dir = path_to_data + data_case_dir
 
-snap = get_snap(dir)
-
-file = f'correlation_grid1/{snap}.dat'
+file = f'breaktime_correlation_grid1.csv'
 datafile = '/'.join([dir,file])
 
 
-data = read_dat(datafile)
-x = data['dz']
+import pandas as pd
+data = pd.read_csv(datafile)
+x = data['dz'].tolist()
 
 
 num = len(x)
@@ -94,8 +90,8 @@ peak_sum = 0
 peak_sum2 = 0
 while os.path.isfile(datafile):
     print(datafile)
-    data = read_dat(datafile)
-    arr_real = np.array(data['4'])
+    data = pd.read_csv(datafile)
+    arr_real = np.array(data['correlation'].tolist())
     arr = abs(rfft(arr_real))
     p_fit = fit(arr)
     peak.append(p_fit)
@@ -107,8 +103,6 @@ while os.path.isfile(datafile):
     peak_array.append([peak_sum/n, peak_sum2/n - (peak_sum/n)**2 ])
     data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n+1}'
     dir = path_to_data + data_case_dir
-    snap = get_snap(dir)
-    file = f'correlation_grid1/{snap}.dat'
     datafile = '/'.join([dir,file])
 
 avg = sum/n
@@ -122,12 +116,12 @@ from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition)
 fig, ax = plt.subplots(1,1)
 
 peak_array = np.array(peak_array)
-ax.errorbar(np.linspace(1, n, n), peak_array[:,0]*2*np.pi*4.8,
-            yerr = np.sqrt(peak_array[:,1])*2*np.pi*4.8, fmt='o',
+ax.errorbar(np.linspace(1, n, n), peak_array[:,0]*2*np.pi*R*0.8,
+            yerr = np.sqrt(peak_array[:,1])*2*np.pi*R*0.8, fmt='o',
             ecolor = 'black',markersize=3.5, color='black',
             capsize= 3, capthick=1)
 
-ax.plot([1,n], [func(oh_data[0])]*2)
+ax.plot([1,n], [func(oh_4[oh_id])]*2)
 
 
 # ax.set_xlim(0,0.1)

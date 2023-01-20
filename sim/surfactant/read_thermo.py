@@ -3,8 +3,10 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 
 
-file = 'in_1000.log'
-#file = 'log.lammps'
+# file = 'in_1000.log'
+file = 'log.lammps'
+file = 'test.log'
+
 
 energy = []
 pressure = []
