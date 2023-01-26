@@ -3,10 +3,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import numpy as np
+# from mdpkg.rwfile import read_dat
 
 
 # path_to_data = '/home/luishcc/hdd/free_thread_old/'
-path_to_data = '/home/luishcc/hdd/free_thread_new/'
+# path_to_data = '/home/luishcc/hdd/free_thread_new/'
+path_to_data = '/home/luishcc/hdd/'
+
 
 def get_snap(dir, exact=True):
     try:
@@ -18,12 +21,12 @@ def get_snap(dir, exact=True):
 
 R = 2
 ratio = 48
-A = 85
+A = 80
 
 grid = 1
 
 ini = 2
-end = 18
+end = 23
 
 
 data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
@@ -31,10 +34,10 @@ dir = path_to_data + data_case_dir
 
 snap = get_snap(dir)
 
-file = f'breaktime_correlation_grid{grid}.csv'
+file = f'breaktime_correlation_grid{grid}.dat'
 datafile = '/'.join([dir,file])
 
-data = pd.read_csv(datafile)
+data = pd.read_csv(datafile,  sep=' ', header=0, names=['dz', 'correlation', 'nan'])
 x = data['dz'].tolist()
 
 num = len(x)
@@ -114,19 +117,23 @@ peak_sum2 = 0
 while os.path.isfile(datafile):
     print(snap)
     print(datafile)
-    data = pd.read_csv(datafile)
+    data = pd.read_csv(datafile, sep=' ', header=0, names=['dz', 'correlation', 'nan'])
+    # data = pd.read_dat(datafile)
+
     arr_real = np.array(data['correlation'].tolist())
     arr = abs(rfft(arr_real))
     ar_lst = arr.tolist()
-    # xx_l = xx.tolist()
-    # p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    #
+    xx_l = xx.tolist()
+    p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
     # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
     # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
     # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit /=3
+    # p_fit /=2
+
     p_fit, plot = fit(arr)
-    # p_fit, plot = fit2(arr)
+    # p_fit, plot = fit2(a  rr)
 
     print(p_fit)
     # plt.figure(1)
@@ -180,7 +187,7 @@ mark_inset(ax, ax1, loc1=2, loc2=4, fc="none", ec='0.3')
 
 ax.plot(xx[1:],avg[1:], 'k-', linewidth=1.5)
 ax.errorbar(xx[1:], avg[1:], yerr = np.sqrt(var[1:])/2, fmt='o',ecolor = 'black',markersize=3.5, color='black', capsize= 3, capthick=1)
-ax.errorbar(peak_avg, 1, xerr = np.sqrt(peak_var)/2, fmt='o',ecolor = 'black',markersize=3.5, color='black', capsize= 3, capthick=1)
+ax.errorbar(peak_avg, 0, xerr = np.sqrt(peak_var)/2, fmt='o',ecolor = 'black',markersize=3.5, color='black', capsize= 3, capthick=1)
 
 ax.set_xlim(0,0.3)
 

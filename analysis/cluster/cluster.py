@@ -17,18 +17,19 @@ file = '/thread.lammpstrj'
 
 # path_to_data = '/home/luishcc/hdd/free_thread_results/'
 path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/test/'
 
 
-R = 2
+R = 4
 ratio = 48
-A = -95
+A = -40
 
-initial_snap = 10
-final_step = 600
+initial_snap = 8
+final_step = 200
 
 
-n = 15
+n = 1
 # data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
 data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}/{n}'
 

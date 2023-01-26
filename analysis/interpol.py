@@ -26,6 +26,6 @@ ax.plot(x,y, 'ko')
 # ax.plot(x2, y_fit, 'b--')
 ax.plot(x2, fexp(x2, *pars), 'r--')
 
-print(fexp(-95, *pars))
+print(fexp(-40, *pars))
 
 plt.show()

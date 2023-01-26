@@ -278,7 +278,7 @@ def pred3(x):
 
 def pred4(x):
     scale = 0.8
-    return (6*scale)*np.cbrt(1.5*np.pi/x)
+    return np.cbrt(1.5*np.pi/x)
 
 
 ##########################################
@@ -323,33 +323,109 @@ ip = InsetPosition(ax2, [0.55,0.5,0.4,0.45])
 ax22.set_axes_locator(ip)
 
 ##########################################
-import pandas as pd
-
-R = 6
-ratio = 48
-A = -50
-snap = 100
 
 
-ax1.errorbar(wave, bb, xerr = np.sqrt(q_var)*2*np.pi*4.8, markerfacecolor='none',
-fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
-dv = abs(wave[-1]-wave[0])
-pdv = 0.3 * dv
-x = np.linspace(wave[0]+pdv, wave[-1]-pdv, 100)
+# Main droplet break_avg
+bbb = [9.545, 9.589, 9.923, 10.649, 10.969, 11.335]
+bbb = [i/4.8 for i in bbb]
+
+# bbb2 =[3.48, 3.39, 3.38, 3.43, 3.98, 3.8, 4.2]
+bbb2 =[3.60, 3.63, 3.70, 3.77, 3.88, 4.01, 4.6]
+bbb2 = [i/1.65 for i in bbb2]
+
+bbb4 =[6.32, 5.8, 6.03, 6.14, 6.35, 6.97, 6.9]
+bbb4 = [i/3.2 for i in bbb4]
+
+
+Rr = [2,4,6]
+A=[40,50,60,70,80,85,90]
+ratio=48
+qq = {}
+qqinv = {}
+qq_var = {}
+for r in Rr:
+    qq[r]=[]
+    qqinv[r]=[]
+    qq_var[r]=[]
+    for a in A:
+        file = f'/home/luishcc/md-projects/analysis/density_correlation/peak/R{r}_ratio{ratio}_A{a}-peak.csv'
+        try:
+            with open(file, 'r') as fd:
+                fd.readline()
+                line = fd.readline().split(',')
+                qq[r].append(float(line[0]) * 2 * np.pi * r*0.8)
+                qqinv[r].append(1/(float(line[0]) * r*0.8))
+                qq_var[r].append(float(line[1]) * ( 2 * np.pi * r*0.8)**2)
+        except Exception as e:
+            print(e)
+            continue
+
+wwave = [.018927425365090515, .017959188701441885, .016553644129911244,
+.014737153310297676, .013920311412504544, .01340404171055144]
+
+wwave = [i*2*np.pi*4.8 for i in wwave]
+
+q_var6 = [3.156327982930347e-06,
+2.328394395880221e-06,
+1.8893985765694086e-06,
+2.054396275751638e-06,
+3.954677744054939e-06,
+9.193559899539904e-06]
+
+def pred4(x):
+    scale = 0.8
+    return np.cbrt(1.5*np.pi/x)
+
+
+ax1.errorbar(wwave, bbb, xerr = np.sqrt(q_var6)*2*np.pi*4.8,markerfacecolor='none',
+fmt='o',ecolor = 'blue', capsize= 2, capthick=1,color='blue', label=r'$R_0=6$')
+
+ax1.errorbar(qq[2], bbb2, xerr = np.sqrt(qq_var[2]),markerfacecolor='none',
+fmt='s',ecolor = 'red', capsize= 2, capthick=1,color='red', label=r'$R_0=2$')
+
+# ax1.errorbar(qq[4], bbb4, xerr = np.sqrt(qq_var[4]),markerfacecolor='none',
+# fmt='x',ecolor = 'green', capsize= 2, capthick=1,color='green', label=r'$R_0=4$')
+
+dv = abs(wwave[-1]-wwave[0])
+pdv = 1.2 * dv
+x = np.linspace(wwave[0]+1.*pdv, wwave[-1]-pdv, 100)
 ax1.plot(x, pred4(x), 'k--', label='Theory')
+
 ax1.set_xlabel('$\chi$')
-ax1.set_ylabel('$R_D$')
+ax1.set_ylabel('$R_D/R_0$')
 from matplotlib import container
 handles, labels = ax1.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-ax1.legend(handles, labels, loc='lower left', ncol=1, frameon=False)
+ax1.legend(handles, labels, loc=0, ncol=1)
+
+
+# import pandas as pd
+#
+# R = 6
+# ratio = 48
+# A = -50
+# snap = 100
+#
+#
+# ax1.errorbar(wave, bb, xerr = np.sqrt(q_var)*2*np.pi*4.8, markerfacecolor='none',
+# fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
+# dv = abs(wave[-1]-wave[0])
+# pdv = 0.3 * dv
+# x = np.linspace(wave[0]+pdv, wave[-1]-pdv, 100)
+# ax1.plot(x, pred4(x), 'k--', label='Theory')
+# ax1.set_xlabel('$\chi$')
+# ax1.set_ylabel('$R_D$')
+# from matplotlib import container
+# handles, labels = ax1.get_legend_handles_labels()
+# handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
+# ax1.legend(handles, labels, loc='lower left', ncol=1, frameon=False)
 
 
 
 
 ##########################################
 
-
+a = [((i/r)**.5*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = 'OhTh'
 # ax2.plot(a2, b_fit, 'k--', label='Linear fit')
 # ax2.plot(a2, b_fit2, 'k--', label='Quadratic fit')
 # ax2.plot(a2, fexp(a2, *pars), 'b--', label='exp fit')
@@ -367,10 +443,14 @@ handles, labels = ax2.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
 ax2.legend(handles, labels, loc=(.13, .75), ncol=1, frameon=False)
 
+from matplotlib.patches import Polygon
+
 ax22.set_ylim(1e-2, 7e-1)
 ax22.loglog(a2, fpow(a2, *pars2), 'k--', label='Power Law')
 ax22.scatter(a, b, marker='o',color = 'black', facecolors='none', label='Simulation')
-
+t1 = Polygon([[.022, .03], [.022, .06], [.06, .03]], facecolor='none', edgecolor='black')
+ax22.add_patch(t1)
+ax22.annotate(r'$0.72\pm0.04$', xy=(.0036, 0.035), fontsize=11)
 
 
 

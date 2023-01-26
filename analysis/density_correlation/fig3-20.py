@@ -29,7 +29,7 @@ x = func(oh)
 
 rho = [7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
 rho2 = [6.05, 6.9, 7.7, 8.4, 9.1, 9.5, 9.8]
-rho3 = [6.05, 6.9, 7.7, 8.4, 9.1, 9.5]
+rho3 = [6.75, 7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
 
 
 lr = {}
@@ -39,17 +39,17 @@ lr[6] = [np.cbrt(1/i) for i in rho]
 invlr[6] = [1/i for i in lr[6]]
 lr[4] = [np.cbrt(1/i) for i in rho2]
 invlr[4] = [1/i for i in lr[4]]
-lr[2] = [np.cbrt(1/i) for i in rho2]
+lr[2] = [np.cbrt(1/i) for i in rho3]
 invlr[2] = [1/i for i in lr[2]]
 
 oh_r = {}
 oh_r[6] = [0.266,0.321,0.451,0.704,0.901,1.137]
 oh_r[4] = [.233, .380, .439, .611, .933, 1.18, 1.42]
-oh_r[2] = [.411, .538, .621, .864, 1.32, 1.66, 2.01]
+oh_r[2] = [.345, .460, .556, .781, 1.22, 1.56, 1.96]
 
 A = [40, 50, 60, 70, 80, 85, 90]
 
-R = [2,4, 6]
+R = [2, 6]
 ratio = 48
 
 q = {}
@@ -65,7 +65,7 @@ for r in R:
             with open(file, 'r') as fd:
                 fd.readline()
                 line = fd.readline().split(',')
-                q[r].append(float(line[0]) * 2 * np.pi * r*0.8)
+                q[r].append(float(line[0]) * 2 * np.pi )#* r*0.8)
                 qinv[r].append(1/(float(line[0]) * r*0.8))
                 q_var[r].append(float(line[1]) * ( 2 * np.pi * r*0.8)**2)
         except Exception as e:
@@ -87,7 +87,7 @@ ax.plot(oh, x, label='Theory', linewidth=1.5, color='k', linestyle='--' )
 # plt.title('Reduced Wavenumber')
 ax.set_ylabel('$\chi$')
 ax.set_xlabel(r'Oh')
-ax.set_ylim(0.08, 1.15)
+ax.set_ylim(0.25, 0.82)
 ax.set_xlim(0.08, 2.34)
 
 
@@ -137,7 +137,7 @@ for r in R:
     pars, cov = curve_fit(f=fexp, xdata=lr[r], ydata=q[r], p0=[0, 0], bounds=(-np.inf, np.inf))
     pars2, cov2 = curve_fit(f=fpow, xdata=lr[r], ydata=q[r], p0=[0, 0], bounds=(-np.inf, np.inf))
     pars3, cov3 = curve_fit(f=flog, xdata=lr[r], ydata=q[r], p0=[0, 0], bounds=(-np.inf, np.inf))
-    pars4, cov4 = curve_fit(f=fexp2, xdata=lr[r], ydata=q[r], maxfev=10000)
+    pars4, cov4 = curve_fit(f=fexp2, xdata=lr[r], ydata=q[r], p0=[9.29243653e+04, -2.66085321e+01, 6.43987070e-01], maxfev=100000)
 
 
     stdevs = np.sqrt(np.diag(cov))
@@ -184,7 +184,9 @@ for r in R:
     linestyle=lstyle[r], label=rf'$R_0={r}$')
     # ax1.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
     # ax1.plot(a2, [flog(i, *pars3) for i in a2], 'b--', label='Log')
-ax2.plot([a2[0],a2[-1]], [0.697, 0.697], 'k-', label=r'0.697')
+ax2.plot([a2[0],a2[-1]], [0.697/4.8, 0.697/4.8], 'k-', label=r'0.697')
+ax2.plot([a2[0],a2[-1]], [0.697/1.65, 0.697/1.65], 'b-', label=r'0.697')
+
 ax2.set_xlabel(r'$l_{\rho}$')
 # ax2.plot([0,1], [0,0], 'k-')
 ax2.set_xlim(0.44, 0.62)

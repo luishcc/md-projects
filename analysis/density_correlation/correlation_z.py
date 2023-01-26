@@ -10,17 +10,17 @@ from mdpkg.grid import Gridz, Grid
 
 
 # path_to_data = '/home/luishcc/hdd/free_thread_old/'
-path_to_data = '/home/luishcc/hdd/free_thread_new/'
-# path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/free_thread_new/'
+path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/'
 
-R = 4
+R = 2
 ratio = 48
 A = 90
 grid = 1
 
-r1 = 3.7
-r2 = 2.7
+r1 = .0
+r2 = 2
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 case = 1
@@ -38,8 +38,8 @@ header_c = 'dz correlation'
 
 
 def run_case():
-    # grd = Gridz(trj.snap, size=grid, Rlow = r1, Rup = r2)
-    grd = Grid(trj.snap, size=grid)
+    grd = Gridz(trj.snap, size=grid, Rlow = r1, Rup = r2)
+    # grd = Grid(trj.snap, size=grid)
     num = floor(grd.num_z/2)
     dz = np.linspace(0, grd.length_z/2, num)
 
@@ -47,7 +47,7 @@ def run_case():
     corr[:] = np.NaN
     corr[:, 0] = dz
 
-    corr[:, 1] = grd.compute_density_correlation(3)
+    corr[:, 1] = grd.compute_density_correlation()
 
     corr_dat = Dat(corr, labels=header_c)
     corr_dat.write_file(save_correlation_file, dir=dir)
@@ -62,7 +62,8 @@ while os.path.isdir(dir):
     #     continue
     trj = DumpReader(dir + '/thread.lammpstrj')
     trj.read_sequential()
-    trj.skip_next(get_snap(dir)-1)
+    # trj.skip_next(get_snap(dir)-1)
+    trj.skip_next(get_snap(dir)+5)
     trj.read_next()
     print(trj.snap.time)
     iter = 0
