@@ -17,9 +17,9 @@ rc_fonts = {
 mpl.rcParams.update(rc_fonts)
 
 
-R = 2
+R = 4
 ratio = 48
-A = -50
+A = -90
 
 
 if R == 2:
@@ -89,7 +89,7 @@ plt.figure(1)
 
 # df['radius'].plot.kde(bw_method=0.1)
 df['radius'].plot.hist(bins=50, alpha=0.5, density=True)
-data = df['radius'].plot.kde(bw_method=0.5).get_lines()[0].get_xydata()
+data = df['radius'].plot.kde(bw_method=0.2).get_lines()[0].get_xydata()
 
 main = df.drop(df[df['radius'] < separation].index)
 satellite = df.drop(df[df['radius'] > separation].index)

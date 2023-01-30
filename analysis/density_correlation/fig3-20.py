@@ -37,19 +37,21 @@ invlr = {}
 
 lr[6] = [np.cbrt(1/i) for i in rho]
 invlr[6] = [1/i for i in lr[6]]
-lr[4] = [np.cbrt(1/i) for i in rho2]
+lr[4] = [np.cbrt(1/i) for i in rho3]
 invlr[4] = [1/i for i in lr[4]]
 lr[2] = [np.cbrt(1/i) for i in rho3]
 invlr[2] = [1/i for i in lr[2]]
 
 oh_r = {}
-oh_r[6] = [0.266,0.321,0.451,0.704,0.901,1.137]
-oh_r[4] = [.233, .380, .439, .611, .933, 1.18, 1.42]
+oh_r[6] = [.266, .321, .451, .704, .901, 1.14]
+oh_r[4] = [.243, .325, .393, .552, .863, 1.10, 1.39]
 oh_r[2] = [.345, .460, .556, .781, 1.22, 1.56, 1.96]
 
 A = [40, 50, 60, 70, 80, 85, 90]
 
-R = [2, 6]
+R = [2, 4, 6]
+scale_r = {2:.85, 4:.85, 6:.8}
+# scale_r = {2:.8, 4:.8, 6:.8}
 ratio = 48
 
 q = {}
@@ -65,9 +67,9 @@ for r in R:
             with open(file, 'r') as fd:
                 fd.readline()
                 line = fd.readline().split(',')
-                q[r].append(float(line[0]) * 2 * np.pi )#* r*0.8)
-                qinv[r].append(1/(float(line[0]) * r*0.8))
-                q_var[r].append(float(line[1]) * ( 2 * np.pi * r*0.8)**2)
+                q[r].append(float(line[0]) * 2 * np.pi * r*scale_r[r])
+                qinv[r].append(1/(float(line[0]) * r*scale_r[r]))
+                q_var[r].append(float(line[1]) * ( 2 * np.pi * r*scale_r[r])**2)
         except Exception as e:
             print(e)
             continue
@@ -184,25 +186,27 @@ for r in R:
     linestyle=lstyle[r], label=rf'$R_0={r}$')
     # ax1.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
     # ax1.plot(a2, [flog(i, *pars3) for i in a2], 'b--', label='Log')
-ax2.plot([a2[0],a2[-1]], [0.697/4.8, 0.697/4.8], 'k-', label=r'0.697')
-ax2.plot([a2[0],a2[-1]], [0.697/1.65, 0.697/1.65], 'b-', label=r'0.697')
+# ax2.plot([a2[0],a2[-1]], [0.697/4.8, 0.697/4.8], 'k-', label=r'0.697')
+# ax2.plot([a2[0],a2[-1]], [0.697/1.7, 0.697/1.7], 'b-', label=r'0.697')
+ax2.plot([a2[0],a2[-1]], [0.697, 0.697], 'k-', label=r'0.697')
 
 ax2.set_xlabel(r'$l_{\rho}$')
 # ax2.plot([0,1], [0,0], 'k-')
-ax2.set_xlim(0.44, 0.62)
-ax2.set_ylim(0.18, 0.75)
+ax2.set_xlim(0.45, 0.62)
+# ax2.set_ylim(0.18, 0.75)
+ax2.set_ylim(0.23, 0.74)
 
 
-ax2.legend(loc='lower right', handlelength=1.5, borderaxespad=0.1, ncol=1,
-        columnspacing=0.8,  handletextpad=.2, fontsize=11, frameon=False)
+ax2.legend(loc='lower right', handlelength=1.5, borderaxespad=0.1, ncol=2,
+        columnspacing=0.6,  handletextpad=.2, fontsize=11, frameon=False)
 # ax1.annotate(r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $', xy=(0.48, 0.40) )
 
 import matplotlib as mpl
 from matplotlib import container
 handles, labels = ax.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-ax.legend(handles, labels, loc='upper left', columnspacing=0.4,  handletextpad=.1,
-frameon=False, ncol=2, fontsize=11, handlelength=1.5)
+ax.legend(handles, labels, loc='upper left', columnspacing=0.3,  handletextpad=.1,
+frameon=False, ncol=2, fontsize=11, handlelength=1.4)
 
 fig.tight_layout()
 # plt.savefig('fig3-22.pdf', dpi=dpi, bbox_inches='tight')

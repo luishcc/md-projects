@@ -16,9 +16,9 @@ import os
 import numpy as np
 
 
-R = 6
+R = 2
 ratio = 48
-A = -70
+A = -40
 
 
 if R == 2:

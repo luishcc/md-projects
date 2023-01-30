@@ -20,9 +20,9 @@ def get_snap(dir):
         snap = int(fd.readline())
     return snap
 
-R = 2
+R = 4
 ratio = 48
-A = -85
+A = -90
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 

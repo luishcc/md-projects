@@ -23,10 +23,10 @@ path_to_data = '/home/luishcc/hdd/'
 
 R = 4
 ratio = 48
-A = -40
+A = -90
 
 initial_snap = 8
-final_step = 200
+final_step = 400
 
 
 n = 1

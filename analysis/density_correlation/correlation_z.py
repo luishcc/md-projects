@@ -14,13 +14,13 @@ from mdpkg.grid import Gridz, Grid
 path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/'
 
-R = 2
+R = 4
 ratio = 48
 A = 90
 grid = 1
 
-r1 = .0
-r2 = 2
+r1 = .5
+r2 = 4
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 case = 1
@@ -63,7 +63,7 @@ while os.path.isdir(dir):
     trj = DumpReader(dir + '/thread.lammpstrj')
     trj.read_sequential()
     # trj.skip_next(get_snap(dir)-1)
-    trj.skip_next(get_snap(dir)+5)
+    trj.skip_next(get_snap(dir)+2)
     trj.read_next()
     print(trj.snap.time)
     iter = 0

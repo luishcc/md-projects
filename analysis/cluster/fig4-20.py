@@ -38,6 +38,7 @@ b = [.046, .145, .279,
      .000,   .077,
      .411, .402, .282, .213, .200, .181, .126, .133] # sat/total
 
+
 b_var = [.003, .005, .007,
          .003, .005, .006,
          .002, .007, .006, .006,
@@ -323,18 +324,19 @@ ip = InsetPosition(ax2, [0.55,0.5,0.4,0.45])
 ax22.set_axes_locator(ip)
 
 ##########################################
-
+# scale_r = {2:.8, 4:.8, 6:.8}
+scale_r = {2:.85, 4:.85, 6:.8}
 
 # Main droplet break_avg
 bbb = [9.545, 9.589, 9.923, 10.649, 10.969, 11.335]
-bbb = [i/4.8 for i in bbb]
+bbb = [i/(6*scale_r[6]) for i in bbb]
 
 # bbb2 =[3.48, 3.39, 3.38, 3.43, 3.98, 3.8, 4.2]
 bbb2 =[3.60, 3.63, 3.70, 3.77, 3.88, 4.01, 4.6]
-bbb2 = [i/1.65 for i in bbb2]
+bbb2 = [i/(2*scale_r[2]) for i in bbb2]
 
-bbb4 =[6.32, 5.8, 6.03, 6.14, 6.35, 6.97, 6.9]
-bbb4 = [i/3.2 for i in bbb4]
+bbb4 =[7.08, 6.9, 7.1, 7.5, 7.9, 7.9, 8.5]
+bbb4 = [i/(4*scale_r[4]) for i in bbb4]
 
 
 Rr = [2,4,6]
@@ -353,9 +355,9 @@ for r in Rr:
             with open(file, 'r') as fd:
                 fd.readline()
                 line = fd.readline().split(',')
-                qq[r].append(float(line[0]) * 2 * np.pi * r*0.8)
-                qqinv[r].append(1/(float(line[0]) * r*0.8))
-                qq_var[r].append(float(line[1]) * ( 2 * np.pi * r*0.8)**2)
+                qq[r].append(float(line[0]) * 2 * np.pi * r*scale_r[r])
+                qqinv[r].append(1/(float(line[0]) * r*scale_r[r]))
+                qq_var[r].append(float(line[1]) * ( 2 * np.pi * r*scale_r[r])**2)
         except Exception as e:
             print(e)
             continue
@@ -373,7 +375,6 @@ q_var6 = [3.156327982930347e-06,
 9.193559899539904e-06]
 
 def pred4(x):
-    scale = 0.8
     return np.cbrt(1.5*np.pi/x)
 
 
@@ -383,8 +384,8 @@ fmt='o',ecolor = 'blue', capsize= 2, capthick=1,color='blue', label=r'$R_0=6$')
 ax1.errorbar(qq[2], bbb2, xerr = np.sqrt(qq_var[2]),markerfacecolor='none',
 fmt='s',ecolor = 'red', capsize= 2, capthick=1,color='red', label=r'$R_0=2$')
 
-# ax1.errorbar(qq[4], bbb4, xerr = np.sqrt(qq_var[4]),markerfacecolor='none',
-# fmt='x',ecolor = 'green', capsize= 2, capthick=1,color='green', label=r'$R_0=4$')
+ax1.errorbar(qq[4], bbb4, xerr = np.sqrt(qq_var[4]),markerfacecolor='none',
+fmt='x',ecolor = 'green', capsize= 2, capthick=1,color='green', label=r'$R_0=4$')
 
 dv = abs(wwave[-1]-wwave[0])
 pdv = 1.2 * dv
@@ -393,10 +394,13 @@ ax1.plot(x, pred4(x), 'k--', label='Theory')
 
 ax1.set_xlabel('$\chi$')
 ax1.set_ylabel('$R_D/R_0$')
+ax1.set_xlim(0.23, 0.67 )
+ax1.set_ylim(1.85, 2.85)
+
 from matplotlib import container
 handles, labels = ax1.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-ax1.legend(handles, labels, loc=0, ncol=1)
+ax1.legend(handles, labels, loc=0, ncol=1, frameon=False)
 
 
 # import pandas as pd
@@ -454,7 +458,7 @@ ax22.annotate(r'$0.72\pm0.04$', xy=(.0036, 0.035), fontsize=11)
 
 
 
-plt.savefig('fig4-2.pdf', bbox_inches='tight', dpi=dpi )
+# plt.savefig('fig4-2.pdf', bbox_inches='tight', dpi=dpi )
 
 
 
