@@ -76,10 +76,10 @@ for r in R:
 
 fig, ax = plt.subplots(1,1)
 
-
-ax2 = plt.axes([0,0,1,1])
-ip = InsetPosition(ax, [0.45,0.55,0.5,0.4])
-ax2.set_axes_locator(ip)
+#
+# ax2 = plt.axes([0,0,1,1])
+# ip = InsetPosition(ax, [0.45,0.55,0.5,0.4])
+# ax2.set_axes_locator(ip)
 
 q[2] = [(i*21)/20 for i in q[2]]
 q_var[2] = [(i*21)/20 for i, j in zip(q_var[2],q[2])]
@@ -89,7 +89,7 @@ ax.plot(oh, x, label='Theory', linewidth=1.5, color='k', linestyle='--' )
 # plt.title('Reduced Wavenumber')
 ax.set_ylabel('$\chi$')
 ax.set_xlabel(r'Oh')
-ax.set_ylim(0.25, 0.82)
+ax.set_ylim(0.25, 0.72)
 ax.set_xlim(0.08, 2.34)
 
 
@@ -171,44 +171,44 @@ for r in R:
 
     print(fit2[0], fit2[1], fit2[2])
     print(fit[0], fit[1])
-
-    ax2.set_ylabel(r'$\chi$')
-
-    a2 = np.linspace(0.0, 0.8, 100)
-    # ax1.plot(lr, q, 'ko', label='Simulation')
-    ax2.errorbar(lr[r], q[r], yerr = np.sqrt(q_var[r])*0, fmt=marker[r],
-    ecolor = color[r],color=color[r], capsize=0, markerfacecolor='none')
-    # ax1.plot(a2, [ff1(i) for i in a2], 'k-', label='Linear')
-    # ax2.plot(a2, [ff2(i) for i in a2], 'b--', label=r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $')
-    # ax1.plot(a2, [fexp(i, *pars) for i in a2], 'b-', label='Exponential')
-    # ax2.plot(a2, [fexp2(i, *pars4) for i in a2], 'g--', label=r'$\chi = 0.701 - 1350e^{-18l_{\rho}}$')
-    ax2.plot(a2, [fexp2(i, *pars4) for i in a2], color=color[r],
-    linestyle=lstyle[r], label=rf'$R_0={r}$')
-    # ax1.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
-    # ax1.plot(a2, [flog(i, *pars3) for i in a2], 'b--', label='Log')
-# ax2.plot([a2[0],a2[-1]], [0.697/4.8, 0.697/4.8], 'k-', label=r'0.697')
-# ax2.plot([a2[0],a2[-1]], [0.697/1.7, 0.697/1.7], 'b-', label=r'0.697')
-ax2.plot([a2[0],a2[-1]], [0.697, 0.697], 'k-', label=r'0.697')
-
-ax2.set_xlabel(r'$l_{\rho}$')
-# ax2.plot([0,1], [0,0], 'k-')
-ax2.set_xlim(0.45, 0.62)
-# ax2.set_ylim(0.18, 0.75)
-ax2.set_ylim(0.23, 0.74)
-
-
-ax2.legend(loc='lower right', handlelength=1.5, borderaxespad=0.1, ncol=2,
-        columnspacing=0.6,  handletextpad=.2, fontsize=11, frameon=False)
+#
+#     ax2.set_ylabel(r'$\chi$')
+#
+#     a2 = np.linspace(0.0, 0.8, 100)
+#     # ax1.plot(lr, q, 'ko', label='Simulation')
+#     ax2.errorbar(lr[r], q[r], yerr = np.sqrt(q_var[r])*0, fmt=marker[r],
+#     ecolor = color[r],color=color[r], capsize=0, markerfacecolor='none')
+#     # ax1.plot(a2, [ff1(i) for i in a2], 'k-', label='Linear')
+#     # ax2.plot(a2, [ff2(i) for i in a2], 'b--', label=r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $')
+#     # ax1.plot(a2, [fexp(i, *pars) for i in a2], 'b-', label='Exponential')
+#     # ax2.plot(a2, [fexp2(i, *pars4) for i in a2], 'g--', label=r'$\chi = 0.701 - 1350e^{-18l_{\rho}}$')
+#     ax2.plot(a2, [fexp2(i, *pars4) for i in a2], color=color[r],
+#     linestyle=lstyle[r], label=rf'$R_0={r}$')
+#     # ax1.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
+#     # ax1.plot(a2, [flog(i, *pars3) for i in a2], 'b--', label='Log')
+# # ax2.plot([a2[0],a2[-1]], [0.697/4.8, 0.697/4.8], 'k-', label=r'0.697')
+# # ax2.plot([a2[0],a2[-1]], [0.697/1.7, 0.697/1.7], 'b-', label=r'0.697')
+# ax2.plot([a2[0],a2[-1]], [0.697, 0.697], 'k-', label=r'0.697')
+#
+# ax2.set_xlabel(r'$l_{\rho}$')
+# # ax2.plot([0,1], [0,0], 'k-')
+# ax2.set_xlim(0.45, 0.62)
+# # ax2.set_ylim(0.18, 0.75)
+# ax2.set_ylim(0.23, 0.74)
+#
+#
+# ax2.legend(loc='lower right', handlelength=1.5, borderaxespad=0.1, ncol=2,
+#         columnspacing=0.6,  handletextpad=.2, fontsize=11, frameon=False)
 # ax1.annotate(r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $', xy=(0.48, 0.40) )
 
 import matplotlib as mpl
 from matplotlib import container
 handles, labels = ax.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-ax.legend(handles, labels, loc='upper left', columnspacing=0.3,  handletextpad=.1,
-frameon=False, ncol=2, fontsize=11, handlelength=1.4)
+ax.legend(handles, labels, loc='upper right', columnspacing=0.6,  handletextpad=.1,
+frameon=False, ncol=2, fontsize=12, handlelength=1.5)
 
 fig.tight_layout()
-# plt.savefig('fig3-22.pdf', dpi=dpi, bbox_inches='tight')
+plt.savefig('fig3-222.pdf', dpi=dpi, bbox_inches='tight')
 
 plt.show()
