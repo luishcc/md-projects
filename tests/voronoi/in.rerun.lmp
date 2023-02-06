@@ -1,0 +1,75 @@
+# Script modified from mDPD example folder
+#
+# Break up of fluid thread
+
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.3 bin
+neigh_modify        every 1 check yes
+
+atom_style	        hybrid angle mdpd
+
+
+
+bond_style harmonic
+angle_style harmonic
+
+read_data surfactant-thread.data
+
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
+pair_coeff  *  *   mdpd/rhosum  0.75
+
+# ----------------------------------------
+# 2019 Langmuir Zhou et al (SDS)
+#
+
+bond_coeff 1 400 0.64
+bond_coeff 2 400 0.64
+
+angle_coeff 1 100 160
+angle_coeff 2 100 160
+
+pair_coeff  1  1   mdpd  -19.0  25.0  4.5  1.0  0.75
+pair_coeff  1  2   mdpd  -5.98  25.0  4.5  1.0  0.75
+pair_coeff  1  3   mdpd  -32.18 25.0  4.5  1.0  0.75
+pair_coeff  2  2   mdpd  -22.0  25.0  4.5  1.0  0.75
+pair_coeff  2  3   mdpd  -27.0  25.0  4.5  1.0  0.75
+pair_coeff  3  3   mdpd  -40.0  25.0  4.5  1.0  0.75
+
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+
+# compute 	v1 all voronoi/atom neighbors yes edge_histo 6
+
+compute 	v1 all voronoi/atom neighbors yes
+dump    	dperatom all custom 100 dump.voronoi id type x y z c_v1[1] c_v1[2]
+
+variable voroAr atom "c_v1[1] > 0.25 && 40 < x^2+y^2 && x^2+y^2 < 85"
+# variable voroAr atom "c_v1[1] > 0.3"
+group ss dynamic all var voroAr
+
+
+dump    	dperatom2 ss custom 100 dump.voronoi-s2 id type x y z c_v1[1] c_v1[2]
+
+
+
+velocity            all create 1.0 2093 loop local dist gaussian
+comm_modify         vel yes
+fix         mvv     all mvv/dpd 0.65
+
+timestep            0.01
+
+# dump force all custom 100 dump.force-re id fx fy fz
+# dump vel all custom 100 dump.vel-re id vx vy vz
+
+
+rerun surfactant-thread.lammpstrj every 1 dump x y z
