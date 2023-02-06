@@ -17,9 +17,9 @@ rc_fonts = {
 mpl.rcParams.update(rc_fonts)
 
 
-R = 4
+R = 6
 ratio = 48
-A = -90
+A = -60
 
 
 if R == 2:
@@ -105,7 +105,7 @@ print(data[0][np.argmax(data[1][:sep_id])])
 print(data[0][np.argmax(data[1][sep_id:])+sep_id])
 
 plt.title(f'Droplet Size Distribution, A={A}, snapshot={snap}')
-plt.xlim(0, 10)
+plt.xlim(0, 15)
 # plt.ylim(0, 0.7)
 plt.xlabel('Radius')
 plt.ylabel('Density')

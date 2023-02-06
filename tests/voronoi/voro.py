@@ -4,7 +4,7 @@ import os
 from readLammps import DumpReader
 from write import DataFile
 
-from perturbation import Atoms, Point, Box
+from perturbation import Point, Box
 
 from readLammps import Voronoi as voro_read
 
@@ -12,6 +12,13 @@ from scipy.spatial import Voronoi
 
 import matplotlib.pyplot as plt
 
+class Atoms2:
+    def __init__(self, points, density, types):
+        self.number = len(points)
+        self.positions = points
+        self.density = density
+        self.types = types
+        return
 
 def plot_volume_distribution(v):
     import scipy.stats as stats
@@ -26,11 +33,11 @@ def plot_volume_distribution(v):
 
     plt.subplot(132)
     plt.plot(x, stats.norm.pdf(x, mu, sigma))
-    plt.xlim(0,30)
+    plt.xlim(0,150)
 
     plt.subplot(133)
-    mu = stats.tmean(v, (0.1,0.2))
-    sigma = stats.tstd(v, (0.1,0.2))
+    mu = stats.tmean(v, (0.05,0.3))
+    sigma = stats.tstd(v, (0.05,0.3))
     x = np.linspace(mu - 5*sigma, mu + 5*sigma, 100)
     plt.plot(x, stats.norm.pdf(x, mu, sigma))
     plt.xlim(0,0.3)
@@ -63,6 +70,7 @@ def cart2pol(x, y):
 
 def readVor(file_name):
     pos = []
+    types = []
     surf = []
     vol = []
     file = open(file_name, 'r')
@@ -77,11 +85,14 @@ def readVor(file_name):
         if reading_entry:
             l = line.split()
             coo = [float(l[2]), float(l[3]), float(l[4])]
+            type = int(l[1])
             pos.append(coo)
             vol.append(float(l[5]))
-            if float(l[5]) > .3:
+            if float(l[5]) > .23:
                 surf.append(coo)
-    return pos, surf, vol
+                types.append(type)
+
+    return pos, surf, vol, types
 
 # data = DumpReader('test.dump')
 
@@ -104,10 +115,10 @@ p2 = np.array([[0, 0], [0, 0.5], [0, 1],
 #vor3 = voro_read('dump.neighbors')
 
 
-pos, surf, volumes = readVor('dump.voro')
+pos, surf, volumes, types = readVor('dump.voro-1')
 
-plot_volume_distribution(volumes)
-#exit()
+# plot_volume_distribution(volumes)
+# exit()
 
 px = [sub[0] for sub in pos]
 py = [sub[1] for sub in pos]
@@ -132,19 +143,21 @@ positions = []
 for i in range(len(sx)):
     positions.append(Point([sx[i],sy[i],sz[i]]))
 
-atoms_list = Atoms(positions, 1.)
 
-data = DataFile(box, atoms_list)
+atoms_list1 = Atoms2(positions, 1., types)
+# print(types, type(types))
+
+data = DataFile(box, atoms_list1)
 data.write_file('surf-5', os.getcwd())
 
-exit()
-box = Box((max(sr)-min(sr))*2, 2*np.pi*radius, wave_length)
-
-positions = []
-for i in range(len(sx)):
-    positions.append(Point([ sr[i]-radius, st[i]*radius, sz[i] ]))
-
-atoms_list = Atoms(positions, 1.)
-
-data = DataFile(box, atoms_list)
-data.write_file('surf-pol', os.getcwd())
+# box = Box((max(sr)-min(sr))*2, 2*np.pi*radius, wave_length)
+#
+# positions = []
+# for i in range(len(sx)):
+#     positions.append(Point([ sr[i]-radius, st[i]*radius, sz[i] ]))
+#
+# atoms_list = Atoms(positions, types)
+# print(types)
+#
+# data = DataFile(box, atoms_list)
+# data.write_file('surf-pol', os.getcwd())

@@ -40,7 +40,7 @@ positions = []
 for atom in data.atoms:
     positions.append(Point(atom.x))
 
-atoms_list = Atoms(positions, 1.)
+# atoms_list = Atoms(positions, 1.)
 
-data = DataFile(box, atoms_list)
-data.write_file('test', os.getcwd())
+# data = DataFile(box, atoms_list)
+# data.write_file('test', os.getcwd())

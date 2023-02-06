@@ -18,7 +18,7 @@ import numpy as np
 
 R = 2
 ratio = 48
-A = -40
+A = -90
 
 
 if R == 2:
@@ -139,7 +139,7 @@ plt.legend(loc='upper left')
 print()
 print('PERCENT: ', max(num_satellite2.values())/max(num_drops2.values()))
 # print('PERCENT: ', num_satellite2[max_snap2]/max(num_drops2.values()))
-print(max_snap3, max_snap4)
+print('stellite: ', max_snap3, ' main: ', max_snap4, ' total: ',max_snap2)
 #
 # ax2 = plt.subplot(2,1,2, sharex=ax1)
 #

@@ -21,11 +21,11 @@ path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/test/'
 
 
-R = 4
+R = 6
 ratio = 48
-A = -90
+A = -40
 
-initial_snap = 8
+initial_snap = 100
 final_step = 400
 
 

@@ -50,6 +50,8 @@ class DataFile:
     def write_atoms(self, file):
         file.write('Atoms\n\n')
         pos = self.atoms.positions
+        typ = self.atoms.types
         for i in range(self.atoms.number):
-            file.write(f'{i+1} 1 {self.atoms.density} {pos[i].x} {pos[i].y} {pos[i].z}\n')
+            t = typ[i]
+            file.write(f'{i+1} {t} 1 {pos[i].x} {pos[i].y} {pos[i].z}\n')
         return

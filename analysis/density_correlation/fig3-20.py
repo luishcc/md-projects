@@ -29,13 +29,13 @@ x = func(oh)
 
 rho = [7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
 rho2 = [6.05, 6.9, 7.7, 8.4, 9.1, 9.5, 9.8]
-rho3 = [6.75, 7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
+rho3 = [ 6.75, 7.65, 8.30, 8.95, 9.6, 9.92, 10.24]
 
 
 lr = {}
 invlr = {}
 
-lr[6] = [np.cbrt(1/i) for i in rho]
+lr[6] = [np.cbrt(1/i) for i in rho3]
 invlr[6] = [1/i for i in lr[6]]
 lr[4] = [np.cbrt(1/i) for i in rho3]
 invlr[4] = [1/i for i in lr[4]]
@@ -43,16 +43,25 @@ lr[2] = [np.cbrt(1/i) for i in rho3]
 invlr[2] = [1/i for i in lr[2]]
 
 oh_r = {}
-oh_r[6] = [.266, .321, .451, .704, .901, 1.14]
+oh_r[6] = [.198, .266, .321, .451, .704, .901, 1.14]
 oh_r[4] = [.243, .325, .393, .552, .863, 1.10, 1.39]
 oh_r[2] = [.345, .460, .556, .781, 1.22, 1.56, 1.96]
 
-A = [40, 50, 60, 70, 80, 85, 90]
+
+
+A = [ 40, 50, 60, 70, 80, 85, 90]
 
 R = [2, 4, 6]
 scale_r = {2:.85, 4:.85, 6:.8}
-# scale_r = {2:.8, 4:.8, 6:.8}
+radii_r = {2:[1.55, 1.5, 1.45, 1.41, 1.39, 1.36, 1.3],
+           4:[3.2, 3.1, 3, 3, 2.9, 2.85, 2.8],
+           6:[5.3, 5, 4.8, 4.5, 4.4, 4.35, 4.3]}
 ratio = 48
+
+oh_r[6] = [(oh**2*6/ri)**.5 for ri, oh in zip(radii_r[6], oh_r[6])]
+oh_r[4] = [(oh**2*4/ri)**.5 for ri, oh in zip(radii_r[4], oh_r[4])]
+oh_r[2] = [(oh**2*2/ri)**.5 for ri, oh in zip(radii_r[2], oh_r[2])]
+
 
 q = {}
 qinv = {}
@@ -61,15 +70,15 @@ for r in R:
     q[r]=[]
     qinv[r]=[]
     q_var[r]=[]
-    for a in A:
+    for i, a in enumerate(A):
         file = f'peak/R{r}_ratio{ratio}_A{a}-peak.csv'
         try:
             with open(file, 'r') as fd:
                 fd.readline()
                 line = fd.readline().split(',')
-                q[r].append(float(line[0]) * 2 * np.pi * r*scale_r[r])
-                qinv[r].append(1/(float(line[0]) * r*scale_r[r]))
-                q_var[r].append(float(line[1]) * ( 2 * np.pi * r*scale_r[r])**2)
+                q[r].append(float(line[0]) * 2 * np.pi * radii_r[r][i])
+                qinv[r].append(1/(float(line[0]) *  radii_r[r][i]))
+                q_var[r].append(float(line[1]) * ( 2 * np.pi * radii_r[r][i])**2)
         except Exception as e:
             print(e)
             continue
@@ -89,8 +98,8 @@ ax.plot(oh, x, label='Theory', linewidth=1.5, color='k', linestyle='--' )
 # plt.title('Reduced Wavenumber')
 ax.set_ylabel('$\chi$')
 ax.set_xlabel(r'Oh')
-ax.set_ylim(0.25, 0.72)
-ax.set_xlim(0.08, 2.34)
+ax.set_ylim(0.22, 0.69)
+ax.set_xlim(0.06, 2.31)
 
 
 print(oh_r, q, q_var)
@@ -171,32 +180,30 @@ for r in R:
 
     print(fit2[0], fit2[1], fit2[2])
     print(fit[0], fit[1])
-#
-#     ax2.set_ylabel(r'$\chi$')
-#
-#     a2 = np.linspace(0.0, 0.8, 100)
-#     # ax1.plot(lr, q, 'ko', label='Simulation')
-#     ax2.errorbar(lr[r], q[r], yerr = np.sqrt(q_var[r])*0, fmt=marker[r],
-#     ecolor = color[r],color=color[r], capsize=0, markerfacecolor='none')
-#     # ax1.plot(a2, [ff1(i) for i in a2], 'k-', label='Linear')
-#     # ax2.plot(a2, [ff2(i) for i in a2], 'b--', label=r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $')
-#     # ax1.plot(a2, [fexp(i, *pars) for i in a2], 'b-', label='Exponential')
-#     # ax2.plot(a2, [fexp2(i, *pars4) for i in a2], 'g--', label=r'$\chi = 0.701 - 1350e^{-18l_{\rho}}$')
-#     ax2.plot(a2, [fexp2(i, *pars4) for i in a2], color=color[r],
-#     linestyle=lstyle[r], label=rf'$R_0={r}$')
-#     # ax1.plot(a2, [fpow(i, *pars2) for i in a2], 'b--', label='Power')
-#     # ax1.plot(a2, [flog(i, *pars3) for i in a2], 'b--', label='Log')
-# # ax2.plot([a2[0],a2[-1]], [0.697/4.8, 0.697/4.8], 'k-', label=r'0.697')
-# # ax2.plot([a2[0],a2[-1]], [0.697/1.7, 0.697/1.7], 'b-', label=r'0.697')
+
+    # ax2.set_ylabel(r'$\chi$')
+
+    a2 = np.linspace(0.0, 0.8, 100)
+
+    # ax2.errorbar(lr[r], q[r], yerr = np.sqrt(q_var[r])*0, fmt=marker[r],
+    # ecolor = color[r],color=color[r], capsize=0, markerfacecolor='none')
+
+    # ax2.plot(a2, [ff2(i) for i in a2], 'b--', label=r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $')
+        # ax2.plot(a2, [fexp2(i, *pars4) for i in a2], 'g--', label=r'$\chi = 0.701 - 1350e^{-18l_{\rho}}$')
+    # ax2.plot(a2, [fexp2(i, *pars4) for i in a2], color=color[r],
+    # linestyle=lstyle[r], label=rf'$R_0={r}$')
+
+# ax2.plot([a2[0],a2[-1]], [0.697/4.8, 0.697/4.8], 'k-', label=r'0.697')
+# ax2.plot([a2[0],a2[-1]], [0.697/1.7, 0.697/1.7], 'b-', label=r'0.697')
 # ax2.plot([a2[0],a2[-1]], [0.697, 0.697], 'k-', label=r'0.697')
-#
+
 # ax2.set_xlabel(r'$l_{\rho}$')
-# # ax2.plot([0,1], [0,0], 'k-')
+# ax2.plot([0,1], [0,0], 'k-')
 # ax2.set_xlim(0.45, 0.62)
-# # ax2.set_ylim(0.18, 0.75)
+# ax2.set_ylim(0.18, 0.75)
 # ax2.set_ylim(0.23, 0.74)
-#
-#
+
+
 # ax2.legend(loc='lower right', handlelength=1.5, borderaxespad=0.1, ncol=2,
 #         columnspacing=0.6,  handletextpad=.2, fontsize=11, frameon=False)
 # ax1.annotate(r'$\chi = -35.9 \ l_{\rho}^2 + 38.5 \ l_{\rho} - 9.7 $', xy=(0.48, 0.40) )

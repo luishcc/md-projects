@@ -19,14 +19,14 @@ def get_snap(dir, exact=True):
         return None
     return snap
 
-R = 4
+R = 6
 ratio = 48
-A = 90
+A = 40
 
 grid = 1
 
-ini = 1
-end = 33
+ini = 6
+end = 29    
 
 
 data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
@@ -125,16 +125,16 @@ while os.path.isfile(datafile):
     ar_lst = arr.tolist()
     #
     xx_l = xx.tolist()
-    p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit /=3
+    # p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit /= 3
 
-    # p_fit, plot = fit(arr)
+    p_fit, plot = fit(arr)
     # p_fit, plot = fit2(a  rr)
 
     print(p_fit)

@@ -104,6 +104,7 @@ rho = [6.0, 6.0, 6.0,
 lr = [np.cbrt(1/i) for i in rho]
 
 
+
 q_var = [0, 0, 0,
          0, 0, 0,
          0, 0, 0, 0,
@@ -138,6 +139,8 @@ q_var = [0, 0, 0,
 # a = [r/(i) for i,r in zip(lr,radii)]; xlabel = '$R_0/L_r$'
 
 a = [((i/r)**.5*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = 'OhTh'
+# a = [((i/r)**.6*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = 'OhTh'
+
 
 # a = [(r*p)/(i*j) for r,p,  i, j in zip(radii,  lr, lv, lt)] ; xlabel = '$RL_T/L_pL_v$'
 # a = [r**2/(i*j) for r, i, j in zip(radii, lv, lt)]; xlabel = '$R_0^{2}/L_vL_T$'
@@ -278,7 +281,6 @@ def pred3(x):
     return np.cbrt(0.75*(6*scale)**2/x)
 
 def pred4(x):
-    scale = 0.8
     return np.cbrt(1.5*np.pi/x)
 
 
@@ -299,7 +301,7 @@ rc_fonts = {
 mpl.rcParams.update(rc_fonts)
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition,
+from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition,
                                                   mark_inset)
 from matplotlib import container
 
@@ -327,20 +329,28 @@ ax22.set_axes_locator(ip)
 # scale_r = {2:.8, 4:.8, 6:.8}
 scale_r = {2:.85, 4:.85, 6:.8}
 
+radii_r = {2:[1.55, 1.5, 1.45, 1.41, 1.39, 1.36, 1.3],
+           4:[3.2, 3.1, 3, 3, 2.9, 2.85, 2.8],
+           6:[5.3, 5, 4.8, 4.5, 4.4, 4.35, 4.3]}
+
 # Main droplet break_avg
-bbb = [9.545, 9.589, 9.923, 10.649, 10.969, 11.335]
-bbb = [i/(6*scale_r[6]) for i in bbb]
+bbb = [9.78, 9.62, 9.55, 9.923, 10.649, 10.969, 11.335]
+bbb = [10.2, 9.9, 10, 10.7, 11.2, 11.6, 11.9]
+bbb = [i/(ri) for i,ri in zip(bbb, radii_r[6])]
 
 # bbb2 =[3.48, 3.39, 3.38, 3.43, 3.98, 3.8, 4.2]
 bbb2 =[3.60, 3.63, 3.70, 3.77, 3.88, 4.01, 4.6]
-bbb2 = [i/(2*scale_r[2]) for i in bbb2]
+bbb2 = [i/(ri) for i,ri in zip(bbb2, radii_r[2])]
 
 bbb4 =[7.08, 6.9, 7.1, 7.5, 7.9, 7.9, 8.5]
-bbb4 = [i/(4*scale_r[4]) for i in bbb4]
+bbb4 = [i/(ri) for i,ri in zip(bbb4, radii_r[4])]
 
 
 Rr = [2,4,6]
 A=[40,50,60,70,80,85,90]
+
+
+
 ratio=48
 qq = {}
 qqinv = {}
@@ -349,15 +359,18 @@ for r in Rr:
     qq[r]=[]
     qqinv[r]=[]
     qq_var[r]=[]
-    for a in A:
-        file = f'/home/luishcc/md-projects/analysis/density_correlation/peak/R{r}_ratio{ratio}_A{a}-peak.csv'
+    for i,av in enumerate(A):
+        file = f'/home/luishcc/md-projects/analysis/density_correlation/peak/R{r}_ratio{ratio}_A{av}-peak.csv'
         try:
             with open(file, 'r') as fd:
                 fd.readline()
                 line = fd.readline().split(',')
-                qq[r].append(float(line[0]) * 2 * np.pi * r*scale_r[r])
-                qqinv[r].append(1/(float(line[0]) * r*scale_r[r]))
-                qq_var[r].append(float(line[1]) * ( 2 * np.pi * r*scale_r[r])**2)
+                # qq[r].append(float(line[0]) * 2 * np.pi * r*scale_r[r])
+                # qqinv[r].append(1/(float(line[0]) * r*scale_r[r]))
+                # qq_var[r].append(float(line[1]) * ( 2 * np.pi * r*scale_r[r])**2)
+                qq[r].append(float(line[0]) * 2 * np.pi * radii_r[r][i])
+                qqinv[r].append(1/(float(line[0]) * radii_r[r][i]))
+                qq_var[r].append(float(line[1]) * ( 2 * np.pi * radii_r[r][i])**2)
         except Exception as e:
             print(e)
             continue
@@ -378,7 +391,7 @@ def pred4(x):
     return np.cbrt(1.5*np.pi/x)
 
 
-ax1.errorbar(wwave, bbb, xerr = np.sqrt(q_var6)*2*np.pi*4.8,markerfacecolor='none',
+ax1.errorbar(qq[6], bbb, xerr = np.sqrt(qq_var[6]),markerfacecolor='none',
 fmt='o',ecolor = 'blue', capsize= 2, capthick=1,color='blue', label=r'$R_0=6$')
 
 ax1.errorbar(qq[2], bbb2, xerr = np.sqrt(qq_var[2]),markerfacecolor='none',
@@ -387,15 +400,15 @@ fmt='s',ecolor = 'red', capsize= 2, capthick=1,color='red', label=r'$R_0=2$')
 ax1.errorbar(qq[4], bbb4, xerr = np.sqrt(qq_var[4]),markerfacecolor='none',
 fmt='x',ecolor = 'green', capsize= 2, capthick=1,color='green', label=r'$R_0=4$')
 
-dv = abs(wwave[-1]-wwave[0])
+dv = abs(qq[6][-1]-qq[6][0])
 pdv = 1.2 * dv
 x = np.linspace(wwave[0]+1.*pdv, wwave[-1]-pdv, 100)
 ax1.plot(x, pred4(x), 'k--', label='Theory')
 
 ax1.set_xlabel('$\chi$')
 ax1.set_ylabel('$R_D/R_0$')
-ax1.set_xlim(0.23, 0.67 )
-ax1.set_ylim(1.85, 2.85)
+ax1.set_xlim(0.17, 0.7 )
+ax1.set_ylim(1.8, 3.11)
 
 from matplotlib import container
 handles, labels = ax1.get_legend_handles_labels()
@@ -429,7 +442,7 @@ ax1.legend(handles, labels, loc=0, ncol=1, frameon=False)
 
 ##########################################
 
-a = [((i/r)**.5*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = 'OhTh'
+# a = [((i/r)**.5*(j/r)**1)**1 for r, i, j in zip(radii, lv, lt)]; xlabel = 'OhTh'
 # ax2.plot(a2, b_fit, 'k--', label='Linear fit')
 # ax2.plot(a2, b_fit2, 'k--', label='Quadratic fit')
 # ax2.plot(a2, fexp(a2, *pars), 'b--', label='exp fit')
@@ -458,7 +471,7 @@ ax22.annotate(r'$0.72\pm0.04$', xy=(.0036, 0.035), fontsize=11)
 
 
 
-# plt.savefig('fig4-2.pdf', bbox_inches='tight', dpi=dpi )
+plt.savefig('fig4-2.pdf', bbox_inches='tight', dpi=dpi )
 
 
 
