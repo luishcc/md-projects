@@ -15,7 +15,7 @@ atom_style	        hybrid angle mdpd
 bond_style harmonic
 angle_style harmonic
 
-read_data surfactant-thread.data
+read_data surfactant-thread2.data
 
 
 ###########################################################
@@ -43,7 +43,7 @@ pair_coeff  3  3   mdpd  -40.0  25.0  4.5  1.0  0.75
 
 
 compute             mythermo all temp
-thermo              100
+thermo              1000
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
@@ -51,14 +51,14 @@ thermo_modify       flush yes
 # compute 	v1 all voronoi/atom neighbors yes edge_histo 6
 
 compute 	v1 all voronoi/atom neighbors yes
-dump    	dperatom all custom 100 dump.voronoi id type x y z c_v1[1] c_v1[2]
+# dump    	dperatom all custom 100 dump.voronoi id type x y z c_v1[1] c_v1[2]
 
-variable voroAr atom "c_v1[1] > 0.25 && 40 < x^2+y^2 && x^2+y^2 < 85"
-# variable voroAr atom "c_v1[1] > 0.3"
+# variable voroAr atom "c_v1[1] > 0.25 && 40 < x^2+y^2 && x^2+y^2 < 85"
+variable voroAr atom "c_v1[1] > 0.25 && c_v1[1] < 10"
 group ss dynamic all var voroAr
 
 
-dump    	dperatom2 ss custom 100 dump.voronoi-s2 id type x y z c_v1[1] c_v1[2]
+dump    	dperatom2 ss custom 1000 dump.voronoi-s id type x y z mol
 
 
 
@@ -72,4 +72,5 @@ timestep            0.01
 # dump vel all custom 100 dump.vel-re id vx vy vz
 
 
-rerun surfactant-thread.lammpstrj every 1 dump x y z
+# rerun surfactant-thread.lammpstrj every 1 dump x y z
+rerun cylinder_8_2.6.lammpstrj start 100000 stop 230000 dump x y z

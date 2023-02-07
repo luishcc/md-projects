@@ -115,9 +115,9 @@ p2 = np.array([[0, 0], [0, 0.5], [0, 1],
 #vor3 = voro_read('dump.neighbors')
 
 
-pos, surf, volumes, types = readVor('dump.voronoi')
+pos, surf, volumes, types = readVor('dump.voro-1')
 
-# plot_volume_distribution(volumes)
+plot_volume_distribution(volumes)
 # exit()
 
 px = [sub[0] for sub in pos]
