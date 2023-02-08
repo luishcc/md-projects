@@ -44,29 +44,6 @@ def plot_volume_distribution(v):
     plt.show()
 
 
-def plot_volume_distribution2(v):
-    import scipy.stats as stats
-    #import seaborn as sns
-
-    #sns.set(color_codes=True)
-    #sns.set(rc={'figure.figsize':(5,5)})
-    fig, ax = plt.subplots(1, 1)
-
-    dat = stats.gamma.fit(v)
-    #ax = sns.distplot(dat,
-                  # kde=True,
-                  # bins=100,
-                  # color='skyblue',
-                  # hist_kws={"linewidth": 15,'alpha':1})
-    ax.hist(v,density=True, histtype='bar', alpha=0.3, bins =10000)
-    ax.set_xlim(0,4)
-    plt.show()
-
-
-def cart2pol(x, y):
-    rho = np.sqrt(x**2 + y**2)
-    phi = np.arctan2(y, x)
-    return rho, phi
 
 def readVor(file_name):
     pos = []
