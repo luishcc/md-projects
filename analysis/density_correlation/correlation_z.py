@@ -9,14 +9,14 @@ from mdpkg.rwfile import DumpReader, CSV, Dat
 from mdpkg.grid import Gridz, Grid
 
 
-# path_to_data = '/home/luishcc/hdd/free_thread_old/'
+path_to_data = '/home/luishcc/hdd/free_thread_old/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
-path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/'
 
 R = 6
 ratio = 48
-A = 40
+A = 90
 grid = 1
 
 r1 = 3.6

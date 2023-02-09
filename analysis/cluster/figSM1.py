@@ -28,8 +28,8 @@ fig, axs = plt.subplots(ncols=2, nrows=2)
 
 
 
-fig.subplots_adjust(wspace=.3)
-# fig.subplots_adjust(wspace=.4)
+fig.subplots_adjust(wspace=.25)
+fig.subplots_adjust(hspace=.4)
 
 # fig.tight_layout()
 
@@ -61,16 +61,17 @@ df['radius'] = df['radius'].multiply(np.sqrt(5/3))
 df['radius'].plot.hist(bins=100, alpha=0.4, ax=ax0, density=True, color='b')
 df['radius'].plot.kde(bw_method=0.15, ax=ax0, color='k')
 ax0.set_xlim(0,16)
+ax0.set_ylim(0,0.45)
 ax0.set_xlabel('$R_D$')
 ax0.set_ylabel('Distribution Density')
-ax0.annotate('', xy=(2.8, 0.13), xytext=(1.6,0.08),
+ax0.annotate('', xy=(2.8, 0.15), xytext=(1.65,0.12),
             arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
             )
-ax0.annotate('', xy=(6.4,0.27), xytext=(8.76,0.245),
+ax0.annotate('', xy=(6.42,0.33), xytext=(8.76,0.245),
             arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
             )
-ax0.annotate('Main Droplets', xy=(1.6, 0.275))
-ax0.annotate('Satellite Droplets', xy=(2., 0.135))
+ax0.annotate('Main Droplets', xy=(2.3, 0.35))
+ax0.annotate('Satellite Droplets', xy=(2.0, 0.16))
 
 ##########################################
 
@@ -150,6 +151,10 @@ max_snap4 = max(num_main, key=num_main.get)
 
 ax2.set_ylabel('$<N_{droplets}>/2\pi R_0$')
 ax2.set_xlabel(r'$t-t_b$')
+
+ax2.set_ylim(0,0.74)
+ax2.annotate(r'Oh $=0.199$', xy=(10., 0.3))
+ax2.set_xlim(0,140)
 # plt.plot(x, y2, 'k-', label=r'Total, $\kappa^2 < 0.2$')
 # plt.plot(x, y3, 'k--', label=r'Satellite, $\kappa^2 < 0.2$')
 # plt.plot(x, y4, 'b-.', label=r'Main, $\kappa^2 < 0.2$')
@@ -184,15 +189,16 @@ df['radius'] = df['radius'].multiply(np.sqrt(5/3))
 df['radius'].plot.hist(bins=100, alpha=0.4, ax=ax12, density=True, color='b')
 df['radius'].plot.kde(bw_method=0.2, ax=ax12, color='k')
 ax12.set_xlim(0,16)
+ax12.set_ylim(0,0.45)
 ax12.set_xlabel('$R_D$')
 ax12.set_ylabel('Distribution Density')
-ax12.annotate('', xy=(2.8, 0.13), xytext=(1.6,0.08),
+ax12.annotate('', xy=(2.9, 0.12), xytext=(1.7,0.05),
             arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
             )
-ax12.annotate('', xy=(6.4,0.27), xytext=(8.76,0.245),
+ax12.annotate('', xy=(6.4,0.34), xytext=(9.76,0.24),
             arrowprops=dict(facecolor='black', lw=1.5, arrowstyle='<-'),
             )
-ax12.annotate('Main Droplets', xy=(1.6, 0.275))
+ax12.annotate('Main Droplets', xy=(2.6, 0.35))
 ax12.annotate('Satellite Droplets', xy=(2., 0.135))
 
 ##########################################
@@ -247,10 +253,13 @@ max_snap2 = max(num_drops, key=num_drops.get)
 
 ax11.set_ylabel('$<N_{droplets}>/2\pi R_0$')
 ax11.set_xlabel(r'$t-t_b$')
+ax11.set_ylim(0,0.74)
+ax11.set_xlim(0,140)
 ax11.plot(x, y2, 'k-', label=r'Total')
 ax11.plot(x, y3, 'k--', label=r'Satellite')
 ax11.plot(x, y4, 'b-.', label=r'Main')
 ax11.scatter(max_snap2, num_drops[max_snap2], color='k')
+ax11.annotate(r'Oh $=1.137$', xy=(10., 0.3))
 ax11.legend(loc=('upper left'), frameon=False)
 
 

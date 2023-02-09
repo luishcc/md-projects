@@ -6,9 +6,9 @@ import numpy as np
 # from mdpkg.rwfile import read_dat
 
 
-# path_to_data = '/home/luishcc/hdd/free_thread_old/'
+path_to_data = '/home/luishcc/hdd/free_thread_old/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
-path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/'
 
 
 def get_snap(dir, exact=True):
@@ -21,12 +21,12 @@ def get_snap(dir, exact=True):
 
 R = 6
 ratio = 48
-A = 40
+A = 90
 
 grid = 1
 
-ini = 6
-end = 29    
+ini = 1
+end = 30
 
 
 data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
@@ -169,10 +169,10 @@ xxx = np.linspace(xx2[0], xx2[-1], 300)
 
 
 
-print(peak_avg, np.sqrt(peak_var), peak_var)
-with open(f'R{R}_ratio{ratio}_A{A}-peak.csv', 'w') as fd:
-    fd.write('peak_avg,variance\n')
-    fd.write(f'{peak_avg},{peak_var}')
+# print(peak_avg, np.sqrt(peak_var), peak_var)
+# with open(f'R{R}_ratio{ratio}_A{A}-peak.csv', 'w') as fd:
+#     fd.write('peak_avg,variance\n')
+#     fd.write(f'{peak_avg},{peak_var}')
 
 from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition,
                                                   mark_inset)
@@ -191,7 +191,7 @@ ax.plot(xx[1:],avg[1:], 'k-', linewidth=1.5)
 ax.errorbar(xx[1:], avg[1:], yerr = np.sqrt(var[1:])/2, fmt='o',ecolor = 'black',markersize=3.5, color='black', capsize= 3, capthick=1)
 ax.errorbar(peak_avg, 0, xerr = np.sqrt(peak_var)/2, fmt='o',ecolor = 'black',markersize=3.5, color='black', capsize= 3, capthick=1)
 
-ax.set_xlim(0,0.3)
+ax.set_xlim(0,0.1)
 
 ax.set_title(f'A={-A}')
 ax.set_ylabel(r'$\hat{G}(r,q)$')
