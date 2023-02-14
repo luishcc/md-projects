@@ -9,8 +9,9 @@ from mdpkg.rwfile import read_dat, Dat
 
 path_to_save = os.getcwd()
 # path_to_data = '/home/luishcc/hdd/free_thread_results/'
-path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
+path_to_data = '/home/luishcc/hdd/free_thread_old/'
 
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
@@ -21,8 +22,8 @@ def get_snap(dir):
     return snap
 
 R = 6
-ratio = 48
-A = -40
+ratio = 24
+A = -50
 
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 

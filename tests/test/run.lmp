@@ -1,0 +1,78 @@
+units lj
+dimension 3
+boundary p p p
+
+processors 1 1 *
+
+atom_style hybrid angle mdpd
+
+neighbor 0.5 bin
+neigh_modify  every 1  check yes
+
+comm_modify vel yes
+
+variable R equal 8
+variable pi equal 3.14159265358979
+variable sc equal 2.6	
+
+
+bond_style harmonic
+angle_style harmonic
+
+log cylinder_$(v_R)_$(v_sc:%.1f).log
+read_data initial_cylinder_$(v_R)_$(v_sc:%.1f).data
+
+#replicate 1 1 $(v_R*6)
+replicate 1 1 3
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
+pair_coeff  *  *   mdpd/rhosum  0.75
+
+# ----------------------------------------
+# 2019 Langmuir Zhou et al (SDS)
+#
+
+bond_style harmonic
+bond_coeff 1 400 0.64
+bond_coeff 2 400 0.64
+
+angle_style harmonic
+angle_coeff 1 100 160
+angle_coeff 2 100 160
+
+pair_coeff  1  1   mdpd  -19.0  25.0  4.5  1.0  0.75
+pair_coeff  1  2   mdpd  -5.98  25.0  4.5  1.0  0.75
+pair_coeff  1  3   mdpd  -32.18 25.0  4.5  1.0  0.75
+pair_coeff  2  2   mdpd  -22.0  25.0  4.5  1.0  0.75
+pair_coeff  2  3   mdpd  -27.0  25.0  4.5  1.0  0.75
+pair_coeff  3  3   mdpd  -40.0  25.0  4.5  1.0  0.75
+
+
+
+###########################################################
+
+#min_style cg
+#minimize 1e-4 1e-4 10000 100000
+
+fix         mvv     all mvv/dpd 0.65
+
+compute             mythermo all temp
+thermo              1000
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+#thermo_modify	 lost ignore lost/bond ignore
+
+comm_modify mode single cutoff 3.0 vel yes
+
+
+timestep 0.01
+
+restart  10000 restart.1 restart.0
+dump 2 all custom 5 cylinder_$(v_R)_$(v_sc:%.1f).lammpstrj id type x y  z vx vy vz fx fy fz mol
+write_data data.data
+run 700000
+
