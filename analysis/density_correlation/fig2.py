@@ -20,6 +20,10 @@ from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition,
 from mdpkg.rwfile import read_dat
 
 
+radii_r = {2:[1.55, 1.5, 1.45, 1.41, 1.39, 1.36, 1.3],
+           4:[3.2, 3.1, 3, 3, 2.9, 2.85, 2.8],
+           6:[5.3, 5, 4.8, 4.5, 4.4, 4.35, 4.3]}
+
 def func(x):
     b = x*np.sqrt(18)
     a = 1/(2+b)
@@ -52,6 +56,7 @@ r6 = [0.017699, 0.018868, 0.017699,
 # xr6 = [226, 301, 376, 452, 527, 603, 904, 1809]
 #xr6 = [226, 301,  452, 527,  904, 1809]
 xr6 = [226, 452, 904, 1809]
+xr6 = [6, 12, 24, 48]
 
 
 r8 = [0.013245, 0.013289, 0.013267]
@@ -79,10 +84,10 @@ grid = 1
 
 n=0
 
-path_to_data = '/home/luishcc/hdd/free_thread_results/'
+path_to_data = '/home/luishcc/hdd/free_thread_old/'
 path_to_data2 = '/home/luishcc/md-projects/analysis/density_correlation/peak/'
 
-data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n+1}'
+data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n+1}'
 dir = path_to_data + data_case_dir
 
 snap = get_snap(dir)
@@ -126,7 +131,7 @@ while os.path.isfile(datafile):
         sum_c[:,id] += arr_real
         sumsq_c[:,id] += arr_real**2
     n += 1
-    data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n+1}'
+    data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n+1}'
     dir = path_to_data + data_case_dir
     snap = get_snap(dir)
     file = f'correlation_grid1/{snap}.dat'
@@ -170,21 +175,23 @@ plot_colors =  ['k-', 'b-', 'g-' ]
 plot_colors2 =  ['k', 'b', 'g' ]
 plot_markers = ['o', 's', 'v']
 for i in range(len(plot_interval)):
-    ax2.plot([xi/1809 for xi in x], avg_c[:, i], plot_colors[i], label=f'$r={plot_interval[i]}$', linestyle=plot_style[i], linewidth=1.5)
-    ax1.plot(xx[skip_f:], avg_f[skip_f:, i],  plot_colors[i], label=f'$r={plot_interval[i]}$' ,  markerfacecolor='none', linestyle=plot_style[i], linewidth=1.5)
+    # ax2.plot([xi/1809 for xi in x], avg_c[:, i], plot_colors[i], label=f'$r={plot_interval[i]}$', linestyle=plot_style[i], linewidth=1.5)
+    # ax1.plot(xx[skip_f:], avg_f[skip_f:, i],  plot_colors[i], label=f'$r={plot_interval[i]}$' ,  markerfacecolor='none', linestyle=plot_style[i], linewidth=1.5)
+    ax2.plot([xi/(2*np.pi*radii_r[6][1]) for xi in x], avg_c[:, i], plot_colors[i], label=f'$r={plot_interval[i]}$', linestyle=plot_style[i], linewidth=1.5)
+    ax1.plot(xx[skip_f:]*2*np.pi*radii_r[6][1], avg_f[skip_f:, i],  plot_colors[i], label=f'$r={plot_interval[i]}$' ,  markerfacecolor='none', linestyle=plot_style[i], linewidth=1.5)
 
 ax1.legend(loc='upper right', ncol=3, handletextpad=.2, columnspacing=1, frameon=False)
 #ax2.legend(loc='upper right', ncol=3)
 
 
-ax1.set_ylim(0,16)
-ax1.set_xlim(0.003,0.12)
-ax1.set_xlabel(r'$q$')
+# ax1.set_ylim(0,16)
+ax1.set_xlim(0.,4.5)
+ax1.set_xlabel(r'$2\pi R_0q$')
 ax1.set_ylabel(r'$\hat{G}(r,q)$')
 
 # ax2.set_ylim(0.3,0.8)
-ax2.set_xlim(0,0.2)
-ax2.set_xlabel(r'$\delta_z/L$')
+ax2.set_xlim(0,6)
+ax2.set_xlabel(r'$\delta_z/2\pi R_0$')
 ax2.set_ylabel(r'$G(r,\delta_z)$')
 
 
@@ -230,7 +237,7 @@ for iter1, r in enumerate(R):
     markerfacecolor='none')
 
 # ax.plot([100,3100], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
-ax.plot([100,2100], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
+ax.plot([3,52], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
 
 #ax.plot(x_plot, [i*red[0] for i in r6], 'ko--', markersize=7.5, markerfacecolor='none', label=r'$R_0=6$')
 
@@ -238,7 +245,7 @@ ax.plot([100,2100], [func(oh_data[0])]*2, color='black', linestyle='--', label='
 #ax.plot(xr8, [i*red[1] for i in r8], 'bx--', markersize=9.5, markerfacecolor='none',label=r'$R_0=8$')
 #ax.plot(xr10, [i*red[2] for i in r10], 'gs--', markersize=8.5, markerfacecolor='none',label=r'$R_0=10$')
 
-ax.set_ylim(0.3,0.76)
+# ax.set_ylim(0.3,0.76)
 #ax.legend(loc=(0.55, 0.05), ncol=3)
 
 from matplotlib import container
@@ -248,7 +255,7 @@ handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in ha
 ax.legend(handles, labels, loc='lower right', ncol=2, handletextpad=.2, columnspacing=1, frameon=False)
 
 #ax.legend(loc='lower right', ncol=2)
-ax.set_xlabel(r'$L$' )
+ax.set_xlabel(r'$L/2\pi R_0$' )
 
 # Some ad hoc tweaks.
 

@@ -26,7 +26,7 @@ def get_snap(dir, exact=True):
 
 R = [2,4,6]
 ratio = 48
-A = [40,50,60,70,80,85,90]
+A = [-40,-50,-60,-70,-80,-85,-90]
 
 radii = {2:[1.55, 1.5, 1.45, 1.41, 1.39, 1.36, 1.3],
            4:[3.2, 3.1, 3, 3, 2.9, 2.85, 2.8],
@@ -52,7 +52,7 @@ for r in R:
         n = 1
         sum = 0
         sumsq = 0
-        data_case_dir = f'R{r}_ratio{ratio}_A{a}/1'
+        data_case_dir = f'R{r}_ratio{ratio}_A{abs(a)}/1'
         dir = path_to_data + data_case_dir
         print(os.path.isdir(dir))
         while os.path.isdir(dir):
@@ -60,16 +60,18 @@ for r in R:
             sum += snap
             sumsq += snap**2
             n += 1
-            data_case_dir = f'R{r}_ratio{ratio}_A{a}/{n}'
+            data_case_dir = f'R{r}_ratio{ratio}_A{abs(a)}/{n}'
             dir = path_to_data + data_case_dir
 
         avg.append((sum/(n-1))*(r/radii[r][i]))
+        # avg.append((sum/(n-1))/(radii[r][i]**2))
         var.append(sumsq/(n-1) - (sum/(n-1))**2)
 
     ax.errorbar(A, avg, yerr = [np.sqrt(v) for v in var],
             linewidth=1., fmt=marker[r],ecolor = color[r],markersize=6,
             color=color[r], markerfacecolor='none', capsize=2.5, capthick=0.6,
             label=rf'$R_0={r}$')
+
 
 # ax.set_xlim(0,0.08)
 
@@ -82,5 +84,5 @@ handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in ha
 ax.legend(handles, labels, frameon=False)
 
 fig.tight_layout()
-plt.savefig('figSM3.pdf', dpi=dpi, bbox_inches='tight')
+# plt.savefig('figSM3.pdf', dpi=dpi, bbox_inches='tight')
 plt.show()
