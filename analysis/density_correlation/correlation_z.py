@@ -9,24 +9,30 @@ from mdpkg.rwfile import DumpReader, CSV, Dat
 from mdpkg.grid import Gridz, Grid
 
 
-path_to_data = '/home/luishcc/hdd/free_thread_old/'
+# path_to_data = '/home/luishcc/hdd/free_thread_old/'
+path_to_data = '/home/luishcc/hdd/surfactant/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/'
 
-R = 6
-ratio = 48
-A = 90
+R = 8
+ratio = 24
+A = 50
 grid = 1
 
-r1 = 3.6
-r2 = 6.0
+surf_con = 2.0
 
-sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
+r1 = 6.5
+r2 = 9.5
+
+# sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
+sim_case = f'R{R}-{surf_con}'
 case = 1
 path_to_data = path_to_data + sim_case
 dir = path_to_data + '/' + str(case)
 save_correlation_file = f'breaktime_correlation_grid{grid}'
+
+print(dir)
 
 def get_snap(dir):
     with open(dir+'/breaktime.txt', 'r') as fd:
@@ -60,10 +66,11 @@ while os.path.isdir(dir):
     #     dir = path_to_data +  '/' + str(case)
     #     save_correlation_file = f'breaktime_correlation_grid{grid}'
     #     continue
-    trj = DumpReader(dir + '/thread.lammpstrj')
+    # trj = DumpReader(dir + '/thread.lammpstrj')
+    trj = DumpReader(dir + f'/cylinder_{R}_{surf_con}.lammpstrj')
     trj.read_sequential()
     # trj.skip_next(get_snap(dir)-1)
-    trj.skip_next(get_snap(dir)+5)
+    trj.skip_next(get_snap(dir)-2)
     trj.read_next()
     print(trj.snap.time)
     iter = 0

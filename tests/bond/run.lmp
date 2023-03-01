@@ -10,7 +10,8 @@ neighbor 0.3 bin
 neigh_modify every 1 check yes cluster no
 
 comm_modify cutoff 2.0 vel yes
-
+#comm_modify vel yes
+ 
 
 
 bond_style harmonic
@@ -33,8 +34,8 @@ pair_coeff  *  *   mdpd/rhosum  0.75
 #
 
 bond_style harmonic
-bond_coeff 1 4 0.64
-bond_coeff 2 4 0.64
+bond_coeff 1 400 0.64
+bond_coeff 2 400 0.64
 
 angle_style harmonic
 angle_coeff 1 100 160
@@ -66,4 +67,4 @@ timestep 0.01
 
 dump 2 all custom 1 sim.lammpstrj id type x y  z vx vy vz fx fy fz mol
 
-run 10000
+run 100000

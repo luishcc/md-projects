@@ -1,0 +1,15 @@
+
+tolerance 0.2
+#discale 1.5
+
+#movebadrandom
+
+nloop0 30
+
+output hexane-full.xyz
+filetype xyz
+
+structure hexane.xyz
+  number 10000
+  inside box -5 -5 -5 5 5 5
+end structure

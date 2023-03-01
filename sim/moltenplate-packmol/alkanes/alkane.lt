@@ -1,0 +1,34 @@
+alkane {
+
+  write_once("In Init") {
+    units           lj
+    atom_style      hybrid angle charge
+    bond_style      harmonic
+    angle_style     harmonic
+
+    dihedral_style  none
+    improper_style  none
+
+    pair_style  hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+  }
+
+  Hexane {
+    write("Data Atoms") {
+      $atom:t1   @atom:tail    0.00  0.00  0.00 $mol:. 1
+      $atom:t2   @atom:tail    0.00  0.00  0.50 $mol:. 1
+    }
+    write("Data Bonds") {
+      $bond:b2   @bond:backbone  $atom:t1 $atom:t2
+    }
+    write_once("Data Masses") {
+      @atom:tail  1
+    }
+
+    write_once("In Settings") {
+      bond_coeff   @bond:backbone   harmonic     116.847 7.5
+    }
+
+  } #HT3
+
+
+} # Surfactants

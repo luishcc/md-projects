@@ -12,12 +12,13 @@ side = 7
 rc_fonts = {
     "font.family": "serif",
     "font.size": 12,
-    'figure.figsize': (1.*side, 1.*side),
+    'figure.figsize': (1.6*side, .8*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
 
-path_to_data = '/home/luishcc/hdd/free_thread_old/'
+# path_to_data = '/home/luishcc/hdd/free_thread_old/'
+path_to_data = '/home/luishcc/hdd/surfactant/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/hdd/'
 
@@ -30,9 +31,11 @@ def get_snap(dir, exact=True):
         return None
     return snap
 
-R = 6
-ratio = 48
-A = 40
+R = 8
+ratio = 24
+A = 50
+
+surf_con = 1.6
 
 grid = 1
 
@@ -40,7 +43,8 @@ ini = 1
 end = 30
 
 
-data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
+# data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
+data_case_dir = f'R{R}-{surf_con}/1'
 dir = path_to_data + data_case_dir
 
 snap = get_snap(dir)
@@ -59,8 +63,8 @@ else:
 
 xx = rfftfreq(num)
 
-sum = np.zeros(row)
-sumsq = np.zeros(row)
+sum = np.zeros(len(x))
+sumsq = np.zeros(len(x))
 
 ###############
 
@@ -73,12 +77,14 @@ while os.path.isfile(datafile):
     # data = pd.read_dat(datafile)
 
     arr_real = np.array(data['correlation'].tolist())
-    arr = abs(rfft(arr_real))
+    # arr = abs(rfft(arr_real))
+    arr = arr_real
 
     sum += arr
     sumsq += arr**2
     n += 1
     data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
+    # data_case_dir = f'R{R}-{surf_con}/{n}'
     dir = path_to_data + data_case_dir
     datafile = '/'.join([dir,file])
     snap = get_snap(dir)
@@ -91,34 +97,31 @@ var = sumsq/(n-1) - avg**2
 from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition,
                                                   mark_inset)
 
-fig, axs = plt.subplots(1,1, sharey=True)
+fig, axs = plt.subplots(1,2, sharey=False)
 
 # fig.subplots_adjust(wspace=.3)
-# ax = axs[0]
-# ax2 = axs[1]
+ax = axs[0]
+ax2 = axs[1]
 
-ax=axs
-ax2=axs
+# ax=axs
+# ax2=axs
 
-ax.plot(xx[1:],avg[1:], 'k-', linewidth=1.5, label=r'Oh $=0.199$')
-ax.errorbar(xx[1:], avg[1:], yerr = np.sqrt(var[1:])/2,
- linewidth=1., fmt='o',ecolor = 'black',markersize=5, color='black',
- markerfacecolor='none', capsize=2, capthick=0.4)
+ax.errorbar(x[1:], avg[1:], yerr = np.sqrt(var[1:])/2,
+ linewidth=.3, fmt='',ecolor = 'black',markersize=1, color='black',
+ markerfacecolor='none', capsize=.8, capthick=0.2)
+ax.plot(x[1:],avg[1:], 'b-', linewidth=2.5, label=r'Oh $=0.199$')
 
-ax.set_xlim(0,0.08)
+# ax.set_xlim(0,0.08)
 
-ax.set_ylabel(r'$\hat{G}(r,q)$')
-ax.set_xlabel(r'$q$')
-
-R = 6
-ratio = 48
-A = 90
-
-grid = 1
+ax2.set_ylabel(r'$\hat{G}(r,q)$')
+ax.set_ylabel(r'${G}(r,\delta_z)$')
+ax.set_xlabel(r'$\delta_z$')
 
 
 
-data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
+
+# data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
+data_case_dir = f'R{R}-{surf_con}/1'
 dir = path_to_data + data_case_dir
 
 snap = get_snap(dir)
@@ -156,7 +159,8 @@ while os.path.isfile(datafile):
     sum += arr
     sumsq += arr**2
     n += 1
-    data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
+    # data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
+    data_case_dir = f'R{R}-{surf_con}/{n}'
     dir = path_to_data + data_case_dir
     datafile = '/'.join([dir,file])
     snap = get_snap(dir)
@@ -166,15 +170,15 @@ avg = sum/(n-1)
 var = sumsq/(n-1) - avg**2
 
 
-ax2.plot(xx[1:],avg[1:], 'b--', linewidth=1.5, label=r'Oh $=1.137$')
+ax2.plot(xx[1:],avg[1:], 'b-', linewidth=1.5, label=r'Oh $=1.137$')
 ax2.errorbar(xx[1:], avg[1:], yerr = np.sqrt(var[1:])/2,
 linewidth=1., fmt='s',ecolor ='blue',markersize=5, color='blue', markerfacecolor='none', capsize=2, capthick=0.4)
 ax2.set_xlabel(r'$q$')
 
 ax2.set_xlim(0,0.08)
 
-ax.legend(frameon=False)
-ax2.legend(frameon=False)
+# ax.legend(frameon=False)
+# ax2.legend(frameon=False)
 
 
 plt.show()

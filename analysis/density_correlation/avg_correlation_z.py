@@ -7,6 +7,7 @@ import numpy as np
 
 
 path_to_data = '/home/luishcc/hdd/free_thread_old/'
+path_to_data = '/home/luishcc/hdd/surfactant/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/hdd/'
 
@@ -19,9 +20,11 @@ def get_snap(dir, exact=True):
         return None
     return snap
 
-R = 6
+R = 8
 ratio = 48
 A = 90
+
+surf_con = 2.3
 
 grid = 1
 
@@ -29,7 +32,8 @@ ini = 1
 end = 30
 
 
-data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
+# data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
+data_case_dir = f'R{R}-{surf_con}/1'
 dir = path_to_data + data_case_dir
 
 snap = get_snap(dir)
@@ -125,16 +129,16 @@ while os.path.isfile(datafile):
     ar_lst = arr.tolist()
     #
     xx_l = xx.tolist()
-    # p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit /= 3
+    p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    p_fit /= 3
 
-    p_fit, plot = fit(arr)
+    # p_fit, plot = fit(arr)
     # p_fit, plot = fit2(a  rr)
 
     print(p_fit)
@@ -151,7 +155,9 @@ while os.path.isfile(datafile):
     sum += arr
     sumsq += arr**2
     n += 1
-    data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
+    # data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
+    data_case_dir = f'R{R}-{surf_con}/{n}'
+
     dir = path_to_data + data_case_dir
     datafile = '/'.join([dir,file])
     snap = get_snap(dir)
