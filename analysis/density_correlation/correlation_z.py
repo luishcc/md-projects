@@ -20,7 +20,7 @@ ratio = 24
 A = 50
 grid = 1
 
-surf_con = 2.0
+surf_con = 2.3
 
 r1 = 6.5
 r2 = 9.5

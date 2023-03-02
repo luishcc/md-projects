@@ -24,7 +24,7 @@ R = 8
 ratio = 48
 A = 90
 
-surf_con = 2.3
+surf_con = 2.6
 
 grid = 1
 

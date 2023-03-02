@@ -35,7 +35,7 @@ R = 8
 ratio = 24
 A = 50
 
-surf_con = 1.6
+surf_con = 2.3
 
 grid = 1
 
@@ -63,83 +63,8 @@ else:
 
 xx = rfftfreq(num)
 
-sum = np.zeros(len(x))
-sumsq = np.zeros(len(x))
-
-###############
-
-
-n = 1
-while os.path.isfile(datafile):
-    print(snap)
-    print(datafile)
-    data = pd.read_csv(datafile, sep=' ', header=0, names=['dz', 'correlation', 'nan'])
-    # data = pd.read_dat(datafile)
-
-    arr_real = np.array(data['correlation'].tolist())
-    # arr = abs(rfft(arr_real))
-    arr = arr_real
-
-    sum += arr
-    sumsq += arr**2
-    n += 1
-    data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
-    # data_case_dir = f'R{R}-{surf_con}/{n}'
-    dir = path_to_data + data_case_dir
-    datafile = '/'.join([dir,file])
-    snap = get_snap(dir)
-
-
-avg = sum/(n-1)
-var = sumsq/(n-1) - avg**2
-
-
-from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition,
-                                                  mark_inset)
-
-fig, axs = plt.subplots(1,2, sharey=False)
-
-# fig.subplots_adjust(wspace=.3)
-ax = axs[0]
-ax2 = axs[1]
-
-# ax=axs
-# ax2=axs
-
-ax.errorbar(x[1:], avg[1:], yerr = np.sqrt(var[1:])/2,
- linewidth=.3, fmt='',ecolor = 'black',markersize=1, color='black',
- markerfacecolor='none', capsize=.8, capthick=0.2)
-ax.plot(x[1:],avg[1:], 'b-', linewidth=2.5, label=r'Oh $=0.199$')
-
-# ax.set_xlim(0,0.08)
-
-ax2.set_ylabel(r'$\hat{G}(r,q)$')
-ax.set_ylabel(r'${G}(r,\delta_z)$')
-ax.set_xlabel(r'$\delta_z$')
-
-
-
-
-# data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
-data_case_dir = f'R{R}-{surf_con}/1'
-dir = path_to_data + data_case_dir
-
-snap = get_snap(dir)
-
-file = f'breaktime_correlation_grid{grid}.dat'
-datafile = '/'.join([dir,file])
-
-data = pd.read_csv(datafile,  sep=' ', header=0, names=['dz', 'correlation', 'nan'])
-x = data['dz'].tolist()
-
-num = len(x)
-if num % 2 == 0:
-    row = int((num / 2) + 1)
-else:
-    row = int((num + 1) / 2)
-
-xx = rfftfreq(num)
-
+sum_real = np.zeros(len(x))
+sumsq_real = np.zeros(len(x))
 sum = np.zeros(row)
 sumsq = np.zeros(row)
 
@@ -158,16 +83,44 @@ while os.path.isfile(datafile):
 
     sum += arr
     sumsq += arr**2
+
+    sum_real += arr_real
+    sumsq_real += arr_real**2
+
     n += 1
+
     # data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
     data_case_dir = f'R{R}-{surf_con}/{n}'
     dir = path_to_data + data_case_dir
     datafile = '/'.join([dir,file])
     snap = get_snap(dir)
 
-
 avg = sum/(n-1)
 var = sumsq/(n-1) - avg**2
+
+avg_real = sum_real/(n-1)
+var_real = sumsq_real/(n-1) - avg_real**2
+
+
+from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition,
+                                                  mark_inset)
+
+fig, axs = plt.subplots(1,2, sharey=False)
+
+# fig.subplots_adjust(wspace=.3)
+ax = axs[0]
+ax2 = axs[1]
+
+ax.errorbar(x[1:], avg_real[1:], yerr = np.sqrt(var_real[1:]),
+ linewidth=.3, fmt=' ',ecolor = 'black',markersize=1, color='black',
+ markerfacecolor='none', capsize=.3, capthick=.3)
+ax.plot(x[1:],avg_real[1:], 'b-', linewidth=2.5, label=r'Oh $=0.199$')
+
+# ax.set_xlim(0,0.08)
+
+ax2.set_ylabel(r'$\hat{G}(r,q)$')
+ax.set_ylabel(r'${G}(r,\delta_z)$')
+ax.set_xlabel(r'$\delta_z$')
 
 
 ax2.plot(xx[1:],avg[1:], 'b-', linewidth=1.5, label=r'Oh $=1.137$')
