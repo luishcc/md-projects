@@ -35,7 +35,7 @@ R = 8
 ratio = 24
 A = 50
 
-surf_con = 2.3
+surf_con = 2.6
 
 grid = 1
 
@@ -111,10 +111,10 @@ fig, axs = plt.subplots(1,2, sharey=False)
 ax = axs[0]
 ax2 = axs[1]
 
-ax.errorbar(x[1:], avg_real[1:], yerr = np.sqrt(var_real[1:]),
+ax.errorbar(x, avg_real, yerr = np.sqrt(var_real),
  linewidth=.3, fmt=' ',ecolor = 'black',markersize=1, color='black',
  markerfacecolor='none', capsize=.3, capthick=.3)
-ax.plot(x[1:],avg_real[1:], 'b-', linewidth=2.5, label=r'Oh $=0.199$')
+ax.plot(x,avg_real, 'b-', linewidth=2.5, label=r'Oh $=0.199$')
 
 # ax.set_xlim(0,0.08)
 
@@ -123,8 +123,8 @@ ax.set_ylabel(r'${G}(r,\delta_z)$')
 ax.set_xlabel(r'$\delta_z$')
 
 
-ax2.plot(xx[1:],avg[1:], 'b-', linewidth=1.5, label=r'Oh $=1.137$')
-ax2.errorbar(xx[1:], avg[1:], yerr = np.sqrt(var[1:])/2,
+ax2.plot(xx[ini:end],avg[ini:end], 'b-', linewidth=1.5, label=r'Oh $=1.137$')
+ax2.errorbar(xx[ini:end], avg[ini:end], yerr = np.sqrt(var[ini:end])/2,
 linewidth=1., fmt='s',ecolor ='blue',markersize=5, color='blue', markerfacecolor='none', capsize=2, capthick=0.4)
 ax2.set_xlabel(r'$q$')
 

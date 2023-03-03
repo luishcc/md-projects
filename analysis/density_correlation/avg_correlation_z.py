@@ -24,12 +24,13 @@ R = 8
 ratio = 48
 A = 90
 
-surf_con = 2.6
+surf_con = 1.6
+
 
 grid = 1
 
 ini = 1
-end = 30
+end = 15
 
 
 # data_case_dir = f'R{R}_ratio{ratio}_A{A}/1'
@@ -107,7 +108,8 @@ def fit(value):
     mean = mean.sum()
     sigma = ((value[ini:end])*((xx2)-mean)**2)/nn
     sigma = sigma.sum()
-    popt, pcov = opt.curve_fit(gaus, xx2, value[ini:end], p0=[1,mean, sigma], maxfev=10000)
+    popt, pcov = opt.curve_fit(gaus, xx2, value[ini:end],
+                p0=[1,mean, sigma], maxfev=100000)
 
     return xxx[np.argmax(gaus(xxx,*popt))], (xxx, gaus(xxx, *popt))
 
@@ -128,17 +130,17 @@ while os.path.isfile(datafile):
     arr = abs(rfft(arr_real))
     ar_lst = arr.tolist()
     #
-    xx_l = xx.tolist()
-    p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    p_fit /= 3
+    # xx_l = xx.tolist()
+    # p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    # p_fit /= 3
 
-    # p_fit, plot = fit(arr)
+    p_fit, plot = fit(arr)
     # p_fit, plot = fit2(a  rr)
 
     print(p_fit)
@@ -175,10 +177,12 @@ xxx = np.linspace(xx2[0], xx2[-1], 300)
 
 
 
-# print(peak_avg, np.sqrt(peak_var), peak_var)
-# with open(f'R{R}_ratio{ratio}_A{A}-peak.csv', 'w') as fd:
-#     fd.write('peak_avg,variance\n')
-#     fd.write(f'{peak_avg},{peak_var}')
+print(peak_avg, np.sqrt(peak_var), peak_var)
+# save_file = f'R{R}_ratio{ratio}_A{A}-peak.csv'
+save_file = f'R{R}_{surf_con}-peak.csv'
+with open(save_file, 'w') as fd:
+    fd.write('peak_avg,variance\n')
+    fd.write(f'{peak_avg},{peak_var}')
 
 from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition,
                                                   mark_inset)
