@@ -5,6 +5,7 @@ dump.*
 info.*
 restart.*
 data/
+*.profile
 
 *.csv
 *.pdf

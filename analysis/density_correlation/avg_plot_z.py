@@ -35,7 +35,7 @@ R = 8
 ratio = 24
 A = 50
 
-surf_con = 2.6
+surf_con = 2.3
 
 grid = 1
 
@@ -88,6 +88,7 @@ while os.path.isfile(datafile):
     sumsq_real += arr_real**2
 
     n += 1
+
 
     # data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
     data_case_dir = f'R{R}-{surf_con}/{n}'

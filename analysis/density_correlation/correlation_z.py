@@ -27,7 +27,7 @@ r2 = 9.5
 
 # sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 sim_case = f'R{R}-{surf_con}'
-case = 1
+case = 11
 path_to_data = path_to_data + sim_case
 dir = path_to_data + '/' + str(case)
 save_correlation_file = f'breaktime_correlation_grid{grid}'

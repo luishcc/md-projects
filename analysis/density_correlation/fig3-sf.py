@@ -22,6 +22,7 @@ qinv = []
 q_var = []
 
 for i, a in enumerate(sf):
+    # file = f'peak/R{R}_{a}-peak.csv'
     file = f'R{R}_{a}-peak.csv'
     try:
         with open(file, 'r') as fd:
@@ -38,7 +39,7 @@ fig, ax = plt.subplots(1,1)
 
 # plt.title('Reduced Wavenumber')
 ax.set_ylabel('$\chi$')
-ax.set_xlabel(r'Sf')
+ax.set_xlabel(r'N_s/A_s')
 # ax.set_ylim(0.22, 0.69)
 # ax.set_xlim(0.06, 2.31)
 
