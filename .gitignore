@@ -4,6 +4,7 @@ log.*
 dump.*
 info.*
 restart.*
+data/
 
 *.csv
 *.pdf
