@@ -1,0 +1,59 @@
+units lj
+dimension 3
+boundary p p p
+
+processors * * 1
+
+atom_style hybrid angle mdpd
+
+neighbor 0.3 bin
+neigh_modify every 1 delay 0 check yes
+
+comm_modify vel yes
+
+variable sc index 0.0
+
+region box block -10 10 -10 10 -35 35
+create_box 1 box
+
+log $(v_sc:%.1f)/sc_$(v_sc:%.1f).log
+
+region     slab      block -10 10 -10 10 -10 10
+create_atoms  1 random $(round(lx*ly*20*6.05)) 2021 slab
+
+mass 1 1
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
+pair_coeff  *  *   mdpd/rhosum  0.75
+
+pair_coeff  1  1   mdpd  -40.0  25.0  4.5  1.0  0.75
+
+dump        mydump  all atom 25000 $(v_sc:%.1f)/sim_$(v_sc:%.1f).lammpstrj
+dump_modify mydump scale no
+
+min_style cg
+minimize 0 0 1000 10000
+
+fix         mvv     all mvv/dpd 0.65
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+
+timestep            0.01
+run                 10000
+
+compute             myP all pressure mythermo
+
+variable gamma equal "((zhi-zlo)*0.5) * (pzz - (pxx + pyy)*0.5)"
+
+fix 1 all ave/time 10 9 1000 v_gamma file $(v_sc:%.1f)/gamma_$(v_sc:%.1f).profile
+
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+thermo_style custom v_gamma pxx pyy pzz temp
+
+run                 100000

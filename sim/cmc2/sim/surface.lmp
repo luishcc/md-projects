@@ -2,7 +2,7 @@ units lj
 dimension 3
 boundary p p p
 
-processors * * 2
+processors * * 1
 
 atom_style hybrid angle mdpd
 
@@ -11,11 +11,11 @@ neigh_modify every 1 delay 0 check yes
 
 comm_modify mode single cutoff 2.3 vel yes
 
-variable sc equal 0.4
+variable sc index 0.4
 
-read_data data/$(v_sc:%.2g)/system.data extra/atom/types 1
+read_data ../data/$(v_sc:%.1f)/system.data extra/atom/types 1
 
-log sc_$(v_sc:%.2g).log
+log $(v_sc:%.1f)/sc_$(v_sc:%.1f).log
 
 region     slab      block -10 10 -10 10 -10 10
 create_atoms        3 random $(round(lx*ly*20*6.05)) 2021 slab
@@ -67,7 +67,7 @@ angle_coeff 2 10 160
 ###########################################################
 
 
-dump        mydump  all atom 10000 sim_$(v_sc:%.2g).lammpstrj
+dump        mydump  all atom 25000 $(v_sc:%.1f)/sim_$(v_sc:%.1f).lammpstrj
 dump_modify mydump scale no
 
 min_style cg
@@ -88,7 +88,7 @@ compute             myP all pressure mythermo
 
 variable gamma equal "((zhi-zlo)*0.5) * (pzz - (pxx + pyy)*0.5)"
 
-fix 1 all ave/time 100 90 10000 v_gamma file gamma_$(v_sc:%.2g).profile
+fix 1 all ave/time 100 90 10000 v_gamma file $(v_sc:%.1f)/gamma_$(v_sc:%.1f).profile
 
 thermo              100
 thermo_modify       temp mythermo

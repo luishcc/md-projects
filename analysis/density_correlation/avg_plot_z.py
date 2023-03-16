@@ -35,7 +35,7 @@ R = 8
 ratio = 24
 A = 50
 
-surf_con = 2.3
+surf_con = 2.0
 
 grid = 1
 
@@ -124,8 +124,8 @@ ax.set_ylabel(r'${G}(r,\delta_z)$')
 ax.set_xlabel(r'$\delta_z$')
 
 
-ax2.plot(xx[ini:end],avg[ini:end], 'b-', linewidth=1.5, label=r'Oh $=1.137$')
-ax2.errorbar(xx[ini:end], avg[ini:end], yerr = np.sqrt(var[ini:end])/2,
+ax2.plot(xx[ini:],avg[ini:], 'b-', linewidth=1.5, label=r'Oh $=1.137$')
+ax2.errorbar(xx[ini:], avg[ini:], yerr = np.sqrt(var[ini:])/2,
 linewidth=1., fmt='s',ecolor ='blue',markersize=5, color='blue', markerfacecolor='none', capsize=2, capthick=0.4)
 ax2.set_xlabel(r'$q$')
 
@@ -135,6 +135,7 @@ ax2.set_xlim(0,0.08)
 # ax2.legend(frameon=False)
 
 
+fig.savefig(f'{surf_con}.png', bbox_inches='tight')
 plt.show()
 
 #

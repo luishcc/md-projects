@@ -130,17 +130,17 @@ while os.path.isfile(datafile):
     arr = abs(rfft(arr_real))
     ar_lst = arr.tolist()
     #
-    # xx_l = xx.tolist()
-    # p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    xx_l = xx.tolist()
+    p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
+    ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
+    p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
     # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
     # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit /= 3
+    p_fit /= 2
 
-    p_fit, plot = fit(arr)
+    # p_fit, plot = fit(arr)
     # p_fit, plot = fit2(a  rr)
 
     print(p_fit)

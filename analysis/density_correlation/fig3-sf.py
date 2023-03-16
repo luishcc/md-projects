@@ -28,9 +28,9 @@ for i, a in enumerate(sf):
         with open(file, 'r') as fd:
             fd.readline()
             line = fd.readline().split(',')
-            q.append(float(line[0]) * 2 * np.pi * R)
+            q.append(float(line[0]) * 2 * np.pi * R*0.8)
             qinv.append(1/(float(line[0]) *  R))
-            q_var.append(float(line[1]) * ( 2 * np.pi * R**2))
+            q_var.append(float(line[1]) * ( 2 * np.pi * (R*0.8)**2))
     except Exception as e:
         print(e)
         continue
@@ -39,7 +39,7 @@ fig, ax = plt.subplots(1,1)
 
 # plt.title('Reduced Wavenumber')
 ax.set_ylabel('$\chi$')
-ax.set_xlabel(r'N_s/A_s')
+ax.set_xlabel(r'$N_s/A_s$')
 # ax.set_ylim(0.22, 0.69)
 # ax.set_xlim(0.06, 2.31)
 
@@ -55,5 +55,5 @@ handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in ha
 # ax.legend(handles, labels, loc='upper right', columnspacing=0.6,  handletextpad=.1,
 # frameon=False, ncol=2, fontsize=12, handlelength=1.5)
 
-
+fig.savefig('surfactant.png', bbox_inches='tight')
 plt.show()

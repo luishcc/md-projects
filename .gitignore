@@ -6,6 +6,7 @@ info.*
 restart.*
 data/
 *.profile
+bash.out
 
 *.csv
 *.pdf

@@ -1,44 +1,31 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from scipy.signal import savgol_filter
+import sys
 
+try:
+    sc = sys.argv[1]
+except IndexError:
+    sc = 0.2
+    
+file = f'sim/{sc}/gamma_{sc}.profile'
 
-file = 'sc_0.1.log'
-
+time = []
 gamma = []
 
-i=0
-flag = True
 with open(file, 'r') as fd:
-    for _ in range(296):
-        fd.readline()
-    while flag:
-        print(i)
-        i+=1
+    fd.readline()
+    fd.readline()    
+    while True:
         line = fd.readline()
-        print(line)
         try:
-            a = line.split()[0]
+            a = line.split()[1]
+            b = line.split()[0]            
+            gamma.append(float(a))
+            time.append(int(b))            
         except:
-            if i>=100000:
-                break
-            continue
-        if a == 'v_gamma':
-            print('TRUE')
-            for i in range(30):
-                fd.readline()
-            while True:
-                try:
-                    line = fd.readline().split()
-                    gamma.append(float(line[0]))
-                except:
-                    flag = False
-                    break
-        if i>=10000:
             break
 
 print(sum(gamma)/len(gamma))
 
 fig, ax = plt.subplots(1,1)
-ax.plot(np.linspace(0,1, len(gamma)), gamma)
+ax.plot(time, gamma)
 plt.show()
