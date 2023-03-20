@@ -35,30 +35,32 @@ def run_avg(file):
     return  avg, std
 
 gamma_lst = []
+con_lst = []
 sc_lst =  []
 std_lst = []
 
 for entry in os.scandir('sim'):
     if not entry.is_dir():
         continue
-    sc = float(entry.name)
-    sc_lst.append(sc)
+    try:
+        sc = float(entry.name)
+        gamma, std = run_avg('/'.join([entry.path, f'gamma_{sc}.profile']))
+        gamma_lst.append(gamma)
+        sc_lst.append(sc)
+        std_lst.append(std)
+    except FileNotFoundError:
+        print(f'gamma_{sc}.profile not found, skipping')
+        continue
+    with open(f'{entry.path}/sc.dat', 'r') as fd:
+        con = float(fd.readline())
+    con_lst.append(con)
 
-    gamma, std = run_avg('/'.join([entry.path, f'gamma_{sc}.profile']))
-    gamma_lst.append(gamma)
-    std_lst.append(std)
 
-zip_lst = zip(sc_lst, gamma_lst, std_lst)
+zip_lst = zip(sc_lst, gamma_lst, std_lst, con_lst)
 sort_lst = sorted(zip_lst)
 tuples = zip(*sort_lst)
-sc_lst, gamma_lst, std_lst = [list(tuple) for tuple in tuples]
+sc_lst, gamma_lst, std_lst, con_lst = [list(tuple) for tuple in tuples]
 
-def to_mol(N):
-    NAv = 6.023e23
-    V = 8.17**3 * 1e-24
-    return N/(V*NAv)
-
-# surfactant_c = [to_mol(i*2) for i in surfactant_c]
 gamma_lst = [(72/7.62)*i for i in gamma_lst]
 std_lst = [(72/7.62)*i for i in std_lst]
 
@@ -73,5 +75,15 @@ ax.set_ylabel(r'$\gamma$ [mN/m]')
 
 plt.tight_layout()
 plt.savefig('cmc.pdf', dpi=dpi)
+
+fig2, ax2 = plt.subplots(1,1)
+
+ax2.plot(sc_lst, con_lst, 'ko-')
+
+ax2.set_xlabel(r'$C$ [$N_t/A_s$]')
+ax2.set_ylabel(r'$\phi_s$ [$N_s/A_s$]')
+
+plt.tight_layout()
+plt.savefig('sc.pdf', dpi=dpi)
 
 plt.show()
