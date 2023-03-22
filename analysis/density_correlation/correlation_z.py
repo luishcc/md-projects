@@ -20,14 +20,17 @@ ratio = 24
 A = 50
 grid = 1
 
-surf_con = 2.3
+try:
+    surf_con = float(sys.argv[1])
+except IndexError:
+    surf_con = 1.0
 
-r1 = 6.5
-r2 = 9.5
+r1 = 6.
+r2 = 10.
 
 # sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
 sim_case = f'R{R}-{surf_con}'
-case = 11
+case = 1
 path_to_data = path_to_data + sim_case
 dir = path_to_data + '/' + str(case)
 save_correlation_file = f'breaktime_correlation_grid{grid}'

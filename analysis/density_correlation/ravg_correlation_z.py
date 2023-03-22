@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 import numpy as np
-import sys
 # from mdpkg.rwfile import read_dat
 
 
@@ -25,10 +24,8 @@ R = 8
 ratio = 48
 A = 90
 
-try:
-    surf_con = float(sys.argv[1])
-except IndexError:
-    surf_con = 1.0
+surf_con = 2.0
+
 
 grid = 1
 
@@ -118,12 +115,24 @@ def fit(value):
 
 #############################################
 
+num = [i+1 for i in range(30)]
+
 
 n = 1
 peak = []
+avg_lst = []
+var_lst = []
 peak_sum = 0
 peak_sum2 = 0
-while os.path.isfile(datafile):
+# while os.path.isfile(datafile):
+import random
+while True:
+    try:
+        nn = num.pop(random.randrange(len(num)))
+        print(nn)
+    except:
+        print('Error \n\n')
+        break
     print(snap)
     print(datafile)
     data = pd.read_csv(datafile, sep=' ', header=0, names=['dz', 'correlation', 'nan'])
@@ -147,12 +156,6 @@ while os.path.isfile(datafile):
     # p_fit, plot = fit2(arr)
 
     print(p_fit)
-    # plt.figure(1)
-    # plt.plot(xx[1:], arr[1:])
-    # plt.plot(*plot)
-    # plt.xlim(0, 0.1)
-    # plt.show()
-    # plt.clf()
 
     peak.append(p_fit)
     peak_sum += p_fit
@@ -160,13 +163,21 @@ while os.path.isfile(datafile):
     sum += arr
     sumsq += arr**2
     n += 1
-    # data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n}'
-    data_case_dir = f'R{R}-{surf_con}/{n}'
+
+    if n > 2:
+        avg2 = peak_sum/(n-1)
+        var2 = 0
+        for aa in peak:
+            var2 += (aa - avg2)**2
+        avg_lst.append(avg2)
+        var_lst.append((var2/(len(peak)-1))/(n-1))
+
+    # data_case_dir = f'R{R}_ratio{ratio}_A{A}/{nn}'
+    data_case_dir = f'R{R}-{surf_con}/{nn}'
 
     dir = path_to_data + data_case_dir
     datafile = '/'.join([dir,file])
     snap = get_snap(dir)
-
 
 avg = sum/(n-1)
 var = sumsq/(n-1) - avg**2
@@ -175,88 +186,11 @@ peak_avg = peak_sum/(n-1)
 peak_var = peak_sum2/(n-1) - peak_avg**2
 
 
-xx2 = xx[ini:end]
-xxx = np.linspace(xx2[0], xx2[-1], 300)
-
-
-
-print(peak_avg, np.sqrt(peak_var), peak_var, '\n\n')
-
-# save_file = f'R{R}_ratio{ratio}_A{A}-peak.csv'
-save_file = f'R{R}_{surf_con}-peak.csv'
-with open(save_file, 'w') as fd:
-    fd.write('peak_avg,variance\n')
-    fd.write(f'{peak_avg},{peak_var}')
-
-from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition,
-                                                  mark_inset)
-xx2 = xx[ini:end]
-xxx = np.linspace(xx2[0], xx2[-1], 300)
 
 fig, ax = plt.subplots(1,1)
 
-ax1 = plt.axes([0,0,1,1])
-ip = InsetPosition(ax, [0.55,0.35,0.42,0.6])
-ax1.set_axes_locator(ip)
-mark_inset(ax, ax1, loc1=2, loc2=4, fc="none", ec='0.3')
+x = np.linspace(1,n-1,n-1-1)
 
-
-ax.plot(xx[1:],avg[1:], 'k-', linewidth=1.5)
-ax.errorbar(xx[1:], avg[1:], yerr = np.sqrt(var[1:])/2, fmt='o',ecolor = 'black',markersize=3.5, color='black', capsize= 3, capthick=1)
-ax.errorbar(peak_avg, 0, xerr = np.sqrt(peak_var)/2, fmt='o',ecolor = 'black',markersize=3.5, color='black', capsize= 3, capthick=1)
-
-ax.set_xlim(0,0.1)
-
-ax.set_title(f'A={-A}')
-ax.set_ylabel(r'$\hat{G}(r,q)$')
-ax.set_xlabel(r'$q$')
-# ax.plot(xxx, gaussk)
-
-# xx2 = xx[ini:end]
-# xxx = np.linspace(xx2[0], xx2[-1], 300)
-# nn = len(xx2)
-# mean = ((xx2)*(avg[ini:end]))/nn
-# mean = mean.sum()
-# sigma = ((avg[ini:end])*((xx2)-mean)**2)/nn
-# sigma = sigma.sum()
-# popt, pcov = opt.curve_fit(gaus, xx2, avg[ini:end], p0=[1,mean, sigma], maxfev=10000)
-#
-# pp, plot = fit2(avg)
-#
-# print(pp)
-
-
-nn = len(xx2)
-mean = ((xx2)*(avg[ini:end]))/nn
-mean = mean.sum()
-sigma = ((avg[ini:end])*((xx2)-mean)**2)/nn
-sigma = sigma.sum()
-popt, pcov = opt.curve_fit(gaus, xx2, avg[ini:end], p0=[1,mean, sigma], maxfev=10000)
-
-s = 0
-ss = 0
-for i in peak:
-    s += (i-popt[1])**2
-var = s/len(peak)
-
-
-print(*(popt), '\n\n')
-save_file = f'R{R}_{surf_con}-peak.csv'
-with open(save_file, 'w') as fd:
-    fd.write('peak_avg,variance\n')
-    fd.write(f'{popt[1]},{var}')
-
-# ax1.plot(np.linspace(1,n, len(peak)), peak, 'k.-', linewidth=2.5)
-
-
-ax1.plot(xx[ini:end],avg[ini:end], 'k--', linewidth=2., label='Data')
-ax1.plot(xxx, gaus(xxx, *popt), 'b-', linewidth=2.5, label='gauss')
-# ax1.plot(*plot, 'b-', linewidth=2.5, label='gauss')
-
-# ax1.plot(np.linspace(1,n, len(peak)), peak, 'k.-', linewidth=2.5)
+ax.errorbar(x[1:], avg_lst[1:], yerr =[i**.5 for i in var_lst[1:]], fmt='o', ecolor = 'black', markersize=3.5, color='black', capsize= 3, capthick=1)
 
 plt.show()
-#
-# with open(f'R{R}_ratio{ratio}_A{A}-peak.csv', 'w') as fd:
-#     fd.write('peak_avg,variance\n')
-#     fd.write(f'{popt[0]},{popt[1]}')

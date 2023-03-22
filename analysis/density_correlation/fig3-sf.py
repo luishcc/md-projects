@@ -28,9 +28,9 @@ for i, a in enumerate(sf):
         with open(file, 'r') as fd:
             fd.readline()
             line = fd.readline().split(',')
-            q.append(float(line[0]) * 2 * np.pi * R*0.8)
+            q.append(float(line[0]) * 2 * np.pi * R*1)
             qinv.append(1/(float(line[0]) *  R))
-            q_var.append(float(line[1]) * ( 2 * np.pi * (R*0.8)**2))
+            q_var.append(float(line[1]) * ( 2 * np.pi * (R*1)**2))
     except Exception as e:
         print(e)
         continue
