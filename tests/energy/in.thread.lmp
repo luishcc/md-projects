@@ -1,0 +1,51 @@
+# Script modified from mDPD example folder
+#
+# Break up of fluid thread
+
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.3 bin
+neigh_modify        every 1 check yes
+
+atom_style	        mdpd
+
+region     mdpd     block 0 5 0 5 0 5 units box
+region     mdpd2    block 2 3 2 3 2 3
+create_box          1 mdpd
+
+
+create_atoms        1 random 8 12 mdpd2
+
+pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+pair_coeff          1 1 mdpd/rhosum  0.75
+pair_coeff          1 1 mdpd         -50 25 4.5 1.0 0.75
+mass                1 1.0
+
+
+thermo              1
+thermo_style        custom step temp press pe evdwl ke
+
+velocity            all create 1.0 2093 loop local dist gaussian
+comm_modify         vel yes
+fix         mvv     all mvv/dpd 0.65
+# fix_modify  mvv     energy yes
+
+# min_style cg
+# minimize 0 0 1000 10000
+
+
+compute cc all property/atom rho
+
+
+dump        mydump  all custom 1 energy.lammpstrj id x y z c_cc 
+# dump        mydump  all atom 1 energy.lammpstrj
+# dump_modify mydump  scale no
+
+
+
+write_data data.data
+
+
+timestep            0.01
+run                 2

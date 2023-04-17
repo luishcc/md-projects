@@ -1,11 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-# plt.rcParams.update({
-#     "text.usetex": True,
-#     "font.family": "sans-serif",
-#     "font.size": 14,
-#     "font.sans-serif": ["Helvetica"]})
+import matplotlib as mpl
+dpi = 1600
+side = 7
+rc_fonts = {
+    "font.family": "serif",
+    "font.size": 12,
+    'figure.figsize': (0.8*side, 0.9*side),
+    "text.usetex": True
+    }
+mpl.rcParams.update(rc_fonts)
 
 
 def total_force(x, a, b):
@@ -34,25 +38,35 @@ def repulsive(x, b):
 r = np.linspace(0,1.5,1000)
 f_a = np.zeros(len(r))
 f_b = np.zeros(len(r))
+f_b2 = np.zeros(len(r))
 f = np.zeros(len(r))
+f2 = np.zeros(len(r))
 w_p = np.zeros(len(r))
 
 A = -50
 B = 25
-pp = 1
+pp = 3
 
 
 for i in range(len(r)):
     f_a[i] = 1*attractive(A) * weight(r[i])
     f_b[i] = 1*repulsive(r[i], B) * weight(r[i], cutoff=0.75)
-    # f_b[i] = 1*2*B*pp * weight(r[i], cutoff=0.75)
+    f_b2[i] = 1*2*B*pp * weight(r[i], cutoff=0.75)
     f[i] = f_a[i]+f_b[i]
+    f2[i] = f_a[i]+f_b2[i]
     w_p[i] = local_density(r[i])
 
 fig = plt.figure()
-plt.plot(r, f_a, 'r--', markersize=0.4, label=f'Attractive term A={A}')
-plt.plot(r, f_b, 'b--', markersize=0.4, label=f'Repulsive term B={B}')
-plt.plot(r, f, 'k-', label=f'Total Force')
+plt.plot(r, f_a, 'r--', markersize=0.4, label=f'Attractive term')
+# plt.plot(r, f_b, 'b--', markersize=0.4, label=f'Repulsive term')
+# plt.plot(r, f, 'k-', label=f'Total Force')
+
+plt.plot(r, [0]*len(r), 'k--')
+
+plt.plot(r, f_b2, 'b--', markersize=0.4, label=f'Repulsive term')
+plt.plot(r, f2, 'k-', label=f'Total Force')
+
+
 plt.title('Conservative Force')
 plt.xlabel(r'$r_{ij}$')
 plt.ylabel('F')
@@ -62,11 +76,11 @@ plt.yticks([])
 fig.savefig('temp.png', transparent=True)
 
 
-plt.figure(2)
-plt.plot(r, w_p, 'r--', markersize=0.4)
-plt.title('Local Density Weight Function')
-plt.xlabel('r_ij')
-plt.ylabel('W_\rho')
-plt.grid('on')
+# plt.figure(2)
+# plt.plot(r, w_p, 'r--', markersize=0.4)
+# plt.title('Local Density Weight Function')
+# plt.xlabel('r_ij')
+# plt.ylabel('W_\rho')
+# plt.grid('on')
 
 plt.show()

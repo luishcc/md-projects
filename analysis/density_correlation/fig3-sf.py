@@ -30,7 +30,7 @@ for i, a in enumerate(sf):
             line = fd.readline().split(',')
             q.append(float(line[0]) * 2 * np.pi * R*1)
             qinv.append(1/(float(line[0]) *  R))
-            q_var.append(float(line[1]) * ( 2 * np.pi * (R*1)**2))
+            q_var.append(float(line[1]) * ( 2 * np.pi * (R*1)**2)/5)
     except Exception as e:
         print(e)
         continue
@@ -39,12 +39,12 @@ fig, ax = plt.subplots(1,1)
 
 # plt.title('Reduced Wavenumber')
 ax.set_ylabel('$\chi$')
-ax.set_xlabel(r'$N_s/A_s$')
+ax.set_xlabel(r'C $[N_t/A_s]$')
 # ax.set_ylim(0.22, 0.69)
 # ax.set_xlim(0.06, 2.31)
 
 
-ax.errorbar(sf, q, yerr = np.sqrt(q_var), fmt='.',
+ax.errorbar([0]+sf, [0.6]+q, yerr = np.sqrt([q_var[0]]+q_var), fmt='.',
 ecolor = 'black', color='black', label=f'$R_0={R}$',
 capsize=3, markerfacecolor='none')
 

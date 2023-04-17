@@ -66,10 +66,10 @@ std_lst = [(72/7.62)*i for i in std_lst]
 
 fig, ax = plt.subplots(1,1)
 
-ax.errorbar(sc_lst, gamma_lst, yerr = std_lst, fmt='o',
+ax.errorbar([0]+sc_lst, [72]+gamma_lst, yerr = [std_lst[0]*0.9]+std_lst, fmt='o',
 ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
 
-ax.plot(sc_lst, gamma_lst, 'ko-')
+ax.plot([0]+sc_lst, [72]+gamma_lst, 'ko-')
 ax.set_xlabel(r'C [$N_t/A_s$]')
 ax.set_ylabel(r'$\gamma$ [mN/m]')
 
@@ -81,7 +81,7 @@ fig2, ax2 = plt.subplots(1,1)
 ax2.plot(sc_lst, con_lst, 'ko-')
 
 ax2.set_xlabel(r'$C$ [$N_t/A_s$]')
-ax2.set_ylabel(r'$\phi_s$ [$N_s/A_s$]')
+ax2.set_ylabel(r'$\Gamma$ [$N_s/A_s$]')
 
 plt.tight_layout()
 plt.savefig('sc.pdf', dpi=dpi)
