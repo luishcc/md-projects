@@ -18,7 +18,7 @@ from ovito.modifiers import *
 grid = 1.2
 frame = 20
 
-file = 'test.lammpstrj'
+file = 'testA80.lammpstrj'
 
 vp = Viewport()
 vp.type = Viewport.Type.Perspective

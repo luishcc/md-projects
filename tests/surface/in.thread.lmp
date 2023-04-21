@@ -11,7 +11,7 @@ neigh_modify        every 1 check yes
 atom_style	        mdpd
 
 variable Radius equal 6
-variable WaveLength equal 2*PI*v_Radius*1.1
+variable WaveLength equal 2*PI*v_Radius*2.0
 print ${WaveLength}
 variable Radius equal 6
 
@@ -25,7 +25,7 @@ create_atoms        1 region tube
 
 pair_style          hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
 pair_coeff          1 1 mdpd/rhosum  0.75
-pair_coeff          1 1 mdpd         -50 25 4.5 1.0 0.75
+pair_coeff          1 1 mdpd         -85 25 4.5 1.0 0.75
 mass                1 1.0
 
 compute             mythermo all temp
@@ -41,8 +41,8 @@ min_style cg
 minimize 0 0 1000 10000
 
 
-dump        mydump  all atom 10 test2.lammpstrj
+dump        mydump  all atom 10 testA853.lammpstrj
+dump_modify mydump scale no
 
 timestep            0.01
-run                 20000
-
+run                 25000

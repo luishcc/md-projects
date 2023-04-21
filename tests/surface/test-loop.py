@@ -18,7 +18,7 @@ from ovito.modifiers import *
 grid = 1.2
 frame = 20
 
-file = 'test2.lammpstrj'
+file = 'testA853.lammpstrj'
 
 
 pipeline = import_file(file)
@@ -54,7 +54,7 @@ data = pipeline.compute()
 # pipeline.add_to_scene()
 # data.particles.vis.radius = 0.3
 
-export_file(pipeline, f'files2/sc-*.dat', 'txt/table', key='binning', multiple_frames=True)
+export_file(pipeline, f'files7/sc-*.dat', 'txt/table', key='binning', multiple_frames=True)
 
 # vp.zoom_all((800,600))
 # vp.render_image(

@@ -1,0 +1,104 @@
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.5 bin
+neigh_modify        every 1 check yes
+
+atom_style	        mdpd
+
+# read_data  initial_npt_40.data
+
+variable llx equal 5
+variable lly equal 5
+variable llz equal 15
+
+region     mdpd     block 0 ${llx} 0 ${lly} 0 ${llz} units box
+# region     mdpd     block -5 5 -5 5 0 40 units box
+create_box          1 mdpd
+
+
+variable A equal -50
+variable B equal 25
+variable rho equal 6.5
+variable rd equal 0.75
+variable Nsteps equal 100000
+variable seed index 2345
+variable epsilon equal 0.002
+
+
+
+region     slab      block 0 ${llx} 0 ${lly} $(v_llz/3) $(2*v_llz/3)
+create_atoms        1 random $(round(v_llx * v_lly * (2*v_llz/3- v_llz/3) * v_rho)) 2021 slab
+
+# region     slab      block -5 5 -5 5 15 25
+# create_atoms        1 random 6000 2021 slab
+
+
+
+pair_style          hybrid/overlay mdpd/rhosum mdpd 1 1.0 9872598
+pair_coeff          1 1 mdpd/rhosum  0.75
+pair_coeff          1 1 mdpd         ${A} ${B} 4.5 1.0 ${rd}
+mass                1 1.0
+
+
+
+velocity            all create 1.0 ${seed} loop local dist gaussian
+comm_modify         vel yes
+fix         mvv     all mvv/dpd 0.65
+
+
+# compute den all chunk/atom bin/3d z 20 20 x -10 20 y -10 20 discard yes
+# fix den all ave/chunk 1 100 100 den density/number file den.txt
+
+
+dump        mydump  all atom 100000 st.lammpstrj
+dump_modify mydump scale no
+
+compute     mythermo  all temp
+compute     myP all pressure mythermo
+compute     myE all pe
+
+variable gamma equal "((zhi-zlo)*0.5) * (pzz - (pxx + pyy)*0.5)"
+
+thermo              100
+thermo_modify       flush yes
+# thermo_style custom v_gamma pxx pyy pzz temp pe
+
+change_box all z scale $(1/(1+v_epsilon*(-3))) y volume x volume remap
+
+min_style cg
+minimize 0 0 1000 10000
+
+timestep            0.01
+run                 100000
+
+
+fix 1 all ave/time 10 9 100 v_gamma file gamma.profile
+
+
+fix 2 all ave/time 10 9 100 c_myE file energy-3.profile
+run                 ${Nsteps}
+
+change_box all z scale $((1+v_epsilon*(-3))/(1+v_epsilon*(-2))) y volume x volume remap
+fix 2 all ave/time 10 9 100 c_myE file energy-2.profile
+run                 ${Nsteps}
+
+change_box all z scale $((1+v_epsilon*(-2))/(1+v_epsilon*(-1))) y volume x volume remap
+fix 2 all ave/time 10 9 100 c_myE file energy-1.profile
+run                 ${Nsteps}
+
+change_box all z scale $((1+v_epsilon*(-1))) y volume x volume remap
+fix 2 all ave/time 10 9 100 c_myE file energy.profile
+run                 ${Nsteps}
+
+change_box all z scale $(1/(1+v_epsilon*(1))) y volume x volume remap
+fix 2 all ave/time 10 9 100 c_myE file energy+1.profile
+run                 ${Nsteps}
+
+change_box all z scale $((1+v_epsilon*(1))/(1+v_epsilon*(2))) y volume x volume remap
+fix 2 all ave/time 10 9 100 c_myE file energy+2.profile
+run                 ${Nsteps}
+
+change_box all z scale $((1+v_epsilon*(2))/(1+v_epsilon*(3))) y volume x volume remap
+fix 2 all ave/time 10 9 100 c_myE file energy+3.profile
+run                 ${Nsteps}
