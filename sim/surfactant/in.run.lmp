@@ -12,7 +12,7 @@ comm_modify vel yes
 
 variable R equal 8
 variable pi equal 3.14159265358979
-variable sc equal 1.8
+variable sc equal 0.5
 
 
 log test.log
@@ -83,6 +83,7 @@ timestep 0.01
 
 dump 2 all atom 1000 all-test$(v_R)_$(v_sc:%.2g).lammpstrj
 
-run 100000
+run 200000
+
 
 write_data  initial_cylinder_$(v_R)_$(v_sc:%.2g).data

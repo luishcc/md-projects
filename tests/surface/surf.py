@@ -69,7 +69,7 @@ ax.plot(z[:], [i/4 for i in dense[:]], 'k-', label='Surfactant')
 ax.set_ylabel(r'$\phi_s$')
 ax.set_xlabel(r'$z$')
 ax.legend(frameon=False)
-ax.set_ylim(0.7, 1.8)
+# ax.set_ylim(0.7, 1.8)
 
 ax2.plot(z, shape, 'k-', label='Surface profile')
 ax2.plot(z, [i-thickness*.9 for i in shape], 'k--', label='Thickness')
