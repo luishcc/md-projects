@@ -1,7 +1,7 @@
 import "surfactant.lt"
 using namespace surfactant
 
-layer = new HT3 [6273]
+layer = new HT3 [3498]
 
 write_once("Data Boundary") {
     0      24       zlo zhi
