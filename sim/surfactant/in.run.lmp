@@ -10,15 +10,15 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes
 
-variable R equal 16
+variable R equal 8
 variable pi equal 3.14159265358979
-variable sc equal 2.6
+variable sc equal 1.8
 
 
 log test.log
-read_data cylinder_$(v_R)_$(v_sc:%.2g).data
+read_data initial_data/cylinder_$(v_R)_$(v_sc:%.2g).data
 
-region  water  cylinder z 0 0 4 INF INF
+region  water  cylinder z 0 0 ${R} INF INF
 #create_atoms 3 random 20000 2021 water
 # create_atoms 3 random 17000 2021 water
 create_atoms 3 random $(round((zhi-zlo)*v_pi*v_R^2*5.8)) 2021 water
@@ -81,7 +81,7 @@ thermo_modify       flush yes
 
 timestep 0.01
 
-dump 2 all atom 100 all-test.lammpstrj
+dump 2 all atom 1000 all-test$(v_R)_$(v_sc:%.2g).lammpstrj
 
 run 100000
 
