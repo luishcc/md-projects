@@ -1,0 +1,64 @@
+units 		          lj
+dimension	          3
+boundary	          p p p
+neighbor	          0.3 bin
+neigh_modify        every 1 check yes
+
+atom_style	        mdpd
+
+variable pi equal 3.14159265358979323846
+
+variable R equal 6
+
+variable A equal -40
+variable density equal 6.05
+variable Oh equal 0.289
+
+# variable A equal -80
+# variable density equal 9.1
+# variable Oh equal 0.762
+
+variable dir index 1
+variable rseed equal ${dir}
+
+
+variable chi equal 1/sqrt(2+sqrt(18)*v_Oh)
+variable wavenumber equal ${chi}
+variable WaveLength equal 2*PI*v_R/v_wavenumber
+
+region mdpd block -18 18 -18 18 0 ${WaveLength} units box
+create_box 1 mdpd
+region tube cylinder z 0 0 v_R INF INF
+create_atoms 1 random $(round((zhi-zlo)*v_pi*v_R^2*v_density)) 2021 tube
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 ${rseed}
+pair_coeff 1 1 mdpd/rhosum  0.75
+pair_coeff 1 1 mdpd ${A} 25 4.5 1.0 0.75
+mass       1 1.0
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+velocity            all create 1.0 ${rseed} loop local dist gaussian
+comm_modify         vel yes
+
+fix         mvv     all mvv/dpd 0.65
+
+min_style cg
+minimize 0 0 100 1000
+
+dump        mydump  all custom 100 ${dir}/pinch_A$(abs(v_A)).lammpstrj id type x y z vx vy vz
+
+timestep            0.01
+run                 18000
+
+dump_modify mydump every 50
+run                 6000
+
+dump_modify mydump every 10
+run                 10000
+
+
+

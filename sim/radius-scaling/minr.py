@@ -116,9 +116,9 @@ y4 = [(i)/4.2 for i in x4]
 y5 = [(i**(.418))/2.8 for i in x5]
 
 
-ax.loglog([(end2-i)/(10*ti) for i in snaps2], min_r2, 'b>', markerfacecolor='none', label=r'$2.5*2\pi R$')
-ax.loglog([(end3-i)/(10*ti) for i in snaps3], min_r3, 'ko', markerfacecolor='none', label=r'$1.1*2\pi R$')
-ax.loglog([(end-i)/(10*ti) for i in snaps], min_r, 'gs', markerfacecolor='none', label=r'$1.5*2\pi R$')
+ax.loglog([(end2-i)/(10*ti) for i in snaps2], min_r2, 'b>', markerfacecolor='none', label='Low Oh')
+ax.loglog([(end3-i)/(10*ti) for i in snaps3], min_r3, 'ko', markerfacecolor='none', label='High Oh')
+ax.loglog([(end-i)/(10*ti) for i in snaps], min_r, 'gs', markerfacecolor='none', label='Surfactant')
 
 # ax.plot(x1,y1, 'b--', linewidth=3.5,
     # label=r'$\displaystyle \frac{h_{min}}{R_0} \sim (t_b-t)^{0.418}$')
@@ -133,8 +133,8 @@ ax.loglog([(end-i)/(10*ti) for i in snaps], min_r, 'gs', markerfacecolor='none',
 
 # ax.plot([0.1,100], [0.589]*2, 'r--')
 # ax.plot([0.1,100], [0.277]*2, 'b--')
-# ax.plot([0.1,100], [0.152]*2, 'k--')
-# ax.plot([0.1,100], [0.152**.5*4.4**.5]*2, 'k--')
+ax.plot([0.1,100], [0.152]*2, 'k--')
+ax.plot([0.1,100], [0.152**.5*4.4**.5]*2, 'k--')
 # ax.plot([1,5], [0.167]*2, 'k--')
 
 # ax.plot([(end-i)/(10*ti) for i in snaps], [lv/6]*len(snaps), 'k--')
