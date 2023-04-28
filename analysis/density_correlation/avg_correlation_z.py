@@ -7,8 +7,9 @@ import sys
 # from mdpkg.rwfile import read_dat
 
 
-path_to_data = '/home/luishcc/hdd/free_thread_old/'
+# path_to_data = '/home/luishcc/hdd/free_thread_old/'
 path_to_data = '/home/luishcc/hdd/surfactant/'
+path_to_data = '/home/luishcc/hdd/surfactant/new/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/hdd/'
 

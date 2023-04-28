@@ -1,86 +1,36 @@
 import os
-import sys
+import numpy as np
 
+def get_breaktime(dir):
+    with open(f'{dir}/breaktime.txt', 'r') as fd:
+        snap = int(fd.readline())
+    return snap
 
-snap = 0
-file = f'files/sc-{snap}.dat'
-file2 = f'files2/sc-{snap}.dat'
-file3 = f'files3/sc-{snap}.dat'
-file4 = f'files4/sc-{snap}.dat'
-file7 = f'files7/sc-{snap}.dat'
-file6 = f'files6/sc-{snap}.dat'
-
-
-
-min_r = []
-min_z = []
-snaps = []
-min_r2 = []
-min_z2 = []
-snaps2 = []
-min_r3 = []
-min_z3 = []
-snaps3 = []
-# while os.path.isfile(file):
-# end = 312
-end = 2273
-for i in range(end):
-    lst_z = []
-    lst_r = []
-    with open(file6, 'r') as fd:
-        fd.readline()
-        fd.readline()
-        for line in fd:
-            line = line.split()
-            lst_z.append(float(line[0]))
-            lst_r.append(float(line[1]))
-    min_r.append(min(lst_r)/4.4)
-    min_z.append(lst_z[lst_r.index(min(lst_r))])
-    snaps.append(snap)
-    snap += 1
-    file6 = f'files6/sc-{snap}.dat'
-
-snap = 0
-# while os.path.isfile(file):
-# end2 = 2121 #files5
-end2 = 1864
-for i in range(end2):
-    lst_z = []
-    lst_r = []
-    with open(file7, 'r') as fd:
-        fd.readline()
-        fd.readline()
-        for line in fd:
-            line = line.split()
-            lst_z.append(float(line[0]))
-            lst_r.append(float(line[1]))
-    min_r2.append(min(lst_r)/4.4)
-    min_z2.append(lst_z[lst_r.index(min(lst_r))])
-    snaps2.append(snap)
-    snap += 1
-    file7 = f'files7/sc-{snap}.dat'
-
-end3 = 1918
-snap = 0
-for i in range(end3):
-    lst_z = []
-    lst_r = []
-    with open(file4, 'r') as fd:
-        fd.readline()
-        fd.readline()
-        for line in fd:
-            line = line.split()
-            lst_z.append(float(line[0]))
-            lst_r.append(float(line[1]))
-    min_r3.append(min(lst_r)/4.4)
-    min_z3.append(lst_z[lst_r.index(min(lst_r))])
-    snaps3.append(snap)
-    snap += 1
-    file4 = f'files4/sc-{snap}.dat'
+def read_sim(dir):
+    cwd = os.getcwd()
+    min_r = []
+    min_z = []
+    breaktime = get_breaktime(dir)
+    for i in range(breaktime):
+        file = f'{cwd}/{dir}/surface_profile/{i}.dat'
+        with open(file, 'r') as fd:
+            next(fd)
+            next(fd)
+            data = [line.split() for line in fd]
+        lst_z = [float(line[0]) for line in data]
+        lst_r = [float(line[1]) for line in data]
+        minR = min(lst_r)
+        if minR <= 1e-4:
+            break
+        minZ = lst_z[lst_r.index(minR)] 
+        min_r.append(minR)
+        min_z.append(minZ)
+    z0 = (min_z[0] + min_z[1] + min_z[2] + min_z[3])*0.25
+    return min_r, [abs(z-z0) for z in min_z], len(min_r)
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from matplotlib import container
+
 dpi = 1600
 side = 5
 rc_fonts = {
@@ -91,105 +41,49 @@ rc_fonts = {
     }
 mpl.rcParams.update(rc_fonts)
 
-fig, (ax) = plt.subplots(1,1, sharex = True)
+fig, (ax) = plt.subplots(1,1, sharex = False)
 
-ti = 10.703
-ti=1
-lt = 0.277
-lv = 0.581
+lists = []
+for i in range(10):
+    r, z, t = read_sim(i+1)
+    lists.append(r)
+    ax.loglog([t-j for j in range(t)], r, 'c--',
+              linewidth=1, markerfacecolor='none')
+    # ax2.plot([j for j in range(t)], z, markerfacecolor='none', label=i)
 
-import numpy as np
+mean = []
+for i in range(max([len(l) for l in lists])):
+    temp = []
+    for lst in lists:
+        if len(lst) > i:
+            temp.append(lst[-i-1])
+    mean.append(sum(temp)/len(temp))
+mean.reverse()
 
-x1 = np.linspace(0.01,0.2,100)
-x2 = np.linspace(0.1,6.9,100)
-x22 = np.linspace(0.2,.45,100)
-x3 = np.linspace(.6,1.8,100)
-x4 = np.linspace(1.7,2.6,100)
-x5 = np.linspace(2.5,5.4,100)
+ax.plot([len(mean)-j for j in range(len(mean))], mean, 'k-', 
+          markerfacecolor='none', label='Mean',
+          linewidth=4)
 
-y1 = [1/10 for i in x1]
-y2 = [(i**0.418)/3.4 for i in x2]
-y22 = [(i**(2/3))/3.4 for i in x2]
-y3 = [(i)/3.4 for i in x2]
-# y3 = [(i**(2/3))/3.1 for i in x3]
-y4 = [(i)/4.2 for i in x4]
-y5 = [(i**(.418))/2.8 for i in x5]
+x0 = np.linspace(1,30,1000)
+x1 = np.linspace(15,200,1000)
+x2 = np.linspace(100,900,1000)
 
+y0 = [i**0.1/2 for i in x0]
+y1 = [i**0.418/6 for i in x1]
+y2 = [(i**.6666)/19.5 for i in x2]
 
-ax.loglog([(end2-i)/(10*ti) for i in snaps2], min_r2, 'b>', markerfacecolor='none', label='Low Oh')
-ax.loglog([(end3-i)/(10*ti) for i in snaps3], min_r3, 'ko', markerfacecolor='none', label='High Oh')
-ax.loglog([(end-i)/(10*ti) for i in snaps], min_r, 'gs', markerfacecolor='none', label='Surfactant')
+ax.plot(x0,y0, 'y--', linewidth=5, label=r'$(t_b-t)^{0.xx}$')
+ax.plot(x1,y1, 'g--', linewidth=5, label=r'$(t_b-t)^{0.418}$')
+ax.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{2/3}$')
 
-# ax.plot(x1,y1, 'b--', linewidth=3.5,
-    # label=r'$\displaystyle \frac{h_{min}}{R_0} \sim (t_b-t)^{0.418}$')
+# ax.errorbar([i for i in range(len(mean))], mean, yerr=variance**(1/2))
 
-# ax.plot(x1*10,y1, 'g--', linewidth=3)
-# ax.plot(x2*10,y2, 'g--', linewidth=3)
-# ax.plot(x2*10,y22, 'g--', linewidth=3)
-# ax.plot(x2*10,y3, 'g--', linewidth=3)
-# ax.plot(x4*10,y4, 'g--', linewidth=3)
-# ax.plot(x5,y5, 'b--', linewidth=3)
-
-
-# ax.plot([0.1,100], [0.589]*2, 'r--')
-# ax.plot([0.1,100], [0.277]*2, 'b--')
-ax.plot([0.1,100], [0.152]*2, 'k--')
-ax.plot([0.1,100], [0.152**.5*4.4**.5]*2, 'k--')
-# ax.plot([1,5], [0.167]*2, 'k--')
-
-# ax.plot([(end-i)/(10*ti) for i in snaps], [lv/6]*len(snaps), 'k--')
-
-ax.set_ylabel(r'$h_{{min}}/R_0$')
+ax.set_ylabel(r'$h_{{min}}$')
 ax.set_xlabel(r'$(t_b-t)^*$')
-
-# ax.text(1.8, 0.34, r'$\displaystyle \frac{h_{min}}{R_0} \sim (t_b-t)^{0.418}$')
-# ax.text(0.1, 0.29, r'$l_T \approx 0.277$')
-# ax.text(0.1, 0.18, r'$l_T \approx 0.166$')
-# ax.text(0.1, 0.6, r'$l_T \approx 0.589$')
-# ax.text(6, 0.16, r'$l_{\rho} = 0.167$')
-
-# ax.text(0.04, 0.09, r'$\tau^0$')
-# ax.text(0.25, 0.13, r'$\tau^{2/3}$')
-# ax.text(0.57, 0.19, r'$\tau^{0.418}$')
-# ax.text(1.1, 0.3, r'$\tau^{2/3}$')
-# ax.text(2.3, 0.46, r'$\tau^{1}$')
-# ax.text(4.77, 0.6, r'$\tau^{0.418}$')
-
-# ax.set_ylim(0.09,1.1)
-
+# ax.set_xlabel(r'$t$')
 ax.legend(frameon=False)
 
 plt.tight_layout()
 # plt.savefig(f'time.pdf', dpi=dpi)
 
-plt.show()
-
-exit()
-from numpy import diff
-from scipy import signal
-
-snaps.reverse()
-min_r.reverse()
-x = np.array([((end-i)/(10*ti)) for i in snaps])
-y = np.array(min_r)
-
-dx = abs(x[1]-x[0])
-
-y = signal.savgol_filter(y,20,4)
-
-ddy = np.gradient(np.log(y),dx)
-# ddx = diff(lnx)/dx
-# ddx = np.gradient(np.log(x), dx)
-
-# dy = signal.savgol_filter(dy*dx,20,3)
-ddy = signal.savgol_filter(ddy,20,3)
-# ddy = ddy*x
-
-lnx = np.log(x)
-lny = np.log(y)
-
-fig, (ax, ax2, ax3) = plt.subplots(3,1)
-ax.semilogx(x, lny)
-ax2.plot(x, ddy)
-ax3.plot(x, ddy*x)
 plt.show()

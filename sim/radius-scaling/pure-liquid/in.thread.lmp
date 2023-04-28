@@ -49,16 +49,16 @@ fix         mvv     all mvv/dpd 0.65
 min_style cg
 minimize 0 0 100 1000
 
-dump        mydump  all custom 100 ${dir}/pinch_A$(abs(v_A)).lammpstrj id type x y z vx vy vz
+dump        mydump  all custom 10 ${dir}/pinch_A$(abs(v_A)).lammpstrj id type x y z 
 
 timestep            0.01
-run                 18000
+run                 35000
 
-dump_modify mydump every 50
-run                 6000
+# dump_modify mydump every 50
+# run                 7000
 
-dump_modify mydump every 10
-run                 10000
+# dump_modify mydump every 10
+# run                 10000
 
 
 

@@ -10,7 +10,8 @@ from mdpkg.grid import Gridz, Grid
 
 
 # path_to_data = '/home/luishcc/hdd/free_thread_old/'
-path_to_data = '/home/luishcc/hdd/surfactant/'
+# path_to_data = '/home/luishcc/hdd/surfactant/'
+path_to_data = '/home/luishcc/hdd/surfactant/new/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/'
