@@ -10,13 +10,13 @@ variable pi equal 3.14159265358979323846
 
 variable R equal 6
 
-variable A equal -40
-variable density equal 6.05
-variable Oh equal 0.289
+# variable A equal -40
+# variable density equal 6.05
+# variable Oh equal 0.289
 
-# variable A equal -80
-# variable density equal 9.1
-# variable Oh equal 0.762
+variable A equal -80
+variable density equal 9.1
+variable Oh equal 0.762
 
 variable dir index 1
 variable rseed equal ${dir}
@@ -52,7 +52,7 @@ minimize 0 0 100 1000
 dump        mydump  all custom 10 ${dir}/pinch_A$(abs(v_A)).lammpstrj id type x y z 
 
 timestep            0.01
-run                 35000
+run                 40000
 
 # dump_modify mydump every 50
 # run                 7000

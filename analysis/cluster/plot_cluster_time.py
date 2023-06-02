@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib as mpl
+import sys
 
 dpi = 1600
 side = 7
@@ -16,10 +17,14 @@ import os
 import numpy as np
 
 
-R = 6
+R = 8
 ratio = 48
-A = -50
+A = -40
 
+try:
+    surf_con = float(sys.argv[1])
+except IndexError:
+    surf_con = 1.0
 
 if R == 2:
     separation = 1.7
@@ -28,14 +33,19 @@ elif R == 4:
 elif R == 6:
     separation = 4
 elif R == 8:
-    separation = 5.5
+    # separation = 5.5
+    separation = 7
+    # separation = 8.5
 elif R == 10:
     separation = 7
 
 
-case = f'R{R}_ratio{ratio}_A{abs(A)}'
+# case = f'R{R}_ratio{ratio}_A{abs(A)}'
 # path = f'/home/luishcc/md-projects/analysis/cluster/R{R}_ratio{ratio}_A{abs(A)}/'
-path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
+# path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
+
+case = f'R{R}-{surf_con}'
+path = f'/home/luishcc/md-projects/analysis/cluster/R{R}-{surf_con}'
 
 # dir_out = '/'.join([path, 'fig'])
 #
@@ -63,10 +73,10 @@ for file in os.scandir(path):
     print(df.shape)
 
 
-    df.drop(df[df['size'] <= 1].index, inplace=True)
+    df.drop(df[df['size'] <= 8].index, inplace=True)
     # df.drop(df[df['radius'] > 5].index, inplace=True)
     # df.drop(df[df['size'] > 1000].index, inplace=True)
-    df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
+    df.drop(df[df['anisotropy'] > 0.3].index, inplace=True)
     # df.drop(df[df['asphericity'] > 3].index, inplace=True)
     df['radius'] = df['radius'].multiply(np.sqrt(5/3))
 
@@ -83,10 +93,15 @@ for file in os.scandir(path):
     # num_main[name] = main.shape[0] / (30 * 1810)
     # num_satellite[name] = satellite.shape[0] / (30 * 1810)
 
-    num_cluster[name] = df.shape[0] / (30 * 2*np.pi*R*0.8)
-    num_drops[name] = df.shape[0]  / (30 * 2*np.pi*R*0.8)
-    num_main[name] = main.shape[0] / (30 * 2*np.pi*R*0.8)
-    num_satellite[name] = satellite.shape[0] / (30 * 2*np.pi*R*0.8)
+    n_sims = 20
+    # n_sims = 30
+    scale=0.9
+    # scale=0.8
+
+    num_cluster[name] = df.shape[0] / (n_sims * 2*np.pi*R*scale)
+    num_drops[name] = df.shape[0]  / (n_sims * 2*np.pi*R*scale)
+    num_main[name] = main.shape[0] / (n_sims * 2*np.pi*R*scale)
+    num_satellite[name] = satellite.shape[0] / (n_sims * 2*np.pi*R*scale)
 
     num_cluster2[name] = df.shape[0]
     num_drops2[name] = df.shape[0]
@@ -132,7 +147,7 @@ plt.scatter(max_snap3, num_satellite[max_snap3], color='k')
 plt.scatter(max_snap4, num_main[max_snap4], color='k')
 # plt.grid(True)
 # plt.legend(loc='upper left', prop={'size': 11.})
-plt.legend(loc='upper left')
+plt.legend(frameon=False)
 # plt.plot(max_snap2, max(num_drops.values()), 'ko')
 # plt.plot(max_snap1, max(num_cluster.values()), 'ko')
 
@@ -163,41 +178,41 @@ print('stellite: ', max_snap3, ' main: ', max_snap4, ' total: ',max_snap2)
 # plt.close()
 # plt.savefig(f'time.png', transparent=True, dpi=1600)
 
-plt.show()
+# plt.show()
 
-exit()
+# exit()
 
 plt.figure(2)
 ax1 = plt.subplot(2,1,1)
-df = pd.read_csv(path+f'{max_snap2}.csv')
-df.drop(df[df['size'] <= 1].index, inplace=True)
+df = pd.read_csv(path+f'/{max_snap2}.csv')
+df.drop(df[df['size'] <= 8].index, inplace=True)
 df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
-df['radius'] = df['radius'] / (np.sqrt(0.6))
-# df['radius'].plot.hist(bins=50, alpha=0.5)
+df['radius'] = df['radius'].multiply(np.sqrt(5/3))
 df['radius'].plot.kde(bw_method=0.1)
-plt.title(f'Droplet Size Distribution, A={A}, snapshot={max_snap2}')
+df['radius'].plot.hist(bins=20, alpha=0.5, density=True, label='Histogram')
+plt.title(f'C={round(surf_con*8/R, 4)}, max drops snapshot')
 # plt.xlim(0, 15)
 # plt.ylim(0, 60)
 plt.xlabel('Radius')
-plt.ylabel('KDE')
+plt.ylabel('Histogram')
 plt.grid(True)
 
 ax2 = plt.subplot(2,1,2, sharex=ax1)
-df = pd.read_csv(path+f'{max_snap3}.csv')
-df.drop(df[df['size'] <= 1].index, inplace=True)
+df = pd.read_csv(path+f'/{max_snap3}.csv')
+df.drop(df[df['size'] <= 8].index, inplace=True)
 df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
-df['radius'] = df['radius'] / (np.sqrt(0.6))
-# df['radius'].plot.hist(bins=50, alpha=0.5)
+df['radius'] = df['radius'].multiply(np.sqrt(5/3))
 df['radius'].plot.kde(bw_method=0.1)
-plt.title(f'Droplet Size Distribution, A={A}, snapshot={max_snap3}')
-plt.xlim(0, 15)
+df['radius'].plot.hist(bins=20, alpha=0.5, density=True, label='Histogram')
+plt.title(f'Max satellites snapshot')
+plt.xlim(0, 35)
 # plt.ylim(0, 60)
 plt.xlabel('Radius')
-plt.ylabel('KDE')
+plt.ylabel('Histogram')
 plt.grid(True)
 
 # plt.savefig(f'{case}_Dist.png', format='png')
-# plt.show()
+plt.show()
 
 # scale_x = 1
 # scale_y = 1

@@ -7,33 +7,56 @@ import numpy as np
 from mdpkg.rwfile import Dat, CSV
 
 import os
+import sys
 
 
 from mdpkg.rwfile import read_dat, Dat
 
 
 # dir = '/home/luishcc/hdd/free_thread_results/R6_ratio6_A50-4/'
-file = '/thread.lammpstrj'
+
 
 # path_to_data = '/home/luishcc/hdd/free_thread_results/'
-path_to_data = '/home/luishcc/hdd/'
+# path_to_data = '/home/luishcc/hdd/'
+path_to_data = '/home/luishcc/hdd/surfactant/new/'
+
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/test/'
 
 
-R = 6
+R = 8
 ratio = 48
 A = -40
 
-initial_snap = 100
-final_step = 400
+try:
+    surf_con = float(sys.argv[1])
+except IndexError:
+    surf_con = 1.0
+
+def get_snap(dir):
+    with open(dir+'/breaktime.txt', 'r') as fd:
+        snap = int(fd.readline())
+    return snap
+
+# initial_snap = 100
+# final_step = 400
+
+
+# file = '/thread.lammpstrj'
+
+sim_case = f'R{R}-{surf_con}'
+path_to_data = path_to_data + sim_case
+case = 1
+dir = path_to_data + '/' + str(case)
+file = f'/cylinder_{R}_{surf_con}.lammpstrj'
 
 
 n = 1
 # data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
-data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}/{n}'
+# data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}/{n}'
 
-dir = path_to_data + data_case_dir
+# dir = path_to_data + data_case_dir
+
 save_dir = dir + f'/cluster'
 
 
@@ -62,6 +85,9 @@ while os.path.isdir(dir):
 
     print(dir)
 
+    initial_step = get_snap(dir)
+    final_step = initial_step + 250
+
     # if os.path.isdir(save_dir):
     #     n += 1
     #     data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}-{n}'
@@ -74,7 +100,7 @@ while os.path.isdir(dir):
     clt_mod = ClusterAnalysisModifier(cutoff = 0.8, compute_gyration = True)
     pipeline.modifiers.append(clt_mod)
 
-    for i in range(initial_snap, pipeline.source.num_frames):
+    for i in range(initial_step, pipeline.source.num_frames):
         if i >= final_step:
             break
         data = pipeline.compute(i)
@@ -103,8 +129,12 @@ while os.path.isdir(dir):
         # print()
 
     n += 1
-    data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}/{n}'
-    dir = path_to_data + data_case_dir
+    # data_case_dir = f'R{R}_ratio{ratio}_A{abs(A)}/{n}'
+    # dir = path_to_data + data_case_dir
+
+    case += 1
+    dir = path_to_data + '/' + str(case)
+
     save_dir = dir + f'/cluster'
 
 

@@ -1,11 +1,17 @@
 import os
+import sys
 from ovito.io import *
 from ovito.modifiers import *
 
 R = 8
-sc = 1.8
 
-file = f'initial_cylinder_{R}_{sc}.data'
+try: 
+    sc = sys.argv[1]
+except:
+    sc = 0.5
+
+# file = f'initial_cylinder_{R}_{sc}.data'
+file = f'initial_wave_cylinder_{R}_{sc}.data'
 save_file = '.'.join([file,'CLEAN'])
 if os.path.isfile(save_file):
     print(f'File {save_file} already exists.')

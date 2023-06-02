@@ -1,4 +1,5 @@
 import os
+import sys
 
 import pandas as pd
 import numpy as np
@@ -17,10 +18,14 @@ rc_fonts = {
 mpl.rcParams.update(rc_fonts)
 
 
-R = 6
+R = 8
 ratio = 48
-A = -60
+A = -40
 
+try:
+    surf_con = float(sys.argv[1])
+except IndexError:
+    surf_con = 1.0
 
 if R == 2:
     separation = 1.7
@@ -30,6 +35,7 @@ elif R == 6:
     separation = 4
 elif R == 8:
     separation = 5.5
+    separation = 8.5
 elif R == 10:
     separation = 7
 
@@ -39,6 +45,8 @@ case = f'R{R}_ratio{ratio}_A{abs(A)}'
 path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
 # path = f'/home/luishcc/md-projects/analysis/cluster/break-avg/R{R}_ratio{ratio}_A{abs(A)}'
 
+case = f'R{R}-{surf_con}'
+path = f'/home/luishcc/md-projects/analysis/cluster/R{R}-{surf_con}'
 
 
 num_cluster = {}
@@ -57,8 +65,8 @@ for file in os.scandir(path):
 
     print(df.shape)
 
-    df.drop(df[df['size'] <= 1].index, inplace=True)
-    df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
+    df.drop(df[df['size'] <= 8].index, inplace=True)
+    df.drop(df[df['anisotropy'] > 0.25].index, inplace=True)
     df['radius'] = df['radius'].multiply(np.sqrt(5/3))
 
     satellite = df[df['radius'] < separation]
@@ -105,7 +113,7 @@ print(data[0][np.argmax(data[1][:sep_id])])
 print(data[0][np.argmax(data[1][sep_id:])+sep_id])
 
 plt.title(f'Droplet Size Distribution, A={A}, snapshot={snap}')
-plt.xlim(0, 15)
+# plt.xlim(0, 15)
 # plt.ylim(0, 0.7)
 plt.xlabel('Radius')
 plt.ylabel('Density')

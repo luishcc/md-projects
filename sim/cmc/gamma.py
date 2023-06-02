@@ -28,4 +28,4 @@ print(sum(gamma)/len(gamma))
 
 fig, ax = plt.subplots(1,1)
 ax.plot(time, gamma)
-plt.show()
+#plt.show()

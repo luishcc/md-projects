@@ -11,7 +11,8 @@ path_to_save = os.getcwd()
 # path_to_data = '/home/luishcc/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
-path_to_data = '/home/luishcc/hdd/free_thread_old/'
+# path_to_data = '/home/luishcc/hdd/free_thread_old/'
+path_to_data = '/home/luishcc/hdd/surfactant/new/'
 
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
@@ -21,11 +22,19 @@ def get_snap(dir):
         snap = int(fd.readline())
     return snap
 
-R = 6
+R = 8
 ratio = 24
 A = -50
 
+try:
+    surf_con = float(sys.argv[1])
+except IndexError:
+    surf_con = 1.0
+
+
 sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
+
+sim_case = f'R{R}-{surf_con}'
 
 dir_in = path_to_data + sim_case
 

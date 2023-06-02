@@ -111,7 +111,7 @@ lstyle = {2:'-.', 4:'--', 6:'-'}
 for r in R:
     # print(r)
     # print(oh_r[r], q[r], q_var[r])
-    ax.errorbar(oh_r[r], q[r], yerr = np.sqrt(q_var[r]), fmt=marker[r],
+    ax.errorbar(oh_r[r], q[r], yerr = 2*np.sqrt(np.array(q_var[r])/30), fmt=marker[r],
     ecolor = color[r], color=color[r], label=f'$R_0={r}$',
     capsize=3, markerfacecolor='none')
 

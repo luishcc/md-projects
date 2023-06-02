@@ -12,16 +12,19 @@ comm_modify vel yes
 
 variable R equal 8
 variable pi equal 3.14159265358979
-variable sc equal 0.5
+variable sc index 0.5
 
 
 log test.log
-read_data initial_data/cylinder_$(v_R)_$(v_sc:%.2g).data
+# read_data initial_data/cylinder_$(v_R)_$(v_sc:%.2g).data
+read_data wave_cylinder_$(v_R)_$(v_sc:%.2g).data extra/atom/types 1
+mass 3 1 
 
 region  water  cylinder z 0 0 ${R} INF INF
 #create_atoms 3 random 20000 2021 water
 # create_atoms 3 random 17000 2021 water
 create_atoms 3 random $(round((zhi-zlo)*v_pi*v_R^2*5.8)) 2021 water
+# create_atoms 3 random $(round((zhi-zlo)*v_pi*v_R^2*3.5)) 2021 water
 
 ###########################################################
 # Pair, Bond and Angle Coefficients
@@ -81,9 +84,11 @@ thermo_modify       flush yes
 
 timestep 0.01
 
-dump 2 all atom 1000 all-test$(v_R)_$(v_sc:%.2g).lammpstrj
+# dump 2 all atom 1000 all-test$(v_R)_$(v_sc:%.2g).lammpstrj
+dump 2 all atom 1000 all-test-wave$(v_R)_$(v_sc:%.2g).lammpstrj
 
 run 200000
 
 
-write_data  initial_cylinder_$(v_R)_$(v_sc:%.2g).data
+# write_data  initial_cylinder_$(v_R)_$(v_sc:%.2g).data
+write_data  initial_wave_cylinder_$(v_R)_$(v_sc:%.2g).data

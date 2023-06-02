@@ -8,7 +8,7 @@ import sys
 
 
 # path_to_data = '/home/luishcc/hdd/free_thread_old/'
-path_to_data = '/home/luishcc/hdd/surfactant/'
+# path_to_data = '/home/luishcc/hdd/surfactant/'
 path_to_data = '/home/luishcc/hdd/surfactant/new/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/hdd/'
@@ -113,7 +113,7 @@ def fit(value):
     sigma = ((value[ini:end])*((xx2)-mean)**2)/nn
     sigma = sigma.sum()
     popt, pcov = opt.curve_fit(gaus, xx2, value[ini:end],
-                p0=[1,mean, sigma], maxfev=100000)
+                p0=[1,mean, sigma], maxfev=1000000)
 
     return xxx[np.argmax(gaus(xxx,*popt))], (xxx, gaus(xxx, *popt))
 
@@ -133,7 +133,7 @@ while os.path.isfile(datafile):
     arr_real = np.array(data['correlation'].tolist())
     arr = abs(rfft(arr_real))
     ar_lst = arr.tolist()
-    #
+    
     # xx_l = xx.tolist()
     # p_fit = xx_l.pop(np.argmax(ar_lst[ini:])+ini)
     # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
@@ -142,7 +142,7 @@ while os.path.isfile(datafile):
     # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
     # ar_lst.pop(np.argmax(ar_lst[ini:])+ini)
     # p_fit += xx_l.pop(np.argmax(ar_lst[ini:])+ini)
-    # p_fit /= 3
+    # p_fit /= 2
 
     p_fit, plot = fit(arr)
     # p_fit, plot = fit2(arr)
@@ -232,7 +232,7 @@ mean = ((xx2)*(avg[ini:end]))/nn
 mean = mean.sum()
 sigma = ((avg[ini:end])*((xx2)-mean)**2)/nn
 sigma = sigma.sum()
-popt, pcov = opt.curve_fit(gaus, xx2, avg[ini:end], p0=[1,mean, sigma], maxfev=10000)
+popt, pcov = opt.curve_fit(gaus, xx2, avg[ini:end], p0=[1,mean, sigma], maxfev=1000000)
 
 s = 0
 ss = 0

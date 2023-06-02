@@ -6,18 +6,40 @@ tolerance 0.8
 
 nloop0 30
 
-output cylinder_8_1.8.xyz
+output wave_cylinder_8_2.9.xyz
 filetype xyz
 
 structure surfactant.xyz
-  number 2172
+  number 5388
   atoms 1
-    inside box -50 -50 1 50 50 23
-    inside cylinder 0. 0. 0. 0. 0. 0.8 7.4 23.2
-    outside cylinder 0. 0. 0. 0. 0. 0.8 7.2 23.2
+    inside box -50 -50 1 50 50 35.96
+    inside cylinder 0. 0. 0. 0. 0. 0.8 7.4 36.2
+    outside cylinder 0. 0. 0. 0. 0. 0.8 7.2 36.2
   end atoms
   atoms 4
-    inside box -50 -50 1 50 50 23
-    outside cylinder 0. 0. 0. 0. 0. 0.8 8.2 23.2
+    inside box -50 -50 1 50 50 35.96
+    outside cylinder 0. 0. 0. 0. 0. 0.8 8.2 36.2
   end atoms
 end structure
+
+#structure surfactant.xyz
+#  number 545
+#  atoms 1
+#    inside box -50 -50 1 50 50 23
+#    inside cylinder 0. 0. 0. 0. 0. 0.8 7.4 23.2
+#    outside cylinder 0. 0. 0. 0. 0. 0.8 7.2 23.2
+#  end atoms
+#  atoms 4
+#    inside box -50 -50 1 50 50 23
+#    outside cylinder 0. 0. 0. 0. 0. 0.8 8.2 23.2
+#  end atoms
+#end structure
+
+
+#structure surfactant.xyz
+#  number 3000
+#  atoms 1
+#    inside box -50 -50 1 50 50 23
+#    inside cylinder 0. 0. 0. 0. 0. 0.8 7.4 23.2
+#  end atoms
+#end structure

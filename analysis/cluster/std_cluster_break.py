@@ -7,6 +7,20 @@ import matplotlib.pyplot as plt
 
 from mdpkg.rwfile import read_dat, Dat
 
+R = 8
+ratio = 48
+A = -50
+
+try:
+    surf_con = float(sys.argv[1])
+except IndexError:
+    surf_con = 1.0
+
+snap_time_t = 163
+snap_time_s = 94
+
+separation = 8
+
 path_to_save = os.getcwd()
 path_to_data = '/home/luishcc/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
@@ -14,21 +28,15 @@ path_to_data = '/home/luishcc/hdd/'
 # path_to_data = '/media/luis/luis-backup/hdd1-panos3/hdd/free_thread_results/'
 # path_to_data = '/home/luishcc/test/'
 
+path_to_data = '/home/luishcc/hdd/surfactant/new/'
+
 def get_snap(dir):
     with open(dir+'/breaktime.txt', 'r') as fd:
         snap = int(fd.readline())
     return snap
 
-R = 2
-ratio = 48
-A = -95
-
-snap_time_t = 45
-snap_time_s = 5
-
-separation = 1.7
-
-sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
+# sim_case = f'R{R}_ratio{ratio}_A{abs(A)}'
+sim_case = f'R{R}-{surf_con}'
 
 dir_in = path_to_data + sim_case
 
@@ -60,11 +68,11 @@ while os.path.isdir(ff):
     df = pd.read_csv(file_t)
     df2 = pd.read_csv(file_s)
 
-    df.drop(df[df['size'] <= 1].index, inplace=True)
-    df.drop(df[df['anisotropy'] > 0.2].index, inplace=True)
+    df.drop(df[df['size'] <= 8].index, inplace=True)
+    df.drop(df[df['anisotropy'] > 0.25].index, inplace=True)
 
-    df2.drop(df2[df2['size'] <= 1].index, inplace=True)
-    df2.drop(df2[df2['anisotropy'] > 0.2].index, inplace=True)
+    df2.drop(df2[df2['size'] <= 6].index, inplace=True)
+    df2.drop(df2[df2['anisotropy'] > 0.25].index, inplace=True)
 
     satellite = df2[df2['radius'] < separation]
     main = df[df['radius'] > separation]
@@ -85,4 +93,4 @@ while os.path.isdir(ff):
 
 avg = sum/n
 std = sumsq/n - avg**2
-print( avg, std, n)
+print("Avg: ", avg, "Var: ", std, "N: ", n)

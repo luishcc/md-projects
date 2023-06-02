@@ -7,12 +7,6 @@ from mdpkg.rwfile import DumpReader
 from math import floor
 
 
-# path_to_data = '/home/luishcc/hdd/'
-# path_to_data = '/home/luishcc/hdd/surfactant/'
-# path_to_data = '/home/luishcc/hdd/free_thread_old/'
-# path_to_data = '/home/luishcc/hdd/free_thread_new/'
-
-
 path_to_data = '/home/luishcc/md-projects/sim/radius-scaling/pure-liquid/'
 
 
@@ -24,20 +18,18 @@ grid = 1.0
 
 surf_con = 2.6
 
-n_sim=11
+n_sim=1
 
-data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n_sim}'
-data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n_sim}'
-data_case_dir = f'R{R}-{surf_con}/{n_sim}'
+# data_case_dir = f'R{R}_ratio{ratio}_A{A}-{n_sim}'
+# data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n_sim}'
+# data_case_dir = f'R{R}-{surf_con}/{n_sim}'
 
 data_case_dir = f'{n_sim}'
 
 dir = path_to_data + data_case_dir
 
-# file = 'thread.lammpstrj'
-# file = f'cylinder_{R}_{surf_con}.lammpstrj'
-
-file = 'pinch_A40.lammpstrj'
+# file = 'pinch_A40.lammpstrj'
+file = 'pinch_A80.lammpstrj'
 
 
 datafile = '/'.join([dir,file])
@@ -120,16 +112,12 @@ while os.path.isdir(dir):
 
     print(dir)
 
-    # a = check_file(dir + '/thread.lammpstrj')
-    # a = check_file(dir + f'/cylinder_{R}_{surf_con}.lammpstrj')
-    a = check_file(dir + f'/pinch_A40.lammpstrj')
+    a = check_file(dir + f'/{file}')
 
     with open(dir+'/breaktime.txt', 'w') as fd:
         fd.write(str(a))
 
     n_sim += 1
-    # data_case_dir = f'R{R}_ratio{ratio}_A{A}/{n_sim}'
-    # data_case_dir = f'R{R}-{surf_con}/{n_sim}'
     data_case_dir = f'{n_sim}'
 
 

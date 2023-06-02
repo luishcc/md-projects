@@ -8,6 +8,7 @@ import numpy as np
 
 path_to_data = '/home/luishcc/hdd/free_thread_old/'
 path_to_data = '/home/luishcc/hdd/surfactant/'
+path_to_data = '/home/luishcc/hdd/surfactant/new/'
 # path_to_data = '/home/luishcc/hdd/free_thread_new/'
 # path_to_data = '/home/luishcc/hdd/'
 
@@ -115,7 +116,7 @@ def fit(value):
 
 #############################################
 
-num = [i+1 for i in range(30)]
+num = [i+1 for i in range(20)]
 
 
 n = 1

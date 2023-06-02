@@ -186,12 +186,12 @@ ax1.legend(loc='upper right', ncol=3, handletextpad=.2, columnspacing=1, frameon
 
 # ax1.set_ylim(0,16)
 ax1.set_xlim(0.,4.5)
-ax1.set_xlabel(r'$2\pi R_0q$')
-ax1.set_ylabel(r'$\hat{G}(r,q)$')
+ax1.set_xlabel(r'$\chi $')
+ax1.set_ylabel(r'$\hat{G}(r,\chi)$')
 
 # ax2.set_ylim(0.3,0.8)
 ax2.set_xlim(0,6)
-ax2.set_xlabel(r'$\delta_z/2\pi R_0$')
+ax2.set_xlabel(r'$\delta_z/(2\pi R_0)$')
 ax2.set_ylabel(r'$G(r,\delta_z)$')
 
 
@@ -233,7 +233,7 @@ for iter1, r in enumerate(R):
             continue
     print(xrr[iter1], q, q_var)
 
-    ax.errorbar(x_plot, q, yerr = np.sqrt(q_var), fmt=plot_markers[iter1],ecolor = 'black' ,markersize=6.5, color=plot_colors2[iter1], capsize= 2, capthick=1, label='Simulation',#label=f'$R_0={r}$',
+    ax.errorbar(x_plot, q, yerr = 2*np.sqrt(np.array(q_var)/30), fmt=plot_markers[iter1],ecolor = 'black' ,markersize=6.5, color=plot_colors2[iter1], capsize= 2, capthick=1, label='Simulation',#label=f'$R_0={r}$',
     markerfacecolor='none')
 
 # ax.plot([100,3100], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theory')
@@ -245,7 +245,7 @@ ax.plot([3,52], [func(oh_data[0])]*2, color='black', linestyle='--', label='Theo
 #ax.plot(xr8, [i*red[1] for i in r8], 'bx--', markersize=9.5, markerfacecolor='none',label=r'$R_0=8$')
 #ax.plot(xr10, [i*red[2] for i in r10], 'gs--', markersize=8.5, markerfacecolor='none',label=r'$R_0=10$')
 
-# ax.set_ylim(0.3,0.76)
+ax.set_ylim(0.4,0.7)
 #ax.legend(loc=(0.55, 0.05), ncol=3)
 
 from matplotlib import container
@@ -255,7 +255,7 @@ handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in ha
 ax.legend(handles, labels, loc='lower right', ncol=2, handletextpad=.2, columnspacing=1, frameon=False)
 
 #ax.legend(loc='lower right', ncol=2)
-ax.set_xlabel(r'$L/2\pi R_0$' )
+ax.set_xlabel(r'$L/(2\pi R_0)$' )
 
 # Some ad hoc tweaks.
 

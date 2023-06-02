@@ -1,10 +1,10 @@
 #!/bin/bash
 
-MIN=11
+MIN=1
 MAX=20
 STEP=1
 
-N_MAX=3   # N_MAX < 16 (maximum number of cores on office machine)
+N_MAX=4   # N_MAX < 16 (maximum number of cores on office machine)
 
 for con in $(seq ${MIN} ${STEP} ${MAX} )
 do
