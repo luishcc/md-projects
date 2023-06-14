@@ -11,7 +11,7 @@ def read_sim(dir):
     min_r = []
     min_z = []
     breaktime = get_breaktime(dir)
-    for i in range(breaktime+10 ):
+    for i in range(breaktime+50):
         # file = f'{cwd}/{dir}/surface_profile/{i}.dat'
         file = f'{dir}/surface_profile/{i}.dat'
         with open(file, 'r') as fd:
@@ -21,13 +21,13 @@ def read_sim(dir):
         lst_z = [float(line[0]) for line in data]
         lst_r = [float(line[1]) for line in data]
         minR = min(lst_r)
-        if minR <= 1e-5:
+        if minR <= 1e-4:
             break
         minZ = lst_z[lst_r.index(minR)] 
-        min_r.append(minR/5.7)
+        min_r.append(minR/8.1)
         min_z.append(minZ)
-    print(i, breaktime)
     z0 = (min_z[0] + min_z[1] + min_z[2] + min_z[3])*0.25
+    print(i, breaktime, i-breaktime)
     return min_r, [abs(z-z0) for z in min_z], len(min_r)
 
 import matplotlib.pyplot as plt
@@ -47,8 +47,12 @@ mpl.rcParams.update(rc_fonts)
 fig, ax2 = plt.subplots(1,1, sharex = False)
 
 lists = []
+
 nn=20
-case = '/home/luishcc/hdd/radius_scaling/low-Oh'
+
+case = '/home/luishcc/hdd/radius_scaling/surfactant/1.6'
+# case = '/home/luishcc/hdd/radius_scaling/surfactant/2.3'
+# case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = 'high-Oh'
 for i in range(nn):
@@ -83,8 +87,9 @@ ax2.plot([len(mean)-j for j in range(len(mean))], mean, 'k-',
           linewidth=4)
 
 x0 = np.linspace(1,8,1000)
-x1 = np.linspace(40,140,1000)
+x1 = np.linspace(20,600,1000)
 x2 = np.linspace(150,600,1000)
+x3 = np.linspace(5,20,1000)
 
 tt = np.linspace(0,80,1000)
 tt2 = np.linspace(0,100,1000)
@@ -112,15 +117,17 @@ yt2 = [i**(1/3)/8 for i in tt2]
 # ax.plot(tt,yt, 'b--', linewidth=5, label=r'$(t_b-t){0.0709/Oh}$')
 # ax.plot(tt2,yt2, 'g--', linewidth=5, label=r'$(t_b-t)^{1/3}$')
 
-y0 = [i**0.1/10 for i in x0]
+y0 = [i**0.1/7 for i in x0]
 # y0 = [i**0.333/25 for i in x0]
-y1 = [i**0.47/45 for i in x1]
+y1 = [i**0.42/13 for i in x1]
 # y1 = [i**0.5/38 for i in x1]
-y2 = [(i**.61)/60 for i in x2]
+y2 = [(i**.666)/90 for i in x2]
+y3 = [(i**.333)/15 for i in x3]
 
 ax2.plot(x0,y0, 'y--', linewidth=5, label=r'$(t_b-t)^{0.1}$')
-ax2.plot(x1,y1, 'g--', linewidth=5, label=r'$(t_b-t)^{0.48}$')
-ax2.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{0.61}$')
+ax2.plot(x1,y1, 'g--', linewidth=5, label=r'$(t_b-t)^{0.42}$')
+# ax2.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{0.666}$')
+# ax2.plot(x3,y3, 'r--', linewidth=5, label=r'$(t_b-t)^{0.333}$')
 
 # ax.errorbar([i for i in range(len(mean))], mean, yerr=variance**(1/2))
 
@@ -132,8 +139,8 @@ ax2.set_xlabel(r'$(t_b-t)$')
 ax2.legend(frameon=False)
 
 plt.tight_layout()
-plt.savefig(f'low.pdf', dpi=dpi)
-# plt.savefig(f'high.pdf', dpi=dpi)
+plt.savefig(f'surfactant-1.6.pdf', dpi=dpi)
+# plt.savefig(f'surfactant-2.3.pdf', dpi=dpi)
 
 # plt.show()
 
@@ -145,7 +152,7 @@ plt.figure()
 mean2 = mean
 
 dy = np.gradient(np.log(mean2), np.log(times), edge_order=2)
-w = savgol_filter( dy, 100, 3)
+w = savgol_filter( dy, 50, 4)
 
 plt.semilogx(times, dy)
 plt.plot(times, w)
