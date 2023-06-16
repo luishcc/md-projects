@@ -11,7 +11,7 @@ def read_sim(dir):
     min_r = []
     min_z = []
     breaktime = get_breaktime(dir)
-    for i in range(breaktime+50):
+    for i in range(breaktime+5):
         # file = f'{cwd}/{dir}/surface_profile/{i}.dat'
         file = f'{dir}/surface_profile/{i}.dat'
         with open(file, 'r') as fd:
@@ -56,15 +56,20 @@ case = '/home/luishcc/hdd/radius_scaling/surfactant/1.6'
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = 'high-Oh'
 for i in range(nn):
+    if i <19 or i>29 or i==0:
+        continue
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
     lists.append(r)
     # ax.plot([t-j for j in range(t)], r, 'c--',
     #           linewidth=1, markerfacecolor='none')
-    ax2.loglog([t-j for j in range(t)], r, 'c--',
-              linewidth=1, markerfacecolor='none')
+    # ax2.loglog([t-j for j in range(t)], r, 'c--',
+    #           linewidth=1, markerfacecolor='none')
+    ax2.loglog([t-j for j in range(t)], r, 
+            linewidth=1, markerfacecolor='none', label=i+1)
     # ax2.plot([j for j in range(t)], z, markerfacecolor='none', label=i)
 
+ax2.legend()
 mean = []
 for i in range(max([len(l) for l in lists])):
     temp = []
@@ -139,7 +144,7 @@ ax2.set_xlabel(r'$(t_b-t)$')
 ax2.legend(frameon=False)
 
 plt.tight_layout()
-plt.savefig(f'surfactant-1.6.pdf', dpi=dpi)
+# plt.savefig(f'surfactant-1.6.pdf', dpi=dpi)
 # plt.savefig(f'surfactant-2.3.pdf', dpi=dpi)
 
 # plt.show()
