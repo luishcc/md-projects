@@ -51,25 +51,26 @@ lists = []
 nn=20
 
 case = '/home/luishcc/hdd/radius_scaling/surfactant/0.5'
+# case = '/home/luishcc/hdd/radius_scaling/surfactant/1.6'
 # case = '/home/luishcc/hdd/radius_scaling/surfactant/2.3'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = 'high-Oh'
 for i in range(nn):
-    if i <0 or i>29 or i==-1:
-        continue
+    # if i ==1 or i==17 or i==13:
+    #     continue
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
     lists.append(r)
     # ax.plot([t-j for j in range(t)], r, 'c--',
     #           linewidth=1, markerfacecolor='none')
-    # ax2.loglog([t-j for j in range(t)], r, 'c--',
-    #           linewidth=1, markerfacecolor='none')
-    ax2.loglog([t-j for j in range(t)], r, 
-            linewidth=1, markerfacecolor='none')
+    ax2.loglog([t-j for j in range(t)], r, 'c--',
+              linewidth=1, markerfacecolor='none')
+    # ax2.loglog([t-j for j in range(t)], r, 
+    #         linewidth=1, markerfacecolor='none')
     # ax2.plot([j for j in range(t)], z, markerfacecolor='none', label=i)
 
-ax2.legend()
+# ax2.legend()
 mean = []
 for i in range(max([len(l) for l in lists])):
     temp = []
@@ -91,10 +92,10 @@ ax2.plot([len(mean)-j for j in range(len(mean))], mean, 'k-',
           markerfacecolor='none', label='Mean',
           linewidth=4)
 
-x0 = np.linspace(1,8,1000)
-x1 = np.linspace(20,600,1000)
-x2 = np.linspace(150,600,1000)
-x3 = np.linspace(5,20,1000)
+x0 = np.linspace(1,4,1000)
+x1 = np.linspace(5,20,1000)
+x2 = np.linspace(18, 130,1000)
+x3 = np.linspace(10,35,1000)
 
 tt = np.linspace(0,80,1000)
 tt2 = np.linspace(0,100,1000)
@@ -122,16 +123,16 @@ yt2 = [i**(1/3)/8 for i in tt2]
 # ax.plot(tt,yt, 'b--', linewidth=5, label=r'$(t_b-t){0.0709/Oh}$')
 # ax.plot(tt2,yt2, 'g--', linewidth=5, label=r'$(t_b-t)^{1/3}$')
 
-y0 = [i**0.1/7 for i in x0]
+y0 = [i**0.1/8 for i in x0]
 # y0 = [i**0.333/25 for i in x0]
-y1 = [i**0.42/13 for i in x1]
+y1 = [i**0.42/20 for i in x1]
 # y1 = [i**0.5/38 for i in x1]
-y2 = [(i**.666)/90 for i in x2]
-y3 = [(i**.333)/15 for i in x3]
+y2 = [(i**.666)/30 for i in x2]
+y3 = [(i**.333)/14 for i in x3]
 
 ax2.plot(x0,y0, 'y--', linewidth=5, label=r'$(t_b-t)^{0.1}$')
 ax2.plot(x1,y1, 'g--', linewidth=5, label=r'$(t_b-t)^{0.42}$')
-# ax2.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{0.666}$')
+ax2.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{0.666}$')
 # ax2.plot(x3,y3, 'r--', linewidth=5, label=r'$(t_b-t)^{0.333}$')
 
 # ax.errorbar([i for i in range(len(mean))], mean, yerr=variance**(1/2))
@@ -145,6 +146,7 @@ ax2.legend(frameon=False)
 
 plt.tight_layout()
 # plt.savefig(f'surfactant-1.6.pdf', dpi=dpi)
+plt.savefig(f'surfactant-0.5.pdf', dpi=dpi)
 # plt.savefig(f'surfactant-2.3.pdf', dpi=dpi)
 
 # plt.show()
