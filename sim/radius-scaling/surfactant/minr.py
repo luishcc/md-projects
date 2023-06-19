@@ -50,13 +50,13 @@ lists = []
 
 nn=20
 
-case = '/home/luishcc/hdd/radius_scaling/surfactant/1.6'
+case = '/home/luishcc/hdd/radius_scaling/surfactant/0.5'
 # case = '/home/luishcc/hdd/radius_scaling/surfactant/2.3'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = 'high-Oh'
 for i in range(nn):
-    if i <19 or i>29 or i==0:
+    if i <0 or i>29 or i==-1:
         continue
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
@@ -66,7 +66,7 @@ for i in range(nn):
     # ax2.loglog([t-j for j in range(t)], r, 'c--',
     #           linewidth=1, markerfacecolor='none')
     ax2.loglog([t-j for j in range(t)], r, 
-            linewidth=1, markerfacecolor='none', label=i+1)
+            linewidth=1, markerfacecolor='none')
     # ax2.plot([j for j in range(t)], z, markerfacecolor='none', label=i)
 
 ax2.legend()
