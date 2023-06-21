@@ -50,14 +50,14 @@ lists = []
 
 nn=20
 
-case = '/home/luishcc/hdd/radius_scaling/surfactant/0.5'
-# case = '/home/luishcc/hdd/radius_scaling/surfactant/1.6'
-# case = '/home/luishcc/hdd/radius_scaling/surfactant/2.3'
+sc = 2.3
+
+case = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = 'high-Oh'
 for i in range(nn):
-    # if i ==1 or i==17 or i==13:
+    # if i==17 :
     #     continue
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
@@ -93,7 +93,7 @@ ax2.plot([len(mean)-j for j in range(len(mean))], mean, 'k-',
           linewidth=4)
 
 x0 = np.linspace(1,4,1000)
-x1 = np.linspace(5,20,1000)
+x1 = np.linspace(10,350,1000)
 x2 = np.linspace(18, 130,1000)
 x3 = np.linspace(10,35,1000)
 
@@ -132,7 +132,7 @@ y3 = [(i**.333)/14 for i in x3]
 
 ax2.plot(x0,y0, 'y--', linewidth=5, label=r'$(t_b-t)^{0.1}$')
 ax2.plot(x1,y1, 'g--', linewidth=5, label=r'$(t_b-t)^{0.42}$')
-ax2.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{0.666}$')
+# ax2.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{0.666}$')
 # ax2.plot(x3,y3, 'r--', linewidth=5, label=r'$(t_b-t)^{0.333}$')
 
 # ax.errorbar([i for i in range(len(mean))], mean, yerr=variance**(1/2))
@@ -145,9 +145,7 @@ ax2.set_xlabel(r'$(t_b-t)$')
 ax2.legend(frameon=False)
 
 plt.tight_layout()
-# plt.savefig(f'surfactant-1.6.pdf', dpi=dpi)
-plt.savefig(f'surfactant-0.5.pdf', dpi=dpi)
-# plt.savefig(f'surfactant-2.3.pdf', dpi=dpi)
+plt.savefig(f'surfactant-{sc}.pdf', dpi=dpi)
 
 # plt.show()
 
