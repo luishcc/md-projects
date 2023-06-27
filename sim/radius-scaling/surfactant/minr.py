@@ -11,7 +11,7 @@ def read_sim(dir):
     min_r = []
     min_z = []
     breaktime = get_breaktime(dir)
-    for i in range(breaktime+5):
+    for i in range(breaktime+100):
         # file = f'{cwd}/{dir}/surface_profile/{i}.dat'
         file = f'{dir}/surface_profile/{i}.dat'
         with open(file, 'r') as fd:
@@ -27,7 +27,7 @@ def read_sim(dir):
         min_r.append(minR/8.1)
         min_z.append(minZ)
     z0 = (min_z[0] + min_z[1] + min_z[2] + min_z[3])*0.25
-    print(i, breaktime, i-breaktime)
+    print(i, breaktime, i-breaktime, dir)
     return min_r, [abs(z-z0) for z in min_z], len(min_r)
 
 import matplotlib.pyplot as plt
@@ -50,14 +50,15 @@ lists = []
 
 nn=20
 
-sc = 2.3
+sc = 2.9
 
 case = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = 'high-Oh'
 for i in range(nn):
-    # if i==17 :
+    # if i in [13, 15] :
+    # # if i !=0:
     #     continue
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
