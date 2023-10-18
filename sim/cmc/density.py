@@ -66,18 +66,45 @@ data = data/count
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 dpi = 1600
-side = 7
+side = 7*0.8/0.4
 rc_fonts = {
     "font.family": "serif",
     "font.size": 12,
-    'figure.figsize': (0.5*side, 0.4*side),
+    'figure.figsize': (0.35*side, 0.2*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
 
 
+def rho(z,  r, d):
+    return 6.05*0.5*(1-np.tanh(2*(z-r)/d))
+
+num2=50
+ini = floor(len(data)/2)
+from scipy.optimize import curve_fit
+pars, cov = curve_fit(f=rho, 
+                      xdata=np.linspace(0,num2,num2)*sz, 
+                      ydata=data[ini:ini+num2,3], 
+                      p0=[10, 2], bounds=(-np.inf, np.inf))
+
+# fig, ax = plt.subplots(1,1)
+# num2=0
+# ini = 110
+# ax.plot(np.linspace(0,num2,num2)*sz, data[ini:ini+num2,3])
+# plt.show()
+
+
+stdevs = np.sqrt(np.diag(cov))
+
+
 z = np.linspace(-lz/2,lz/2,num)
 
+print(pars)
+with open(f'sim/{sc}/interface.dat', 'w') as fd:
+    fd.write('R0 thickness\n')
+    fd.write(f'{pars[0]} {pars[1]}')
+
+exit()
 fig, ax = plt.subplots(1,1)
 
 # z = z-35
@@ -86,9 +113,13 @@ ax.plot(z, data[:,3], 'b-', label='W', markerfacecolor='none')
 ax.plot(z, data[:,1], 'r-.', label='H', markerfacecolor='none')
 ax.plot(z, data[:,2], 'y--', label='T', markerfacecolor='none')
 # ax.plot(z, data[:,2]+data[:,1], 'r--', label='surfactant')
+ax.plot([pars[1]]*2, [0,pars[0]], 'k-')
+ax.plot([pars[1]-pars[2]*0.5]*2, [0,pars[0]], 'k--')
+ax.plot([pars[1]+pars[2]*0.5]*2, [0,pars[0]], 'k--')
+
 # ax.set_xlim(-20, 20)
-ax.set_xlim(0, 15)
-ax.set_ylim(0, 6.3)
+ax.set_xlim(6, 13.5)
+# ax.set_ylim(0, 6.3)
 ax.set_ylabel(r'$\rho$ $[N/V]$')
 ax.set_xlabel(r'$z$ [$r_c$]')
 # ax.text(-18,5, fr'$\phi = {round(con/4,2)}$')

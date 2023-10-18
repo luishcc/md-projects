@@ -8,7 +8,7 @@ side = 7
 rc_fonts = {
     "font.family": "serif",
     "font.size": 12,
-    'figure.figsize': (0.8*side, 0.9*side),
+    'figure.figsize': (0.8*side, 0.6*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
