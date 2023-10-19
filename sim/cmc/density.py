@@ -66,11 +66,11 @@ data = data/count
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 dpi = 1600
-side = 7*0.8/0.4
+side = 7
 rc_fonts = {
     "font.family": "serif",
     "font.size": 12,
-    'figure.figsize': (0.35*side, 0.2*side),
+    'figure.figsize': (.8*side, 0.6*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
@@ -87,11 +87,35 @@ pars, cov = curve_fit(f=rho,
                       ydata=data[ini:ini+num2,3], 
                       p0=[10, 2], bounds=(-np.inf, np.inf))
 
-# fig, ax = plt.subplots(1,1)
-# num2=0
-# ini = 110
-# ax.plot(np.linspace(0,num2,num2)*sz, data[ini:ini+num2,3])
-# plt.show()
+print(pars)
+# with open(f'sim/{sc}/interface.dat', 'w') as fd:
+#     fd.write('R0 thickness\n')
+#     fd.write(f'{pars[0]} {pars[1]}')
+
+
+con_lst = []
+sc_lst =  []
+
+for entry in os.scandir('sim'):
+    if not entry.is_dir():
+        continue
+    
+    scc = float(entry.name)
+    sc_lst.append(scc)
+  
+    with open(f'{entry.path}/interface.dat', 'r') as fd:
+        fd.readline()
+        line = fd.readline()
+        line = line.split(' ')
+        con = float(line[1])
+    con_lst.append(con)
+
+
+zip_lst = zip(sc_lst,  con_lst)
+sort_lst = sorted(zip_lst)
+tuples = zip(*sort_lst)
+sc_lst, con_lst = [list(tuple) for tuple in tuples]
+
 
 
 stdevs = np.sqrt(np.diag(cov))
@@ -99,30 +123,44 @@ stdevs = np.sqrt(np.diag(cov))
 
 z = np.linspace(-lz/2,lz/2,num)
 
-print(pars)
-with open(f'sim/{sc}/interface.dat', 'w') as fd:
-    fd.write('R0 thickness\n')
-    fd.write(f'{pars[0]} {pars[1]}')
 
-exit()
-fig, ax = plt.subplots(1,1)
 
-# z = z-35
-# ax.plot(z, data[:,0], 'k-', label='total')
+# exit()
+
+fig, axx = plt.subplots(1,1)
+
+from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition)
+ax = plt.axes([0,0,1,1])
+ip = InsetPosition(ax, [0.35,0.18,0.62,0.65])
+ax.set_axes_locator(ip)
+
+
+axx.set_xlabel(r'C [$N_t/A_s$]')
+axx.set_ylabel(r'$\delta$ [$r_c$]')
+axx.plot(sc_lst, con_lst, 'kx', markerfacecolor='none')
+
+axx.annotate('CMC', xy=(1.7, 1.9), xytext=(0.8, 1.8),
+            arrowprops=dict(facecolor='black', shrink=0.05))
+
+
+
 ax.plot(z, data[:,3], 'b-', label='W', markerfacecolor='none')
-ax.plot(z, data[:,1], 'r-.', label='H', markerfacecolor='none')
-ax.plot(z, data[:,2], 'y--', label='T', markerfacecolor='none')
-# ax.plot(z, data[:,2]+data[:,1], 'r--', label='surfactant')
-ax.plot([pars[1]]*2, [0,pars[0]], 'k-')
-ax.plot([pars[1]-pars[2]*0.5]*2, [0,pars[0]], 'k--')
-ax.plot([pars[1]+pars[2]*0.5]*2, [0,pars[0]], 'k--')
+ax.plot(z, data[:,1], 'r-o', label='H', markerfacecolor='none')
+ax.plot(z, data[:,2], 'g-s', label='T', markerfacecolor='none')
+
+ax.plot([pars[0]]*2, [0,6], 'k-.')
+ax.plot([pars[0]-pars[1]*0.5]*2, [0,6], 'k--')
+ax.plot([pars[0]+pars[1]*0.5]*2, [0,6], 'k--')
 
 # ax.set_xlim(-20, 20)
 ax.set_xlim(6, 13.5)
-# ax.set_ylim(0, 6.3)
+ax.set_ylim(-0.02, 6.2)
 ax.set_ylabel(r'$\rho$ $[N/V]$')
 ax.set_xlabel(r'$z$ [$r_c$]')
-# ax.text(-18,5, fr'$\phi = {round(con/4,2)}$')
+
+# ax.text(pars[0],6.5, fr'$R_0$')
+# ax.text(pars[0],6.5, fr'$\delta_0$')
+
 ax.legend(frameon=False, loc='center left')
 
 plt.tight_layout()
