@@ -10,7 +10,7 @@ dz = 2.
 dr = 0.5
 
 file =  'pinch_sc0.5.lammpstrj'
-dir = '0.2'
+dir = '1'
 
 datafile = '/'.join([dir,file])
 save_dir = f'{dir}/surface_profile'
