@@ -50,37 +50,35 @@ def get_surface(time):
             line = line.split(' ')
             z.append(float(line[0]))
             h.append(float(line[1]))
-    return (z,h)
+    return z, h
               
 
-for t in range(1, breaktime):
-    print(snap.time)
-    print(t)
+def run_snapshot(snapshot):  
 
     bins = {}
-    snap = trj.snap
-    for atom in snap.atoms.values():
+    n_bulk = {}
+    n_surface = {}
+    surface_z, surface_h = get_surface(snap.time)
+    center = centers[snap.time]
+
+    for atom in snapshot.atoms.values():
+
         idz = floor(abs(atom.position[2]) / dz)
         bins.setdefault(idz, []).append(atom)
 
-    surface_z, surface_h = get_surface(snap.time)
-    center = centers[snap.time]
-    for bin, atoms in sorted(bins.items()):
-        print('\n', bin)
-        for atom in atoms:
-            r = np.sqrt((atom.position[0]-center[0])**2 + (atom.position[1]-center[1])**2)
-            thickness_plus = surface_h[bin] + 0.25*surface_thickness
-            thickness_minus = surface_h[bin] - 0.85*surface_thickness
+        r = np.sqrt((atom.position[0]-center[0])**2 + (atom.position[1]-center[1])**2)
+        thickness_plus = surface_h[idz] + 0.25*surface_thickness
+        thickness_minus = surface_h[idz] - 0.85*surface_thickness 
+        key = (idz, atom.type)
+        if thickness_minus < r < thickness_plus:
+            n_surface[key] = n_surface.setdefault(key, 0) + 1
+        elif r <= thickness_minus:
+            n_bulk[key] = n_bulk.setdefault(key, 0) + 1
 
-            
-
-            annuli.setdefault(idr, []).append(atom)
-            density.setdefault(idr, [dr*(idr+0.5), (2*idr+1)*dr**2*dz*np.pi, 0])
-            density[idr][2] += 1 / density[idr][1]
-               
-    trj.read_next()
+    return n_bulk, n_surface, bins
 
 
-
+def run_avg(num):
+    pass
 
 
