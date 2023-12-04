@@ -25,7 +25,8 @@ def read_sim(dir):
 
 case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
-nn = 2
+case = '/home/luishcc/hdd/radius_scaling/surfactant/2.9'
+nn = 7
 shape = read_sim(f'{case}/{nn}')
 
 
@@ -40,10 +41,10 @@ class PauseAnimation:
         self.line = ax.plot(shape[0][1], shape[0][0], 'b-', label=f'Snapshot = 0')[0]
         self.line2 = ax.plot(shape[0][1], -shape[0][0], 'b-')[0]
         ax.set(ylim=[-12, 12], xlabel='z', ylabel='h')
-        self.legend = ax.legend()
+        self.legend = ax.legend(loc='upper left')
                
         self.animation = animation.FuncAnimation(
-            fig, self.update, frames=len(shape), interval=.1, blit=True)
+            fig, self.update, frames=len(shape), interval=2, blit=True)
         self.paused = False
 
         fig.canvas.mpl_connect('button_press_event', self.toggle_pause)

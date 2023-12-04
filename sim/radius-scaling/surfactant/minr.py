@@ -50,16 +50,15 @@ lists = []
 
 nn=20
 
-sc = 2.9
+sc = 0.5
 
 case = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = 'high-Oh'
 for i in range(nn):
-    # if i in [13, 15] :
-    # # if i !=0:
-    #     continue
+    if i < 0 or i < 0   :
+        continue
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
     lists.append(r)
@@ -104,6 +103,9 @@ tt2 = np.linspace(0,100,1000)
 def f(t, b, c):
     return b*t**0.333 + c
 
+ax2.plot([0.4, 800], [(0.36*8)**.5/8]*2, 'k--')
+ax2.plot([0.4, 800], [(0.56*8)**.5/8]*2, 'b--')
+
 Oh = 0.762
 # Oh = 0.289
 
@@ -146,23 +148,23 @@ ax2.set_xlabel(r'$(t_b-t)$')
 ax2.legend(frameon=False)
 
 plt.tight_layout()
-plt.savefig(f'surfactant-{sc}.pdf', dpi=dpi)
-
-# plt.show()
-
-from scipy.signal import savgol_filter
-
-plt.figure()
-
-# mean2 = savgol_filter( mean, 100, 5)
-mean2 = mean
-
-dy = np.gradient(np.log(mean2), np.log(times), edge_order=2)
-w = savgol_filter( dy, 50, 4)
-
-plt.semilogx(times, dy)
-plt.plot(times, w)
-
-plt.ylim(-0.2,0.8)
+# plt.savefig(f'surfactant-{sc}.pdf', dpi=dpi)
 
 plt.show()
+
+# from scipy.signal import savgol_filter
+
+# plt.figure()
+
+# # mean2 = savgol_filter( mean, 100, 5)
+# mean2 = mean
+
+# dy = np.gradient(np.log(mean2), np.log(times), edge_order=2)
+# w = savgol_filter( dy, 50, 4)
+
+# plt.semilogx(times, dy)
+# plt.plot(times, w)
+
+# plt.ylim(-0.2,0.8)
+
+# plt.show()

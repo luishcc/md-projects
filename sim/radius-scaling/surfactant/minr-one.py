@@ -1,14 +1,20 @@
 import os
 import numpy as np
 
-with open(f'1/breaktime.txt', 'r') as fd:
+
+sc = 2.9
+num = 7
+
+case = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
+
+with open(f'{case}/{num}/breaktime.txt', 'r') as fd:
     breaktime = int(fd.readline())
 
 cwd = os.getcwd()
 min_r = []
 min_z = []
-for i in range(breaktime-2):
-    file = f'1/surface_profile/{i}.dat'
+for i in range(breaktime + 10):
+    file = f'{case}/{num}/surface_profile/{i}.dat'
     try:
         with open(file, 'r') as fd:
             next(fd)
