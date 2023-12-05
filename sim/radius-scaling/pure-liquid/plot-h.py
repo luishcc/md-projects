@@ -26,8 +26,10 @@ def read_sim(dir):
 case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 case = '/home/luishcc/hdd/radius_scaling/surfactant/2.9'
+# case = '/home/luishcc/md-projects/sim/radius-scaling/surfactant/0.5'
 nn = 7
 shape = read_sim(f'{case}/{nn}')
+# shape = read_sim(f'{case}')
 
 
 import matplotlib.pyplot as plt
@@ -40,7 +42,7 @@ class PauseAnimation:
         
         self.line = ax.plot(shape[0][1], shape[0][0], 'b-', label=f'Snapshot = 0')[0]
         self.line2 = ax.plot(shape[0][1], -shape[0][0], 'b-')[0]
-        ax.set(ylim=[-12, 12], xlabel='z', ylabel='h')
+        ax.set(ylim=[-15, 15], xlabel='z', ylabel='h')
         self.legend = ax.legend(loc='upper left')
                
         self.animation = animation.FuncAnimation(

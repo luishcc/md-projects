@@ -2,8 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 dir = '0.5'
+dir = '/home/luishcc/hdd/radius_scaling/surfactant/2.3/15'
+# dir = '/home/luishcc/hdd/radius_scaling/surfactant/1.6/16'
 
-time = 240
+time = 580
+time = 1080
 con = {}
 with open(f'{dir}/surface_concentration/{time}.dat') as fd:
     fd.readline()
@@ -34,20 +37,22 @@ with open(f'{dir}/surface_profile/{time}.dat') as fd:
     dz = -float(line[0])
     line = fd.readline().split(' ')
     dz += float(line[0])
+print(dz)
+
 with open(f'{dir}/surface_profile/{time}.dat') as fd:
     fd.readline()
     fd.readline()
     for id_z, line in enumerate(fd):
         line = line.split(' ')
-        radius = float(line[1])-1
+        radius = float(line[1])
+        # if radius < 0:
+        #     radius = abs(radius)
         area = 2*np.pi*radius*dz
         volume = np.pi*radius**2*dz
-        print(radius, dz, area, volume)
+        print(id_z, radius, dz, area, volume)
         areas.append(area)        
         volumes.append(volume)      
         shape.append(radius)  
-
-print(dz)
 
 # Dict where each atom type is a key and 
 # value is a list of lists [[binID, numAtoms], ...]        
@@ -63,10 +68,15 @@ types =  {1:'H', 2:'T', 3:'W'}
 color = {1:'r--', 2:'g--', 3:'b--'}
 color2 = {1:'r-', 2:'g-', 3:'b-'}
 
+temp = con[2][:,1] + con[1][:,1]
 for type, values in con.items():
-    ax.plot(values[:,0], values[:,1]/areas, color[type], label=types[type])
+    if type == 3: continue
+    # ax.plot(values[:,0], values[:,1]/areas, color[type], label=f'{types[type]} Surface')
+
+ax.plot(values[:,0], temp/areas/4, color[type], label=f'Surface')
 for type, values in con_bulk.items():
-    ax.plot(values[:,0], values[:,1]/volumes, color2[type], label=types[type])    
+    if type == 3: continue
+    ax.plot(values[:,0], values[:,1]/volumes/max(values[:,1]/volumes), color2[type], label=f'{types[type]} Bulk')    
 
 ids = np.linspace(0,1,len(shape))
 ax2.plot(ids, volumes/volumes.max(), label='Volume')

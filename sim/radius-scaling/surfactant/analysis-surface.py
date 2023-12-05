@@ -4,15 +4,20 @@ from math import floor
 import numpy as np
 from mdpkg.rwfile import DumpReader, Dat
 
+#############################################################
+# Some directories and analysis properties definitions
+
 try:
     sc = sys.argv[1]
 except:
-    sc = '0.5'
+    sc = '2.3'
 
 concentration = sc.split('/')[0]
 
 file =  f'pinch_sc{concentration}.lammpstrj'
 dir = sc
+
+
 print(dir)
 
 if concentration == '0.5':
@@ -37,20 +42,43 @@ with open(f'{dir}/breaktime.txt', 'r') as fd:
 
 trj = DumpReader(datafile)
 trj.read_sequential()
-# trj.skip_next(50)
-# trj.read_next()
+trj.skip_next(300)
+trj.read_next()
 
 lz = trj.snap.box.get_length_z()
 num_z = round(lz/dz)
 dz = lz/num_z
 z = np.linspace(0, lz, num_z)
 
+# Nothing important in the analysis until this point
+#############################################################
+
+
+#############################################################
+# The cylinder can move sometimes in the xy plane,
+# Centers is a dict that stores the cylinder's center position
+#
+# centers[<timestep>] = [X, Y]
+#
+# OBS: center.dat file stores simulation timestep value and not 
+# the snapshot number
+ 
 centers = {}
 with open(f'{dir}/surface_profile/center.dat', 'r') as fd:
     fd.readline()
     for line in fd:
         line = line.split(' ')
         centers[int(line[0])] = [float(line[1]), float(line[2])]
+# print(centers)
+
+#############################################################
+
+# Code working until this point, 
+# possible sources of error in results:
+# - Computing the cylinder's center with ovito (center.dat)
+# - Not tracking center of each bin separetly
+
+#############################################################
 
 def get_surface(time):
     time_id = int((time - min(centers.keys())) * .01)
