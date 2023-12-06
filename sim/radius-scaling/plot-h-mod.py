@@ -8,6 +8,7 @@ def get_breaktime(dir):
 
 def read_sim(dir):
     shape = {}
+    shift = 0
     breaktime = get_breaktime(dir)
     for i in range(breaktime + 10):
         h = []
@@ -22,12 +23,14 @@ def read_sim(dir):
                 data = line.split()
                 h.append(float(data[1]))
                 z.append(float(data[0]))
-            h = np.array(h)
-            z = np.array(z)
-            minH_id = h.argmin()
-            maxH_id = h.argmax()
-            dd = maxH_id - minH_id
-        shape[i] = [h, z]
+        h = np.array(h)
+        z = np.array(z)
+        # if not shift: shift = int(np.floor(len(h)/2)) - minH_id
+        # if not shift: shift = -h.argmax()
+        # h = np.roll(h, shift)
+        shape[i] = [h, (z+0.5)*1.2019]
+        shift = int(np.floor(len(h)/2)) - h.argmin()
+    shape = { i: [np.roll(j[0], shift), j[1]] for i, j in shape.items() }
     return shape 
 
 
@@ -51,7 +54,8 @@ class PauseAnimation:
         
         self.line = ax.plot(shape[0][1], shape[0][0], 'b-', label=f'Snapshot = 0')[0]
         self.line2 = ax.plot(shape[0][1], -shape[0][0], 'b-')[0]
-        ax.set(ylim=[-16, 16], xlabel='z', ylabel='h')
+        ax.set(ylim=[-18, 18], xlabel='z', ylabel='h')
+        ax.set_aspect('equal', adjustable='box')
         self.legend = ax.legend(loc='upper left')
                
         self.animation = animation.FuncAnimation(
