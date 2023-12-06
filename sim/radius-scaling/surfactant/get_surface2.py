@@ -6,14 +6,14 @@ from ovito.io import *
 from ovito.modifiers import *
 
 grid = 1.2
-sc = 2.9
+sc = 0.5
 
 file =  f'pinch_sc{sc}.lammpstrj'
 dir = str(sc)
 
-save_dirs = {'profile': f'{dir}/surface_profile2',
-             'surf_con': f'{dir}/surface_concentration2',
-             'bulk_con': f'{dir}/bulk_concentration2'}
+save_dirs = {'profile': f'{dir}/surface_profile',
+             'surf_con': f'{dir}/surface_concentration',
+             'bulk_con': f'{dir}/bulk_concentration'}
 
 for sdir in save_dirs.values():
     if not os.path.exists(sdir):
@@ -28,17 +28,13 @@ surf_mod = ConstructSurfaceModifier(
     select_surface_particles = True)
 pipeline.modifiers.append(surf_mod)
 
-# invSel_mod = InvertSelectionModifier()
-# delSel_mod = DeleteSelectedModifier()
-# pipeline.modifiers.append(invSel_mod)
-# pipeline.modifiers.append(delSel_mod)
-
 with open(f'{dir}/breaktime.txt', 'r') as fd:
     breaktime = int(fd.readline())
 
-for i in range(breaktime+10):
-    print(i)
-    data = pipeline.compute(i)
+for frame in range(330, pipeline.source.num_frames):
+    print(frame)
+    data = pipeline.compute(frame)
+  
     surface_positions = data.particles_.positions_[data.particles_.selection != 0]
     positions = data.particles_.positions_
     types = data.particles.particle_types
@@ -47,9 +43,9 @@ for i in range(breaktime+10):
     num_z = round(lz/grid)
     dz = lz/num_z
 
-    sum_x = np.zeros(num_z)
-    sum_y = np.zeros(num_z)
-    id_count = np.zeros(num_z)
+    sum_x = np.zeros(num_z, dtype='int32')
+    sum_y = np.zeros(num_z, dtype='int32')
+    id_count = np.zeros(num_z, dtype='int32')
     surf_bins = {}
     for p in surface_positions:
         id = int(np.floor(abs(p[2])/dz))
@@ -60,7 +56,9 @@ for i in range(breaktime+10):
         xy = [p[0], p[1]]
         surf_bins.setdefault(id, []).append(xy)
 
+    if not id_count.all() : break
     centers = [sum_x/id_count, sum_y/id_count]
+
     h = np.zeros(num_z)
     for id, coords in surf_bins.items():
         x0 = centers[0][id]
@@ -79,30 +77,32 @@ for i in range(breaktime+10):
         y0 = centers[1][id_z]
         radius = np.sqrt((pos[0]-x0)**2 + (pos[1]-y0)**2)
         interface = h[id_z]
-        # area = 2*np.pi*interface*dz
-        # volume = np.pi*interface**2*dz
         thickness = 1.5
-        if interface - thickness < radius < interface + thickness:
-            surf_con[id_z] += 1
         if radius < interface - thickness:
             bulk_con[id_z] += 1
-
-    with open(f'{save_dirs["profile"]}/{i}.dat', 'w') as fd:
-        fd.write((f'# id radius center_X center_Y --dz={dz}\n'))
+            continue
+        if interface - thickness < radius < interface + thickness:
+            surf_con[id_z] += 1
+                
+    with open(f'{save_dirs["profile"]}/{frame}.dat', 'w') as fd:
+        fd.write((f'# id radius center_X center_Y --dz={dz} --N={num_z}\n'))
         for id in range(num_z):
             x0 = centers[0][id]
             y0 = centers[1][id]
             fd.write(f'{id} {h[id]} {x0} {y0}\n')
     
-    with open(f'{save_dirs["surf_con"]}/{i}.dat', 'w') as fd:
-        fd.write((f'# id con --dz={dz}\n'))
+    with open(f'{save_dirs["surf_con"]}/{frame}.dat', 'w') as fd:
+        fd.write((f'# id con --dz={dz} --N={num_z}\n'))
         for id in range(num_z):
             y0 = centers[1][id]
             fd.write(f'{id} {surf_con[id]}\n')
 
-    with open(f'{save_dirs["bulk_con"]}/{i}.dat', 'w') as fd:
-        fd.write((f'# id con --dz={dz}\n'))
+    with open(f'{save_dirs["bulk_con"]}/{frame}.dat', 'w') as fd:
+        fd.write((f'# id con --dz={dz} --N={num_z}\n'))
         for id in range(num_z):
             y0 = centers[1][id]
             fd.write(f'{id} {bulk_con[id]}\n')
 
+with open(f'{dir}/breaktime.txt', 'w') as fd:
+    fd.write((f'{frame}'))
+    
