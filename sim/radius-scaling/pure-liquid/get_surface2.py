@@ -11,14 +11,6 @@ sc = 2.9
 file =  f'pinch_sc{sc}.lammpstrj'
 dir = str(sc)
 
-
-if sc == '0.5':
-    thickness = 1.5
-elif sc == '1.6':
-    thickness = 1.8
-else:
-    thickness = 2
-
 save_dirs = {'profile': f'{dir}/surface_profile',
              'surf_con': f'{dir}/surface_concentration',
              'bulk_con': f'{dir}/bulk_concentration'}
@@ -85,6 +77,7 @@ for frame in range(pipeline.source.num_frames):
         y0 = centers[1][id_z]
         radius = np.sqrt((pos[0]-x0)**2 + (pos[1]-y0)**2)
         interface = h[id_z]
+        thickness = 1.5
         if radius < interface - thickness:
             bulk_con[id_z] += 1
             continue
