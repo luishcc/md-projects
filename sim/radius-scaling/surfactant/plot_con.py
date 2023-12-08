@@ -4,10 +4,10 @@ import numpy as np
 dir = '0.5'
 # dir = '2.9'
 
-# dir = '/home/luishcc/hdd/radius_scaling/surfactant/2.3/15'
+dir = '/home/luishcc/hdd/radius_scaling/surfactant/1.6/5'
 # dir = '/home/luishcc/hdd/radius_scaling/surfactant/1.6/16'
 
-time = 320
+time = 450
 # time = 1320
 
 con = {}

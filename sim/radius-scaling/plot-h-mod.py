@@ -37,11 +37,12 @@ def read_sim(dir):
 # case = '/home/luishcc/hdd/radius_scaling/high-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 # case = '/home/luishcc/hdd/radius_scaling/surfactant/0.5'
+case = '/home/luishcc/hdd/radius_scaling/surfactant/2.9'
 # case = '/home/luishcc/md-projects/sim/radius-scaling/surfactant/0.5'
-case = '/home/luishcc/md-projects/sim/radius-scaling/surfactant/2.9'
-nn = 7
-# shape = read_sim(f'{case}/{nn}')
-shape = read_sim(f'{case}')
+# case = '/home/luishcc/md-projects/sim/radius-scaling/surfactant/2.9'
+nn = 10
+shape = read_sim(f'{case}/{nn}')
+# shape = read_sim(f'{case}')
 
 
 import matplotlib.pyplot as plt

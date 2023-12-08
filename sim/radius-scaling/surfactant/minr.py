@@ -11,7 +11,7 @@ def read_sim(dir):
     min_r = []
     min_z = []
     breaktime = get_breaktime(dir)
-    for i in range(breaktime+100):
+    for i in range(breaktime):
         # file = f'{cwd}/{dir}/surface_profile/{i}.dat'
         file = f'{dir}/surface_profile/{i}.dat'
         with open(file, 'r') as fd:
@@ -43,14 +43,14 @@ rc_fonts = {
     }
 mpl.rcParams.update(rc_fonts)
 
-# fig, (ax,ax2) = plt.subplots(1,2, sharex = False)
-fig, ax2 = plt.subplots(1,1, sharex = False)
+fig, (ax,ax2) = plt.subplots(1,2, sharex = False)
+# fig, ax2 = plt.subplots(1,1, sharex = False)
 
 lists = []
 
 nn=20
 
-sc = 0.5
+sc = 2.9
 
 case = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
@@ -62,10 +62,10 @@ for i in range(nn):
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
     lists.append(r)
-    # ax.plot([t-j for j in range(t)], r, 'c--',
-    #           linewidth=1, markerfacecolor='none')
-    ax2.loglog([t-j for j in range(t)], r, 'c--',
+    ax.plot([t-j for j in range(t)], r, 'c--',
               linewidth=1, markerfacecolor='none')
+    ax2.loglog([t-j for j in range(t)], r, 'c--',
+              linewidth=1, markerfacecolor='gray')
     # ax2.loglog([t-j for j in range(t)], r, 
     #         linewidth=1, markerfacecolor='none')
     # ax2.plot([j for j in range(t)], z, markerfacecolor='none', label=i)
@@ -80,40 +80,46 @@ for i in range(max([len(l) for l in lists])):
     mean.append(sum(temp)/len(temp))
 mean.reverse()
 
-# ax.plot([(len(mean)-j)/10 for j in range(len(mean))], mean, 'k-', 
-#           markerfacecolor='none', label='Mean',
-#           linewidth=4)
+ax.plot([(len(mean)-j) for j in range(len(mean))], mean, 'k-', 
+          markerfacecolor='none', label='Mean',
+          linewidth=4)
 
 # ax.plot([j/10 for j in range(len(mean))], mean, 'k-', 
 #           markerfacecolor='none', label='Mean',
 #           linewidth=4)
 
-ax2.plot([len(mean)-j for j in range(len(mean))], mean, 'k-', 
-          markerfacecolor='none', label='Mean',
-          linewidth=4)
+ax2.plot([len(mean)-j for j in range(len(mean))], mean, 'ko', 
+          markerfacecolor='black', label='Average',
+          linewidth=3)
 
-x0 = np.linspace(1,4,1000)
-x1 = np.linspace(10,350,1000)
-x2 = np.linspace(18, 130,1000)
-x3 = np.linspace(10,35,1000)
 
-tt = np.linspace(0,80,1000)
-tt2 = np.linspace(0,100,1000)
+
+
 
 def f(t, b, c):
     return b*t**0.333 + c
 
-ax2.plot([0.4, 800], [(0.36*8)**.5/8]*2, 'k--')
-ax2.plot([0.4, 800], [(0.56*8)**.5/8]*2, 'b--')
+# ax2.plot([0.4, 800], [(0.36*8)**.5/8]*2, 'k--', label=r'High $\gamma$')
+# ax2.plot([0.4, 800], [(0.56*8)**.5/8]*2, 'b--', label=r'Low $\gamma$')
+
+# ax2.plot([0.4, 800], [0.36/8]*2, 'k--', label=r'High $\gamma$')
+# ax2.plot([0.4, 800], [0.56/8]*2, 'b--', label=r'Low $\gamma$')
+
+ax2.plot([1, 200], [.75/8.1]*2, 'g--', label=r'Low $\gamma$')
+ax2.plot([1, 200], [1/8.1]*2, 'b--', label=r'2')
 
 Oh = 0.762
+Oh = 0.420
 # Oh = 0.289
 
-times = [(len(mean)-j)/10 for j in range(len(mean))]
+times = [(len(mean)-j) for j in range(len(mean))]
 
-yt = [i*(0.0709/Oh)/5.7**2+0.18 for i in tt]
-yt2 = [i**(2/3)/36 for i in tt2]
-yt2 = [i**(1/3)/8 for i in tt2]
+tt = np.linspace(0,80,1000)
+tt2 = np.linspace(0,150,1000)
+
+yt = [i*(0.0304/Oh)/8.2+0.06 for i in tt]
+# yt2 = [i**(2/3)/36 for i in tt2]
+yt2 = [i**(.5)/30 for i in tt2]
 # yt = [i**(0.42)/8 for i in tt]
 # yt2 = [i**(0.666)/24 for i in tt]
 
@@ -123,41 +129,49 @@ yt2 = [i**(1/3)/8 for i in tt2]
 # tt2=np.array(times)
 # yt2 = f(tt2, *pars)
 
-# ax.plot(tt,yt, 'b--', linewidth=5, label=r'$(t_b-t){0.0709/Oh}$')
-# ax.plot(tt2,yt2, 'g--', linewidth=5, label=r'$(t_b-t)^{1/3}$')
+ax.plot(tt,yt, 'b--', linewidth=5, label=r'$(t_b-t){0.0709/Oh}$')
+ax.plot(tt2,yt2, 'g--', linewidth=5, label=r'$(t_b-t)^{1/3}$')
 
-y0 = [i**0.1/8 for i in x0]
-# y0 = [i**0.333/25 for i in x0]
+
+x0 = np.linspace(1,12,1000)
+x1 = np.linspace(2,30,1000)
+x2 = np.linspace(5, 200,1000)
+x3 = np.linspace(10,35,1000)
+
+y0 = [i*(0.0304/Oh)/8.2+0.06 for i in x0]
+y0 = [i**0.333/16 for i in x0]
+y0 = [np.exp(0.08*i)/15 for i in x0]
 y1 = [i**0.42/20 for i in x1]
-# y1 = [i**0.5/38 for i in x1]
-y2 = [(i**.666)/30 for i in x2]
+y1 = [i**0.5/18 for i in x1]
+# y2 = [(i**.666)/30 for i in x2]
+y2 = [(i**.6)/25 for i in x2]
 y3 = [(i**.333)/14 for i in x3]
 
-ax2.plot(x0,y0, 'y--', linewidth=5, label=r'$(t_b-t)^{0.1}$')
-ax2.plot(x1,y1, 'g--', linewidth=5, label=r'$(t_b-t)^{0.42}$')
-# ax2.plot(x2,y2, 'b--', linewidth=5, label=r'$(t_b-t)^{0.666}$')
-# ax2.plot(x3,y3, 'r--', linewidth=5, label=r'$(t_b-t)^{0.333}$')
+ax2.plot(x0,y0, 'y--', linewidth=3, label=r'$(t_b-t)^{0.1}$')
+# ax2.plot(x1,y1, 'g--', linewidth=3, label=r'$(t_b-t)^{0.42}$')
+ax2.plot(x2,y2, 'b--', linewidth=3, label=r'$(t_b-t)^{0.666}$')
+# ax2.plot(x3,y3, 'r--', linewidth=3, label=r'$(t_b-t)^{0.333}$')
 
 # ax.errorbar([i for i in range(len(mean))], mean, yerr=variance**(1/2))
 
 ax2.set_ylabel(r'$h_{{min}}/R_0$')
 ax2.set_xlabel(r'$(t_b-t)$')
-# ax.set_ylim(0,1)
-# ax.set_xlim(0,80)
+ax.set_ylim(-0.05,1)
+ax.set_xlim(-1,150)
 #  ax.set_xlabel(r'$t$')
 ax2.legend(frameon=False)
 
 plt.tight_layout()
 # plt.savefig(f'surfactant-{sc}.pdf', dpi=dpi)
 
-plt.show()
+# plt.show()
 
 # from scipy.signal import savgol_filter
 
 # plt.figure()
 
-# # mean2 = savgol_filter( mean, 100, 5)
-# mean2 = mean
+# mean2 = savgol_filter( mean, 4, 1)
+# # mean2 = mean
 
 # dy = np.gradient(np.log(mean2), np.log(times), edge_order=2)
 # w = savgol_filter( dy, 50, 4)
@@ -167,4 +181,4 @@ plt.show()
 
 # plt.ylim(-0.2,0.8)
 
-# plt.show()
+plt.show()
