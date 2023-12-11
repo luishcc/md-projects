@@ -50,28 +50,28 @@ bulk = []
 surface = []
 for i in range(num_sim):
     dir = f'{path}/{i+1}'
-    time = get_breaktime(dir)-500
+    time = get_breaktime(dir)-1
     shape, con_s, con_b, dz = run_snapshot(dir, time)
     
-    dist = shape.argmax()
-    shape = np.roll(shape, -dist)
-    con_b = np.roll(con_b, -dist)
-    con_s = np.roll(con_s, -dist)
-    flip = shape.argmin() < len(shape)/2    
-    if flip: 
-        shape = np.flip(shape)
-        con_b = np.flip(con_b)
-        con_s = np.flip(con_s)
-    
-    # dist = shape.argmin()-int(len(shape)/2)
+    # dist = shape.argmax()
     # shape = np.roll(shape, -dist)
     # con_b = np.roll(con_b, -dist)
     # con_s = np.roll(con_s, -dist)
-    # flip = shape.argmin() - shape.argmax() > 0
+    # flip = shape.argmin() < len(shape)/2    
     # if flip: 
     #     shape = np.flip(shape)
     #     con_b = np.flip(con_b)
     #     con_s = np.flip(con_s)
+    
+    dist = shape.argmin()-int(len(shape)/2)
+    shape = np.roll(shape, -dist)
+    con_b = np.roll(con_b, -dist)
+    con_s = np.roll(con_s, -dist)
+    flip = shape.argmin() - shape.argmax() > 0
+    if flip: 
+        shape = np.flip(shape)
+        con_b = np.flip(con_b)
+        con_s = np.flip(con_s)
     
     vol = np.pi*shape**2*dz
     area = 2*np.pi*shape*dz
@@ -81,6 +81,7 @@ for i in range(num_sim):
     surface.append(con_s/area/4)
 
 ids = np.linspace(0.5,len(shapes[0])+0.5, len(shapes[0]))*dz
+# ids = np.linspace(-1,1, len(shapes[0]))
 
 fig, (ax,ax2) = plt.subplots(2,1, sharex=True)
 
@@ -99,7 +100,7 @@ ax.plot(ids, avg, 'k-')
 ax.fill_between(ids, avg-std, avg+std, color='gray', alpha = 0.5)
 ax.plot(ids, -avg, 'k-')
 ax.fill_between(ids, -avg-std, -avg+std, color='gray', alpha = 0.5)
-ax.set_aspect('equal', adjustable='box')
+# ax.set_aspect('equal', adjustable='box')
 
 sum = np.zeros(len(shapes[0]))
 sumsq = np.zeros(len(shapes[0]))

@@ -43,14 +43,14 @@ rc_fonts = {
     }
 mpl.rcParams.update(rc_fonts)
 
-fig, (ax,ax2) = plt.subplots(1,2, sharex = False)
-# fig, ax2 = plt.subplots(1,1, sharex = False)
+# fig, (ax,ax2) = plt.subplots(1,2, sharex = False)
+fig, ax2 = plt.subplots(1,1, sharex = False)
 
 lists = []
 
 nn=20
 
-sc = 2.9
+sc = 2.3
 
 case = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 # case = '/home/luishcc/hdd/radius_scaling/low-Oh'
@@ -62,8 +62,8 @@ for i in range(nn):
     r, z, t = read_sim(f'{case}/{i+1}')
     # r, z, t = read_sim(f'{i+1}')
     lists.append(r)
-    ax.plot([t-j for j in range(t)], r, 'c--',
-              linewidth=1, markerfacecolor='none')
+    # ax.plot([t-j for j in range(t)], r, 'c--',
+    #           linewidth=1, markerfacecolor='none')
     ax2.loglog([t-j for j in range(t)], r, 'c--',
               linewidth=1, markerfacecolor='gray')
     # ax2.loglog([t-j for j in range(t)], r, 
@@ -80,9 +80,9 @@ for i in range(max([len(l) for l in lists])):
     mean.append(sum(temp)/len(temp))
 mean.reverse()
 
-ax.plot([(len(mean)-j) for j in range(len(mean))], mean, 'k-', 
-          markerfacecolor='none', label='Mean',
-          linewidth=4)
+# ax.plot([(len(mean)-j) for j in range(len(mean))], mean, 'k-', 
+#           markerfacecolor='none', label='Mean',
+#           linewidth=4)
 
 # ax.plot([j/10 for j in range(len(mean))], mean, 'k-', 
 #           markerfacecolor='none', label='Mean',
@@ -105,8 +105,8 @@ def f(t, b, c):
 # ax2.plot([0.4, 800], [0.36/8]*2, 'k--', label=r'High $\gamma$')
 # ax2.plot([0.4, 800], [0.56/8]*2, 'b--', label=r'Low $\gamma$')
 
-ax2.plot([1, 200], [.75/8.1]*2, 'g--', label=r'Low $\gamma$')
-ax2.plot([1, 200], [1/8.1]*2, 'b--', label=r'2')
+# ax2.plot([1, 200], [.75/8.1]*2, 'b--', label=r'Low $\gamma$')
+ax2.plot([1, 200], [1/8.1]*2, 'g--', label=r'$h_{min}=r_c$')
 
 Oh = 0.762
 Oh = 0.420
@@ -129,14 +129,14 @@ yt2 = [i**(.5)/30 for i in tt2]
 # tt2=np.array(times)
 # yt2 = f(tt2, *pars)
 
-ax.plot(tt,yt, 'b--', linewidth=5, label=r'$(t_b-t){0.0709/Oh}$')
-ax.plot(tt2,yt2, 'g--', linewidth=5, label=r'$(t_b-t)^{1/3}$')
+# ax.plot(tt,yt, 'b--', linewidth=5, label=r'$(t_b-t){0.0709/Oh}$')
+# ax.plot(tt2,yt2, 'g--', linewidth=5, label=r'$(t_b-t)^{1/3}$')
 
 
 x0 = np.linspace(1,12,1000)
 x1 = np.linspace(2,30,1000)
 x2 = np.linspace(5, 200,1000)
-x3 = np.linspace(10,35,1000)
+x3 = np.linspace(5,200,1000)
 
 y0 = [i*(0.0304/Oh)/8.2+0.06 for i in x0]
 y0 = [i**0.333/16 for i in x0]
@@ -144,20 +144,21 @@ y0 = [np.exp(0.08*i)/15 for i in x0]
 y1 = [i**0.42/20 for i in x1]
 y1 = [i**0.5/18 for i in x1]
 # y2 = [(i**.666)/30 for i in x2]
-y2 = [(i**.6)/25 for i in x2]
-y3 = [(i**.333)/14 for i in x3]
+y2 = [(i**.666)/28 for i in x2]
+y3 = [(i**.418)/21 for i in x3]
 
-ax2.plot(x0,y0, 'y--', linewidth=3, label=r'$(t_b-t)^{0.1}$')
+ax2.plot(x0,y0, 'y--', linewidth=3, label=r'$e^{\tau}$')
 # ax2.plot(x1,y1, 'g--', linewidth=3, label=r'$(t_b-t)^{0.42}$')
-ax2.plot(x2,y2, 'b--', linewidth=3, label=r'$(t_b-t)^{0.666}$')
-# ax2.plot(x3,y3, 'r--', linewidth=3, label=r'$(t_b-t)^{0.333}$')
+ax2.plot(x2,y2, 'b--', linewidth=3, label=r'$\tau^{0.666}$')
+ax2.plot(x3,y3, 'r--', linewidth=3, label=r'$\tau^{0.418}$')
 
 # ax.errorbar([i for i in range(len(mean))], mean, yerr=variance**(1/2))
 
 ax2.set_ylabel(r'$h_{{min}}/R_0$')
-ax2.set_xlabel(r'$(t_b-t)$')
-ax.set_ylim(-0.05,1)
-ax.set_xlim(-1,150)
+ax2.set_xlabel(r'$\tau$')
+ax2.set_ylim(0.03,1.3)
+# ax.set_ylim(-0.05,1)
+# ax.set_xlim(-1,150)
 #  ax.set_xlabel(r'$t$')
 ax2.legend(frameon=False)
 
