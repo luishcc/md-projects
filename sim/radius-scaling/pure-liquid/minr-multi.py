@@ -11,7 +11,7 @@ def read_sim(dir,r0):
     min_r = []
     min_z = []
     breaktime = get_breaktime(dir)
-    for i in range(breaktime+10 ):
+    for i in range(breaktime):
         # file = f'{cwd}/{dir}/surface_profile/{i}.dat'
         file = f'{dir}/surface_profile/{i}.dat'
         with open(file, 'r') as fd:
@@ -43,13 +43,11 @@ rc_fonts = {
     }
 mpl.rcParams.update(rc_fonts)
 
-fig, (ax,ax2) = plt.subplots(1,2, sharex = False)
+fig, ax2 = plt.subplots(1,1)
 
 lists = []
 nn=20
-# case = '/home/luishcc/hdd/radius_scaling/low-Oh'
 case = '/home/luishcc/hdd/radius_scaling/high-Oh'
-# case = 'high-Oh'
 for i in range(nn):
     r, z, t = read_sim(f'{case}/{i+1}', 5.7)
     # r, z, t = read_sim(f'{i+1}')
@@ -63,7 +61,6 @@ for i in range(max([len(l) for l in lists])):
             temp.append(lst[-i-1])
     mean.append(sum(temp)/len(temp))
 mean.reverse()
-
 
 
 
@@ -102,44 +99,24 @@ def power(t,a,b):
 from scipy.optimize import curve_fit
 from_t = -50
 pars, cov = curve_fit(f=expo, xdata=np.array(times2[from_t:-1]), ydata=mean2[from_t:-1], p0=[0.01,0.1], bounds=(-np.inf, np.inf))
-pars2, cov2 = curve_fit(f=power, xdata=np.array(times[from_t:-10]), ydata=mean[from_t:-10], p0=[0.01,0.1], bounds=(-np.inf, np.inf))
+pars2, cov2 = curve_fit(f=expo, xdata=np.array(times[from_t+20:-1]), ydata=mean[from_t+20:-1], p0=[0.01,0.1], bounds=(-np.inf, np.inf))
 pars3, cov3 = curve_fit(f=power, xdata=np.array(times[from_t-200:from_t]), ydata=mean[from_t-200:from_t], p0=[0.01,0.1], bounds=(-np.inf, np.inf))
-
-print(times2[-100]  )
-# print(mean2[-20:-1])
-print(pars)
-print(pars2)
-
-
-ax.semilogy(times, mean, 'k-', 
-          markerfacecolor='none', label='Mean',
-          linewidth=4)
-ax.plot(times2, mean2, 'b-', 
-          markerfacecolor='none', label='Mean2',
-          linewidth=4)
-ax.set_xlim(-10,200)          
-ax.set_ylim(-0.1,1.1)          
 
 
 ax2.loglog(times, mean, 'k-', 
-          markerfacecolor='none', label='Mean',
+          markerfacecolor='none', label='High Oh',
           linewidth=4)
 
 ax2.loglog(times2, mean2, 'b-', 
-          markerfacecolor='none', label='Mean2',
+          markerfacecolor='none', label='Low Oh',
           linewidth=4)
 
 
-x0 = np.linspace(.1,6,1000)
-x1 = np.linspace(.8,6,1000)
-x2 = np.linspace(6,90,1000)
-
-tt = np.linspace(0.1,8,1000)
+tt = np.linspace(0.1,4.2,1000)
 tt2 = np.linspace(5,80,1000)
 
 ytt = expo(tt, *pars)
-ytt2 = power(tt, *pars2)
-
+ytt2 = expo(tt, *pars2)
 ytt3 = power(tt2, *pars3)
 
 # Oh = 0.762
@@ -147,46 +124,44 @@ Oh = 0.289
 
 times = [(len(mean)-j)/10 for j in range(len(mean))]
 
-# yt = [i*(0.0709/Oh)/5.7**2+0.18 for i in tt]
-# yt2 = [i**(2/3)/36 for i in tt2]
-# yt2 = [i**(1/3)/8 for i in tt2]
+
 yt = [i**(0.42)/2 for i in tt]
 yt2 = [i**(0.666)*10 for i in tt]
-# yt3 = [i*(0.0709/Oh)/100+0.57 for i in tt]
-# yt3 = [i*(0.0304/Oh)/10+0.1 for i in tt]
 yt3 = [i**0.55/2 for i in tt]
-# yt4 = [np.exp(-(i-len(mean)/10)*0.315) for i in tt]
 
 
-ax.plot(tt,ytt, 'y--', linewidth=3, label=r'$(t_b-t)^{0.42}$')
+
 ax2.plot(tt,ytt, 'y--', linewidth=3, label=r'$(t_b-t)^{0.42}$')
 
-ax.plot(tt2,ytt3, 'c--', linewidth=3, label=r'$(t_b-t)^{0.6}$')
-ax2.plot(tt2,ytt3, 'c--', linewidth=3, label=r'$(t_b-t)^{0.6}$')
-print(pars3)
+# ax2.plot(tt2,ytt3, 'c--', linewidth=3, label=r'$(t_b-t)^{0.6}$')
+# print(pars3)
 
-ax.plot(tt,ytt2, 'g--', linewidth=3, label=r'$(t_b-t)$')
-ax2.plot(tt,ytt2, 'g--', linewidth=3, label=r'$(t_b-t)$')
+ax2.plot(tt,ytt2, 'y--', linewidth=3, label=r'$(t_b-t)$')
 
 # ax.plot(tt,yt, 'b--', linewidth=3, label=r'$(t_b-t)^{0.42}$')
 # ax.plot(tt,yt2, 'g--', linewidth=3, label=r'$(t_b-t)^{1/3}$')
 # ax.plot(tt,yt3, 'y--', linewidth=3, label=r'$(t_b-t){0.0709/Oh}$')
 
-ax.legend()
+
+
+x0 = np.linspace(.1,4.2,1000)
+x1 = np.linspace(1.8,50,1000)
+x2 = np.linspace(6,90,1000)
 
 # y0 = [0.09*np.exp(i*0.012) for i in x0]
-y1 = [i**0.42/13 for i in x1]
-y2 = [(i**.6)/18 for i in x2]
+y1 = [i**0.418/16 for i in x1]
+y2 = [(i**.666)/18 for i in x2]
+
+ax2.plot([1, 20], [.75/5.75]*2, 'g--', label=r'$h_{min}=r_c$')
 
 
 # ax2.plot(x0,y0, 'y--', linewidth=3, label=r'$0$')
-ax2.plot(x1,y1, 'g--', linewidth=3, label=r'$1$')
-# ax2.plot(x2,y2, 'c--', linewidth=3, label=r'$2$')
+ax2.plot(x1,y1, 'g--', linewidth=3, label=r'$\tau^{0.418}$')
+ax2.plot(x2,y2, 'c--', linewidth=3, label=r'$\tau^{2/3}$')
 
 ax2.set_ylabel(r'$h_{{min}}/R_0$')
 ax2.set_xlabel(r'$(t_b-t)$')
 # ax.set_ylim(0,1)
-ax.set_xlim(-1,80)
 #  ax.set_xlabel(r'$t$')
 ax2.legend(frameon=False)
 

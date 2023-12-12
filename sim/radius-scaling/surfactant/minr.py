@@ -64,7 +64,7 @@ for i in range(nn):
     lists.append(r)
     # ax.plot([t-j for j in range(t)], r, 'c--',
     #           linewidth=1, markerfacecolor='none')
-    ax2.loglog([t-j for j in range(t)], r, 'c--',
+    ax2.loglog([(t-j) for j in range(t)], r, 'c--',
               linewidth=1, markerfacecolor='gray')
     # ax2.loglog([t-j for j in range(t)], r, 
     #         linewidth=1, markerfacecolor='none')
@@ -88,7 +88,7 @@ mean.reverse()
 #           markerfacecolor='none', label='Mean',
 #           linewidth=4)
 
-ax2.plot([len(mean)-j for j in range(len(mean))], mean, 'ko', 
+ax2.plot([(len(mean)-j) for j in range(len(mean))], mean, 'ko', 
           markerfacecolor='black', label='Average',
           linewidth=3)
 
@@ -107,10 +107,12 @@ def f(t, b, c):
 
 # ax2.plot([1, 200], [.75/8.1]*2, 'b--', label=r'Low $\gamma$')
 ax2.plot([1, 200], [1/8.1]*2, 'g--', label=r'$h_{min}=r_c$')
+# ax2.plot([.1, 20], [.75/5.75]*2, 'g--', label=r'$h_{min}=r_c$')
 
 Oh = 0.762
 Oh = 0.420
 # Oh = 0.289
+ax2.set_xlim(0.7, 1000)
 
 times = [(len(mean)-j) for j in range(len(mean))]
 
