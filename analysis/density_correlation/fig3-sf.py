@@ -46,7 +46,7 @@ fig, ax = plt.subplots(1,1)
 
 ax.set_ylabel(r'$\chi$ [$\cdot$]')
 ax.set_xlabel(r'C $[N_t/A_s]$')
-ax.set_ylim(0., 0.72)
+# ax.set_ylim(0., 0.72)
 # ax.set_xlim(0.06, 2.31)
 
 ax.errorbar([0]+sf2, [0.67]+q, yerr = np.sqrt([0.001/1]+q_var), fmt='o',
@@ -62,13 +62,13 @@ ax.annotate('CMC', xy=(1.85, .55), xytext=(2.3, 0.65),
             arrowprops=dict(facecolor='black', shrink=0.05))
 ############################################################
 ############################################################
-# axx = ax.twinx()
-from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition)
-axx = plt.axes([0,0,1,1])
-ip = InsetPosition(axx, [0.16,0.2,0.6,0.53])
-axx.set_axes_locator(ip)
-axx.set_ylabel(r'$t_{break-up}$ [$\tau$]')
-axx.set_xlabel(r'C $[N_t/A_s]$')
+axx = ax.twinx()
+# from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition)
+# axx = plt.axes([0,0,1,1])
+# ip = InsetPosition(axx, [0.16,0.2,0.6,0.53])
+# axx.set_axes_locator(ip)
+axx.set_ylabel(r'$t_{break-up}$ [$t_{DPD}$]')
+# axx.set_xlabel(r'C $[N_t/A_s]$')
 #############
 import os
 path_to_data = '/home/luishcc/hdd/surfactant/new/'
@@ -91,7 +91,7 @@ for i, a in enumerate(A):
     dir = path_to_data + data_case_dir
     print(os.path.isdir(dir))
     while os.path.isdir(dir):
-        snap = get_snap(dir)+diff[i]
+        snap = (get_snap(dir)+diff[i])*10
         sum += snap
         sumsq += snap**2
         n += 1
@@ -100,7 +100,7 @@ for i, a in enumerate(A):
     avg.append((sum/(n-1)))
     # avg.append((sum/(n-1))/(radii[r][i]**2))
     var.append(sumsq/(n-1) - (sum/(n-1))**2)
-axx.errorbar([0]+A, [40]+avg, yerr = [np.sqrt(var[0])]+[np.sqrt(v) for v in var], fmt='x',
+axx.errorbar([0]+A, [400]+avg, yerr = [np.sqrt(var[0])]+[np.sqrt(v) for v in var], fmt='x',
              ecolor = 'red', color='red', markerfacecolor='none', 
              capsize=3, label=r'$t_{break-up}$')
 handles2, labels2 = axx.get_legend_handles_labels()

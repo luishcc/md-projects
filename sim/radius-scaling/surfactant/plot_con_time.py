@@ -40,10 +40,11 @@ def run_snapshot(dir, time):
             radius = float(line[1])
             shape[id] = radius  
     
-    # vol = np.pi*shape**2*dz
+    vol = np.pi*shape**2*dz
     area = 2*np.pi*shape*dz
     
     return shape, con_s/area/4, con_b/area/4, dz
+    # return shape, con_s/area/4, con_b/vol*4, dz
 
 def get_breaktime(dir):
     with open(f'{dir}/breaktime.txt', 'r') as fd:
@@ -91,7 +92,7 @@ def findNumSnaps(path, n):
 ######################################################################
 # Main reading section
 
-sc = 0.5
+sc = 1.6
 path = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 num_sim = 20
@@ -262,7 +263,7 @@ class PauseAnimation:
 
             
 pa = PauseAnimation(avg, std, avgb, stdb, avg2, std2)
-pa.save(sc)
+# pa.save(sc)
 plt.show()
 
     
