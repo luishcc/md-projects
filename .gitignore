@@ -17,6 +17,10 @@ remote/*
 */gif2
 *.gif
 *.png
+*.mp4
+*.avi
+*.jpg
+
 *.dat
 
 */__pycache__/

@@ -2,6 +2,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt 
 
+######################################################################
+# Reading functions
 
 def run_snapshot(dir, time):
     # Read surface concentration from .dat file
@@ -86,9 +88,10 @@ def findNumSnaps(path, n):
         times.append(get_breaktime(dir))
     return min(times)
 
-##############################
+######################################################################
+# Main reading section
 
-sc = 2.9
+sc = 0.5
 path = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 num_sim = 20
@@ -103,102 +106,109 @@ for i in range(num_sim):
     
     shape, bulk, surface = read_sim(dir, num_snaps)    
  
-    shapes.append(shape)
+    shapes.append(shape/8.1)
     bulks.append(bulk)
     surfaces.append(surface)
 
-
-
-# ids = np.linspace(0.5,len(shapes[0])+0.5, len(shapes[0]))*dz
-ids = np.linspace(-.5,.5, len(shapes[0][0]))
-
-
-import matplotlib as mpl
-dpi = 1600
-side = 7
-fontsize = 24
-rc_fonts = {
-    "font.family": "serif",
-    "font.size": fontsize,
-    'figure.figsize': (0.8*side, .7*side),
-    "text.usetex": True
-    }
-mpl.rcParams.update(rc_fonts)
-import matplotlib.animation as animation
-
-
-# fig, (ax, ax2) = plt.subplots(2,1, sharex=True)
-# fig, ax = plt.subplots(1,1)
-# fig2, ax2 = plt.subplots(1,1)
-
-
+######################################################################
+# Averaging results
+    
+# Shape average    
 sum = np.zeros(np.shape(shapes[0]))
 sumsq = np.zeros(np.shape(shapes[0]))
 for shape in shapes:
     sum += shape
     sumsq += shape**2
-    # ax.plot(ids, shape, 'c--')
-
 avg = sum/num_sim
 var = sumsq/num_sim - avg**2
 std = np.sqrt(var)
 
+# Surface concentration average
 sum = np.zeros(np.shape(shapes[0]))
 sumsq = np.zeros(np.shape(shapes[0]))
 for con in surfaces:
     sum += con
     sumsq += con**2
-    # ax.plot(ids, shape, 'c--')
 avg2 = sum/num_sim
 var = sumsq/num_sim - avg2**2
 std2 = np.sqrt(var)
 
+# Bulk concentration average
 sum = np.zeros(np.shape(shapes[0]))
 sumsq = np.zeros(np.shape(shapes[0]))
 for con in bulks:
     sum += con
     sumsq += con**2
-    # ax.plot(ids, shape, 'c--')
 avgb = sum/num_sim
 var = sumsq/num_sim - avgb**2
 stdb = np.sqrt(var)
 
 
+######################################################################
+# Plot animation
+
+# ids = np.linspace(0.5,len(shapes[0])+0.5, len(shapes[0]))*dz
+ids = np.linspace(-.5,.5, len(shapes[0][0]))
+
+import matplotlib as mpl
+import matplotlib.animation as animation
+dpi = 1600
+side = 14
+fontsize = 24
+rc_fonts = {
+    "font.family": "serif",
+    "font.size": fontsize,
+    'figure.figsize': (1*side, .6*side),
+    "text.usetex": True
+    }
+mpl.rcParams.update(rc_fonts)
 
 class PauseAnimation:
     def __init__(self, shape, std, conb, stdb, cons, stds):
-        
-        fig, (ax, ax2) = plt.subplots(2,1, sharex=True)
-        self.ax = ax
-        self.ax2 = ax2
-
+        self.shape = shape
+        self.std = std 
         self.cons = cons
         self.conb = conb
         self.stdb = stdb
         self.stds = stds
 
-        self.line = ax.plot(ids, shape[-1], 'k-', label=f'Snapshot = 0')[0]
+        #---------------- Figure ------------------      
+        fig, (ax, ax2) = plt.subplots(2,1, sharex=True)        
+        fig.subplots_adjust(hspace=0.1)
+        self.ax = ax
+        self.ax2 = ax2
+        
+        #---------------- ax plot -----------------
+        self.line = ax.plot(ids, shape[-1], 'k-', label=rf'$t_b-t = {len(shape)}$')[0]
         self.line2 = ax.plot(ids, -shape[-1], 'k-')[0]
         self.poly = ax.fill_between(ids, shape[-1]-std[-1], shape[-1]+std[-1], color='gray', alpha = 0.4)
         self.poly2 = ax.fill_between(ids, -shape[-1]-std[-1], -shape[-1]+std[-1], color='gray', alpha = 0.4)
-        ax.set(ylim=[-18, 18], xlabel='z', ylabel='h')
+        ax.set(ylim=[-2.2, 2.2], xlim=[-0.51, 0.51], ylabel=r'$h/R_0$ $[\cdot]$')
+        # ax.set_ylim(-18, 18)
         # ax.set_aspect('equal', adjustable='box')
-        self.legend = ax.legend(loc='upper left', frameon=False)
+        self.legend = ax.legend(loc='center left', frameon=False, handlelength=0, fontsize=0.8*fontsize)
 
-        self.l1 = ax2.plot(ids, conb[-1], 'b-', label=f'Snapshot = 0')[0]
+        #---------------- ax2 plot -----------------
+        self.l1 = ax2.plot(ids, conb[-1], 'b--', label='Bulk')[0]
         self.p1 = ax2.fill_between(ids, conb[-1]-stdb[-1], conb[-1]+stdb[-1], color='lightblue', alpha = 0.6)
 
-        self.l2 = ax2.plot(ids, cons[-1], 'k-')[0]
+        self.l2 = ax2.plot(ids, cons[-1], 'k-', label='Surface')[0]
         self.p2 = ax2.fill_between(ids, cons[-1]-stds[-1], cons[-1]+stds[-1], color='gray', alpha = 0.4)
         
-        ax2.set(ylim=[0, 2.5], xlabel='z', ylabel=r'$\Gamma$')
-        ax2.plot([-0.5, 0.5], [1.75, 1.75], 'r--')
-               
-        self.animation = animation.FuncAnimation(
-            fig, self.update, frames=len(shape), interval=2, blit=True)
-        self.paused = False
+        ax2.plot([-0.5, 0.5], [1.75, 1.75], 'r--')        
+        ax2.set(ylim=[0, 2.5], xlabel=r'$z/L_z$ $[\cdot]$', ylabel=r'$C$ $[N/A_s]$')
+        ax2.text(-0.3, 1.92, r'$\Gamma_{\infty} = 1.75$', fontsize=0.8*fontsize)
+        ax2.legend(frameon=False, loc='upper right',  handlelength=1., borderaxespad=0.1, ncol=2,
+         columnspacing=0.5,  handletextpad=.2, fontsize=0.75*fontsize)
 
+        #--------------- Animation ----------------               
+        self.animation = animation.FuncAnimation(
+            fig, self.update, frames=len(shape), interval=0.5, blit=True)
+        self.paused = False
         fig.canvas.mpl_connect('button_press_event', self.toggle_pause)
+
+    def save(self, sc, fps=80):
+        self.animation.save(f'{sc}.mp4', fps=fps)
 
     def toggle_pause(self, *args, **kwargs):
         if self.paused:
@@ -209,8 +219,10 @@ class PauseAnimation:
 
     def update(self, frame):
         # for each frame, update the data stored on each artist.
-        h = shape[-frame]
-        st = std[-frame]
+        
+        #--------- ax update ----------
+        h = self.shape[-frame]
+        st = self.std[-frame]
         self.line.set_ydata(h)
         self.line2.set_ydata(-h)
 
@@ -224,6 +236,10 @@ class PauseAnimation:
         dummy.remove()
         self.poly2.set_paths([vert.vertices])
 
+        tau = len(self.shape)-frame
+        self.legend.get_texts()[0].set_text(fr'$t_b-t = {tau}$') 
+
+        #--------- ax2 update ----------
         ss = self.cons[-frame]
         bb = self.conb[-frame]
         self.l1.set_ydata(bb)
@@ -240,14 +256,13 @@ class PauseAnimation:
         vert = dummy.get_paths()[0]
         dummy.remove()
         self.p1.set_paths([vert.vertices])
-
-        self.legend.get_texts()[0].set_text(f'Snapshot = {frame}') 
        
-        return (self.line, self.line2, self.poly, self.poly2, self.l1, self.l2, self.p1, self.p2, self.legend)
-    
-        
-    
+        return (self.line, self.line2, self.poly, self.poly2, 
+                self.l1, self.l2, self.p1, self.p2, self.legend)
+
+            
 pa = PauseAnimation(avg, std, avgb, stdb, avg2, std2)
+pa.save(sc)
 plt.show()
 
     
