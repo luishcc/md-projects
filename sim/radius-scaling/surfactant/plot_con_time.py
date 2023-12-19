@@ -44,7 +44,7 @@ def run_snapshot(dir, time):
     area = 2*np.pi*shape*dz
     
     return shape, con_s/area/4, con_b/area/4, dz
-    # return shape, con_s/area/4, con_b/vol*4, dz
+    # return shape, con_s/area/4, con_b/vol/4, dz
 
 def get_breaktime(dir):
     with open(f'{dir}/breaktime.txt', 'r') as fd:
@@ -92,7 +92,7 @@ def findNumSnaps(path, n):
 ######################################################################
 # Main reading section
 
-sc = 1.6
+sc = 2.9
 path = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 num_sim = 20
@@ -178,6 +178,8 @@ class PauseAnimation:
         fig.subplots_adjust(hspace=0.1)
         self.ax = ax
         self.ax2 = ax2
+        # axx = ax2.twinx()
+        axx = ax2
         
         #---------------- ax plot -----------------
         self.line = ax.plot(ids, shape[-1], 'k-', label=rf'$t_b-t = {len(shape)}$')[0]
@@ -189,15 +191,19 @@ class PauseAnimation:
         # ax.set_aspect('equal', adjustable='box')
         self.legend = ax.legend(loc='center left', frameon=False, handlelength=0, fontsize=0.8*fontsize)
 
-        #---------------- ax2 plot -----------------
-        self.l1 = ax2.plot(ids, conb[-1], 'b--', label='Bulk')[0]
-        self.p1 = ax2.fill_between(ids, conb[-1]-stdb[-1], conb[-1]+stdb[-1], color='lightblue', alpha = 0.6)
+        #---------------- ax2 plot ----------------
+        self.l1 = axx.plot(ids, conb[-1], 'b--', label=r'Bulk $C$')[0]
+        self.p1 = axx.fill_between(ids, conb[-1]-stdb[-1], conb[-1]+stdb[-1], color='lightblue', alpha = 0.6)
+        if axx is not ax2:
+            axx.set(ylim=[0,0.25], ylabel=r'$C$ [$N/V$]')
+            axx.legend(frameon=False, loc='lower right',  handlelength=1., borderaxespad=0.1, 
+         columnspacing=0.5,  handletextpad=.2, fontsize=0.75*fontsize)
 
-        self.l2 = ax2.plot(ids, cons[-1], 'k-', label='Surface')[0]
+        self.l2 = ax2.plot(ids, cons[-1], 'k-', label=r'Surface $\Gamma$')[0]
         self.p2 = ax2.fill_between(ids, cons[-1]-stds[-1], cons[-1]+stds[-1], color='gray', alpha = 0.4)
         
         ax2.plot([-0.5, 0.5], [1.75, 1.75], 'r--')        
-        ax2.set(ylim=[0, 2.5], xlabel=r'$z/L_z$ $[\cdot]$', ylabel=r'$C$ $[N/A_s]$')
+        ax2.set(ylim=[0, 2.5], xlabel=r'$z/L_z$ $[\cdot]$', ylabel=r'$\Gamma$ $[N/A_s]$')
         ax2.text(-0.3, 1.92, r'$\Gamma_{\infty} = 1.75$', fontsize=0.8*fontsize)
         ax2.legend(frameon=False, loc='upper right',  handlelength=1., borderaxespad=0.1, ncol=2,
          columnspacing=0.5,  handletextpad=.2, fontsize=0.75*fontsize)
