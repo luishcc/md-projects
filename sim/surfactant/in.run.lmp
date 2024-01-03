@@ -12,12 +12,12 @@ comm_modify vel yes
 
 variable R equal 8
 variable pi equal 3.14159265358979
-variable sc index 0.5
+variable sc index 1.0
 
 
 log test.log
 # read_data initial_data/cylinder_$(v_R)_$(v_sc:%.2g).data
-read_data wave_cylinder_$(v_R)_$(v_sc:%.2g).data extra/atom/types 1
+read_data wave_cylinder_$(v_R)_$(v_sc:%.1f).data extra/atom/types 1
 mass 3 1 
 
 region  water  cylinder z 0 0 ${R} INF INF
@@ -85,10 +85,10 @@ thermo_modify       flush yes
 timestep 0.01
 
 # dump 2 all atom 1000 all-test$(v_R)_$(v_sc:%.2g).lammpstrj
-dump 2 all atom 1000 all-test-wave$(v_R)_$(v_sc:%.2g).lammpstrj
+dump 2 all atom 1000 all-test-wave$(v_R)_$(v_sc:%.1f).lammpstrj
 
 run 200000
 
 
 # write_data  initial_cylinder_$(v_R)_$(v_sc:%.2g).data
-write_data  initial_wave_cylinder_$(v_R)_$(v_sc:%.2g).data
+write_data  initial_wave_cylinder_$(v_R)_$(v_sc:%.1f).data

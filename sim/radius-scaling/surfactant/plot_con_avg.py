@@ -42,7 +42,7 @@ def get_breaktime(dir):
     return snap
 
 
-sc = 0.5
+sc = 1.0
 path = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 num_sim = 20
@@ -50,6 +50,7 @@ shapes = []
 bulk = []
 surface = []
 for i in range(num_sim):
+    # if i==14: continue
     dir = f'{path}/{i+1}'
     time = get_breaktime(dir)-1
     shape, con_s, con_b, dz = run_snapshot(dir, time)

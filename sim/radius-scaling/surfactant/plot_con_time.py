@@ -92,7 +92,7 @@ def findNumSnaps(path, n):
 ######################################################################
 # Main reading section
 
-sc = 2.9
+sc = 1.0
 path = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 num_sim = 20

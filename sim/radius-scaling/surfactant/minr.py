@@ -47,12 +47,12 @@ lists = []
 
 nn=20
 
-sc = 1.6
+sc = 1.0
 
 case = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 for i in range(nn):
-    if i < 0 or i < 0   :
+    if i ==  114  :
         continue
     r, z, t = read_sim(f'{case}/{i+1}')
     lists.append(r)
