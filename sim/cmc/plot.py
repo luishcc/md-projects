@@ -89,11 +89,11 @@ axx = ax.twinx()
 ax.plot([1.8, 1.8], [18, 80], 'r--')
 
 
-axx.plot(sc_lst, con_lst, 'k-', label=r'$\Gamma$')
+axx.plot(sc_lst, con_lst, 'k^', markerfacecolor='none', label=r'$\Gamma$')
 axx.set_xlabel(r'$C$ [$N_t/A_s$]')
 axx.set_ylabel(r'$\Gamma$ [$N_s/A_s$]')
-axx.annotate('CMC', xy=(1.85, 1.4), xytext=(2.3, 1.6),
-            arrowprops=dict(facecolor='red', shrink=0.05))
+axx.annotate('CMC', xy=(1.85, 1.3), xytext=(2.3, 1.5),
+            arrowprops=dict(facecolor='black', shrink=0.05))
 
 lines, labels = ax.get_legend_handles_labels()
 lines2, labels2 = axx.get_legend_handles_labels()

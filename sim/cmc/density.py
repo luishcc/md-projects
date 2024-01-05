@@ -137,12 +137,24 @@ ax.set_axes_locator(ip)
 
 axx.set_xlabel(r'C [$N_t/A_s$]')
 axx.set_ylabel(r'$\delta$ [$r_c$]')
-axx.plot(sc_lst, con_lst, 'kx', markerfacecolor='none')
+axx.plot(sc_lst, con_lst, 'k^', markerfacecolor='none')
+
+axx.set_ylim(0.4, 2.15)
+axx.set_xlim(0, 3.4)
 
 axx.annotate('CMC', xy=(1.7, 1.9), xytext=(0.8, 1.8),
             arrowprops=dict(facecolor='black', shrink=0.05))
 
 
+yy = np.round((con_lst[12]-con_lst[5] )/ (sc_lst[12]-sc_lst[5]), 1)
+
+xx = np.round((con_lst[5]-con_lst[0] ) / (sc_lst[5]-sc_lst[0]), 1)
+
+axx.text(.4, .65, rf'$\alpha \approx {xx}$')
+axx.plot([.4, 0.2, .4], [.72, .62, .62], 'k-')
+
+axx.text(.9, .95, rf'$\alpha \approx {yy}$')
+axx.plot([.9, 0.7, .9], [1.1, .92, .92], 'k-')
 
 ax.plot(z, data[:,3], 'b-', label='W', markerfacecolor='none')
 ax.plot(z, data[:,1], 'r-o', label='H', markerfacecolor='none')
