@@ -91,7 +91,9 @@ for i, a in enumerate(A):
     dir = path_to_data + data_case_dir
     print(os.path.isdir(dir))
     while os.path.isdir(dir):
-        snap = (get_snap(dir)+diff[i])*10
+        tt = get_snap(dir)
+        print(tt)
+        snap = (tt+diff[i])*10
         sum += snap
         sumsq += snap**2
         n += 1
@@ -103,13 +105,28 @@ for i, a in enumerate(A):
 axx.errorbar([0]+A, [400]+avg, yerr = [np.sqrt(var[0])]+[np.sqrt(v) for v in var], fmt='x',
              ecolor = 'red', color='red', markerfacecolor='none', 
              capsize=3, label=r'$t_{break-up}$')
+
+x = np.array([0]+A)
+y = np.array([400]+avg)
+def lin_fit(x,a,b):
+    return a*x+b
+from scipy.optimize import curve_fit
+popt, popc = curve_fit(lin_fit, x, y, p0=([700,400]))
+
+print(popt, popc)
+# axx.plot(x, lin_fit(x, *popt), 'r--', label='Fit')
+
 handles2, labels2 = axx.get_legend_handles_labels()
 handles2 = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles2]
+
+
+# axx.plot([], [], 'k-')
+
 ############################################################
 ############################################################
 
-# ax.legend(handles+handles2, labels+labels2, loc='center left', columnspacing=0.6,  handletextpad=.1,
-# frameon=False, ncol=1, fontsize=12, handlelength=1.5)
+ax.legend(handles+handles2, labels+labels2, loc='center left', columnspacing=0.6,  handletextpad=.1,
+frameon=False, ncol=1, fontsize=12, handlelength=1.5)
 plt.tight_layout()
 plt.savefig('chi-sf2.pdf', dpi=dpi)
 plt.show()

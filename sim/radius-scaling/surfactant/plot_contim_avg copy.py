@@ -43,7 +43,7 @@ def get_breaktime(dir):
 
 
 sc = 2.9
-tau = 800
+tau = 400
 path = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 num_sim = 20
@@ -128,7 +128,7 @@ ax2.text(-0.45, 2.1, rf'$t_b-t = {tau}$', fontsize=0.9*fontsize)
 
 ax2.set_ylim(-0.01, 2.5)
 ax2.set_xlim(-0.51, 0.51)
-ax2.set_ylabel(r'$C$ $[N/A_s]$')
+ax2.set_ylabel(r'$\Gamma$, $C_b$ $[N/A]$')
 ax2.set_xlabel(r'$z/L_z$ $[\cdot]$')
 
 
@@ -136,7 +136,7 @@ fig.align_ylabels()
 fig.tight_layout()
 
 fig.subplots_adjust(hspace=0.15)
-# fig.savefig(f'cons-{sc}-{tau}.pdf', dpi=dpi)
+fig.savefig(f'cons-{sc}-{tau}.pdf', dpi=dpi)
 
 plt.show()
     

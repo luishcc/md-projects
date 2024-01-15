@@ -42,7 +42,7 @@ def get_breaktime(dir):
     return snap
 
 
-sc = 1.0
+sc = 2.9
 path = f'/home/luishcc/hdd/radius_scaling/surfactant/{sc}'
 
 num_sim = 20
@@ -154,12 +154,22 @@ ax2.fill_between(ids, avg-std, avg+std, color='gray', alpha = 0.4)
 
 # ax2.set_aspect(1/4, adjustable='box')
 ax2.set_ylim(-0.01, 2.5)
-ax2.legend(frameon=False, loc='upper right',  handlelength=1., borderaxespad=0.1, ncol=2,
-         columnspacing=0.5,  handletextpad=.2, fontsize=0.6*fontsize)
-ax2.plot([-0.6, 0.6], [1.75, 1.75], 'r--')
-ax2.text(-0.3, 1.92, r'$\Gamma_{\infty} = 1.75$', fontsize=0.7*fontsize)
 
-ax2.set_ylabel(r'$\Gamma [N/A_s]$')
+
+
+if path == '/home/luishcc/hdd/radius_scaling/surfactant/0.5':
+    ax2.set_ylim(-0.01, .8)
+    ax2.legend(frameon=False, loc='lower right',  handlelength=1., borderaxespad=0.1, ncol=1,
+         columnspacing=0.5,  handletextpad=.2, fontsize=0.8*fontsize)
+    ax2.plot([-0.6, 0.6], [.5, .5], 'r--')
+    ax2.text(-0.3, .55, r'$\Gamma_{0} = 0.5$', fontsize=0.7*fontsize)
+else:   
+    ax2.legend(frameon=False, loc='upper right',  handlelength=1., borderaxespad=0.1, ncol=2,
+         columnspacing=0.5,  handletextpad=.2, fontsize=0.8*fontsize)
+    ax2.plot([-0.6, 0.6], [1.75, 1.75], 'r--')
+    ax2.text(-0.45, 1.92, r'$\Gamma_{\infty} = 1.75$', fontsize=0.7*fontsize)
+
+ax2.set_ylabel(r'$\Gamma$, $C_b$ $[N/A]$')
 ax2.set_xlabel(r'$z/L_z [\cdot]$')
 
 
@@ -167,7 +177,7 @@ fig.align_ylabels()
 fig.tight_layout()
 
 fig.subplots_adjust(hspace=0.15)
-fig.savefig(f'shape-{sc}.pdf', dpi=dpi)
+# fig.savefig(f'shape-{sc}.pdf', dpi=dpi)
 
 # fig2.tight_layout()
 # fig2.savefig(f'con-{sc}.pdf', dpi=dpi)
