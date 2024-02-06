@@ -1,7 +1,7 @@
 import "poly.lt"
 using namespace poly
 
-layer = new N2 [5000]
+layer = new N4 [2200]
 
 write_once("Data Boundary") {
     0      20       zlo zhi
