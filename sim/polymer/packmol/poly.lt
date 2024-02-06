@@ -33,6 +33,44 @@ poly {
     }
 
   } #N4
+  
+  N3 {
+    write("Data Atoms") {
+      $atom:1  @atom:1    0.00  0.00  0.00 $mol:. 1
+      $atom:2  @atom:1    0.00  0.00  0.50 $mol:. 1
+      $atom:3  @atom:1    0.00  0.00  1.00 $mol:. 1
+    }
+    write("Data Bonds") {
+      $bond:b1   @bond:1  $atom:1 $atom:2
+      $bond:b2   @bond:1  $atom:2 $atom:3
+    }
+    write_once("Data Masses") {
+      @atom:1  1
+    }
+
+    write_once("In Settings") {
+      bond_coeff   @bond:1   harmonic     116.847 7.5
+    }
+
+  } #N3
+  
+  N2 {
+    write("Data Atoms") {
+      $atom:1  @atom:1    0.00  0.00  0.00 $mol:. 1
+      $atom:2  @atom:1    0.00  0.00  0.50 $mol:. 1
+    }
+    write("Data Bonds") {
+      $bond:b1   @bond:1  $atom:1 $atom:2
+    }
+    write_once("Data Masses") {
+      @atom:1  1
+    }
+
+    write_once("In Settings") {
+      bond_coeff   @bond:1   harmonic     116.847 7.5
+    }
+
+  } #N2
 
 
 } # Polymers

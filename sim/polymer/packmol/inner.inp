@@ -3,10 +3,10 @@ tolerance 0.6
 
 nloop0 30
 
-output system-n4.xyz
+output system-n2.xyz
 filetype xyz
 
-structure n4.xyz
-  number 28000
-    inside cylinder 0 0 0 0 0 1 8 80
+structure n2.xyz
+  number 5000
+    inside cylinder 0 0 2 0 0 1 4 16
 end structure
