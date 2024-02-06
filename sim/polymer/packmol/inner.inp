@@ -1,0 +1,12 @@
+
+tolerance 0.6
+
+nloop0 30
+
+output system-n4.xyz
+filetype xyz
+
+structure n4.xyz
+  number 28000
+    inside cylinder 0 0 0 0 0 1 8 80
+end structure
