@@ -1,0 +1,12 @@
+
+lmp_py:18353 terminated with signal 11 at PC=7f6fe810c16b SP=7fffa5757cd0.  Backtrace:
+/home/luishcc/programs/lammps/build/liblammps_py.so.0(_ZN9LAMMPS_NS8PairMDPD7computeEii+0x76b)[0x7f6fe810c16b]
+/home/luishcc/programs/lammps/build/liblammps_py.so.0(_ZN9LAMMPS_NS10PairHybrid7computeEii+0x3fb)[0x7f6fe802201b]
+/home/luishcc/programs/lammps/build/liblammps_py.so.0(_ZN9LAMMPS_NS3Min5setupEi+0x3b1)[0x7f6fe7fa7b31]
+/home/luishcc/programs/lammps/build/liblammps_py.so.0(_ZN9LAMMPS_NS8Minimize7commandEiPPc+0x1cf)[0x7f6fe7faf43f]
+/home/luishcc/programs/lammps/build/liblammps_py.so.0(_ZN9LAMMPS_NS5Input15execute_commandEv+0xc12)[0x7f6fe7f4b2d2]
+/home/luishcc/programs/lammps/build/liblammps_py.so.0(_ZN9LAMMPS_NS5Input4fileEv+0x167)[0x7f6fe7f4b777]
+lmp_py(+0x126c)[0x561aa7a9326c]
+/lib/x86_64-linux-gnu/libc.so.6(+0x29d90)[0x7f6fe4c29d90]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80)[0x7f6fe4c29e40]
+lmp_py(+0x1355)[0x561aa7a93355]
