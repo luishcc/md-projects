@@ -46,17 +46,18 @@ timestep 0.01
 run 1000
 
 
-# fix wallhi all wall/region wall harmonic 100.0 0.1 1.0 
 # fix wallhi all wall/region wall lj93 1 1 0.7
 
-# fix wallhi all wall/lj93 zlo 3 1.0 1.0 2.5 units box
-fix wallhi all wall/harmonic zlo 2.5 10 0.4 1.2  units box
+fix wallhi all wall/lj93 zlo 3 2.0 0.5 1.0 units box
 
+
+min_style cg
+minimize 1e-4 1e-4 1000 10000
 
 timestep 0.01
 run 10000
 
-# fix gravity drop addforce 0 -0.01 0
+fix gravity drop addforce 0 -0.01 0
 
-# run 10000
+run 10000
 
