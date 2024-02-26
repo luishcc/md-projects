@@ -9,7 +9,7 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes cutoff 2.0
 
-region        box  block -50 50 -50 50 -20 20 units box
+region        box  block -20 20 -20 20 -20 20 units box
 create_box    4    box
 
 mass 1 1
@@ -65,9 +65,9 @@ timestep 0.01
 run 2000
 
 
-fix field1 solute1 addforce -1.73 -1 0
-fix field2 solute2 addforce 1.73 -1 0
-fix field3 solute3 addforce 0 2 0
+fix field1 solute1 addforce -1.153 -.666 0
+fix field2 solute2 addforce 1.153 -.666 0
+fix field3 solute3 addforce 0 1.333 0
 
 run 30000
 
