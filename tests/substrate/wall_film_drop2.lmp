@@ -9,16 +9,16 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes cutoff 2.0
 
-region        box  block -20 20 -20 20 0 30 units box
+region        box  block -35 35 -20 20 0 30 units box
 create_box    2    box
 
 mass * 1
 
 region        film   block INF INF INF INF 2 7
-region        drop1   sphere 10 0 15 8
-region        drop2   sphere -8 0 13 6
+region        drop1   sphere 12 0 16 10
+region        drop2   sphere -7 0 11 5
 
-create_atoms  2 random $(round(6.9*lx*ly*5)) 2021 film
+create_atoms  2 random $(round(5.5*lx*ly*5)) 2021 film
 group film type 2
 
 ###########################################################
@@ -29,7 +29,7 @@ pair_coeff  *  *   mdpd/rhosum  0.75
 
 pair_coeff  1  1   mdpd  -50.0  25.0  4.5  1.0  0.75
 
-pair_coeff  1  2   mdpd  -25.0  25.0  4.5  1.0  0.75
+pair_coeff  1  2   mdpd  -35.0  25.0  4.5  1.0  0.75
 
 pair_coeff  2  2   mdpd  -50.0  25.0  4.5  1.0  0.75
 
@@ -42,6 +42,11 @@ thermo_modify       flush yes
 
 dump 1 all atom 100 drops.lammpstrj
 
+fix walllo film wall/lj93 zlo 1.6 10 0.5 1.0 units box
+
+fix wallhi2 film wall/harmonic zhi 10 100 0.5 1.0 units box
+fix wallhi all wall/harmonic zhi 29 100 0.5 1.0 units box
+
 min_style cg
 minimize 1e-6 1e-6 1000 10000
 
@@ -49,18 +54,19 @@ fix         mvv     all mvv/dpd 0.65
 timestep 0.01
 run 1000
 
-create_atoms  1 random $(round(6.9*3.1415*8*8*8*4/3)) 2021 drop1
-create_atoms  1 random $(round(6.9*3.1415*6*6*6*4/3)) 2021 drop2
+create_atoms  1 random $(round(6.9*3.1415*10*10*10*4/3)) 2021 drop1
+create_atoms  1 random $(round(6.9*3.1415*5*5*5*4/3)) 2021 drop2
 group drop type 1
 
-fix wallhi all wall/lj93 zlo 1.2 2.0 0.5 1.0 units box
-fix wallhi all wall/harmonic zhi 29 1000 0.5 1.0 units box
+fix walllo2 drop wall/lj93 zlo 1.6 2 0.5 1.0 units box
 
 min_style cg
 minimize 1e-4 1e-4 1000 10000
 
 timestep 0.01
-run 20000
+run 30000
+
+write_data two_drops.data
 
 # fix gravity drop addforce 0 -0.02 0
 
