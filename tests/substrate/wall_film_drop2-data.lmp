@@ -9,17 +9,7 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes cutoff 2.0
 
-region        box  block -35 35 -25 25 0 30 units box
-create_box    2    box
-
-mass * 1
-
-region        film   block INF INF INF INF 2 3
-region        drop1   sphere 12 0 14 10
-region        drop2   sphere -9.0 0 9 5
-
-create_atoms  2 random $(round(6*lx*ly*3)) 2021 film
-group film type 2
+read_data two_drops.data
 
 ###########################################################
 # Pair, Bond and Angle Coefficients
@@ -40,43 +30,24 @@ thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-dump 1 all atom 100 drops.lammpstrj
+dump 1 all atom 100 drops2.lammpstrj
+
+group film type 2
+
+region drop1 sphere 12 0 7 7
+group drop region drop1 
 
 fix walllo film wall/lj93 zlo 1.6 10 0.5 1.0 units box
-
 fix wallhi2 film wall/harmonic zhi 12 100 0.5 1.0 units box
+
+fix walllo2 drop wall/lj93 zlo 1.6 2 0.5 1.0 units box
 fix wallhi all wall/harmonic zhi 29 100 0.5 1.0 units box
 
-min_style cg
-minimize 1e-6 1e-6 1000 10000
+fix kick drop addforce -0.02 0 0  
 
 fix         mvv     all mvv/dpd 0.65
-timestep 0.01
-run 1000
 
-create_atoms  1 random $(round(6.9*3.1415*10*10*10*4/3)) 2021 drop1
-group drop1 region drop1
-group drop type 1
-
-fix walllo2 drop wall/lj93 zlo 1.6 1 0.5 1.0 units box
-
-min_style cg
-minimize 1e-4 1e-4 1000 10000
 
 timestep 0.01
-run 10000
-
-create_atoms  1 random $(round(6.9*3.1415*5*5*5*4/3)) 2021 drop2
-
-min_style cg
-minimize 1e-4 1e-4 1000 10000
-
-timestep 0.01
-run 10000
-
-write_data two_drops2.data
-
-# fix kick drop1 addforce -0.02 0 0 every 
-
-run 30000
+run 20000
 
