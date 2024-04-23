@@ -1,0 +1,75 @@
+log droplet.log
+
+units lj
+dimension 3
+boundary p p p
+
+# processors 2 2 *
+
+atom_style hybrid angle mdpd
+neighbor 0.3 bin
+neigh_modify every 1 delay 0 check yes
+comm_modify vel yes cutoff 2.0
+
+region        box  block -20 20 -20 20 -20 20 units box
+create_box    4    box
+
+mass 1 1
+mass 2 1
+mass 3 1 
+mass 4 1
+
+region        drop   sphere 0 0 0 7
+
+create_atoms  1 random $(round(6.1*3.1415*8*8*8*4/3)) 2021 drop
+
+create_atoms  2 random $(round(6.1*3.1415*8*8*8*4/3*0.006)) 2021 drop
+create_atoms  3 random $(round(6.1*3.1415*8*8*8*4/3*0.006)) 2021 drop
+create_atoms  4 random $(round(6.1*3.1415*8*8*8*4/3*0.006)) 2021 drop
+
+group solvent type 1
+group solute1 type 2
+group solute2 type 3
+group solute3 type 4
+
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
+pair_coeff  *  *   mdpd/rhosum  0.75
+
+pair_coeff  1  1   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  1  2   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  1  3   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  1  4   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  2  2   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  2  3   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  2  4   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  3  3   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  3  4   mdpd  -50.0  25.0  4.5  1.0  0.75
+pair_coeff  4  4   mdpd  -50.0  25.0  4.5  1.0  0.75
+
+###########################################################
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+dump 1 all atom 100 sim.lammpstrj
+
+min_style cg
+minimize 0 0 1000 10000
+
+fix         mvv     all mvv/dpd 0.65
+timestep 0.01
+run 2000
+
+
+fix field1 solute1 addforce -1.153 -.666 0
+fix field2 solute2 addforce 1.153 -.666 0
+fix field3 solute3 addforce 0 1.333 0
+
+run 30000
+
