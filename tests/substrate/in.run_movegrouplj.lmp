@@ -1,0 +1,81 @@
+units lj
+dimension 3
+boundary p p f
+
+processors 2 2 *
+
+atom_style hybrid angle mdpd
+neighbor 0.3 bin
+neigh_modify every 1 delay 0 check yes
+comm_modify vel yes cutoff 2.0
+
+region        box  block -20 20 -20 20 0 30 units box
+create_box    1    box
+
+mass 1 1
+
+region        slip   block  INF INF INF INF 2 4.5 
+
+region        drop   sphere 0 0 9 6
+create_atoms  1 random $(round(6.9*3.1415*6*6*6*4/3)) 2021 drop
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689
+pair_coeff  *  *   mdpd/rhosum  0.75
+
+pair_coeff  1  1   mdpd  -50.0  25.0  4.5  1.0  0.75
+
+###########################################################
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+dump 2 all atom 100 moving-lj1.lammpstrj
+
+min_style cg
+minimize 1e-4 1e-4 1000 10000
+
+fix         mvv     all mvv/dpd 0.65
+timestep 0.01
+run 1000
+
+fix wallhi all wall/harmonic zhi 29 100 0.5 1.0 units box
+fix walllo all wall/lj93 zlo 3 2.0 0.5 1.0 units box
+
+min_style cg
+minimize 1e-4 1e-4 1000 10000
+
+run 6000
+undump 2
+
+dump 1 all atom 100 moving-lj2.lammpstrj
+reset_timestep 0
+
+print  "$(step), $(time)"
+
+group move dynamic all region slip every 10
+
+variable amp equal .4
+variable omega equal 2*PI/30
+variable oscillation equal -v_amp*sin(v_omega*time)
+variable velo equal v_amp/v_omega*cos(v_omega*time)
+
+velocity all set 0 v_velo 0 sum yes
+
+fix gravity all addforce 0 v_oscillation 0
+# fix gravity move setforce 0 v_oscillation 0
+
+run 10000
+
+velocity all set 0 -v_velo 0 sum yes
+velocity move set 0 v_velo 0 sum yes
+
+unfix gravity
+fix gravity move addforce 0 v_oscillation 0
+
+run 60000
+
