@@ -44,7 +44,7 @@ timestep 0.01
 run 1000
 
 fix wallhi all wall/harmonic zhi 29 100 0.5 1.0 units box
-fix walllo all wall/lj93 zlo 3 2.0 0.5 1.0 units box
+fix walllo all wall/lj93 zlo 3 5.0 0.5 1.0 units box
 
 min_style cg
 minimize 1e-4 1e-4 1000 10000
@@ -59,23 +59,16 @@ print  "$(step), $(time)"
 
 group move dynamic all region slip every 10
 
-variable amp equal .4
+variable amp equal 3
 variable omega equal 2*PI/30
-variable oscillation equal -v_amp*sin(v_omega*time)
-variable velo equal v_amp/v_omega*cos(v_omega*time)
+variable oscillation equal -v_amp*v_omega*v_omega*sin(v_omega*time)
+variable velo equal v_amp*v_omega*cos(v_omega*time)
 
-velocity all set 0 v_velo 0 sum yes
-
-fix gravity all addforce 0 v_oscillation 0
-# fix gravity move setforce 0 v_oscillation 0
-
-run 10000
-
-velocity all set 0 -v_velo 0 sum yes
 velocity move set 0 v_velo 0 sum yes
 
-unfix gravity
 fix gravity move addforce 0 v_oscillation 0
 
 run 60000
+
+
 
