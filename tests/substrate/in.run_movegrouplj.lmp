@@ -14,7 +14,7 @@ create_box    1    box
 
 mass 1 1
 
-region        slip   block  INF INF INF INF 2 4.5 
+region        layer   block  INF INF INF INF 2 4.5 
 
 region        drop   sphere 0 0 9 6
 create_atoms  1 random $(round(6.9*3.1415*6*6*6*4/3)) 2021 drop
@@ -57,7 +57,7 @@ reset_timestep 0
 
 print  "$(step), $(time)"
 
-group move dynamic all region slip every 1
+group movingLayer dynamic all region layer every 1
 
 # From the solution to x'' + x = 0, with bc x(0)=0 and x'(0)=A*w
 # x(t) = A*sin(w*t)
@@ -73,9 +73,9 @@ variable velocity equal v_amp*v_omega*cos(v_omega*time)
 
 run 0 # Necessary to add atoms to the dynamic group 'move'
 
-velocity move set 0 v_velocity 0 sum yes
+velocity movingLayer set 0 v_velocity 0 sum yes
 
-fix gravity move addforce 0 v_oscillation 0
+fix f1 movingLayer addforce 0 v_oscillation 0
 
 fix extra all print 10 "$(v_oscillation),$(v_velocity), $(time)"
 
