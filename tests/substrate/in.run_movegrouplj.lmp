@@ -16,8 +16,11 @@ mass 1 1
 
 region        layer   block  INF INF INF INF 2 4.5 
 
-region        drop   sphere 0 0 9 6
-create_atoms  1 random $(round(6.9*3.1415*6*6*6*4/3)) 2021 drop
+
+variable Radius equal 6
+
+region        drop   sphere 0 0 9 v_Radius
+create_atoms  1 random $(round(6.9*4/3*PI*v_Radius^3)) 2021 drop
 
 ###########################################################
 # Pair, Bond and Angle Coefficients
