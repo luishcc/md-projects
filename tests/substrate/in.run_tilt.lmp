@@ -37,7 +37,7 @@ thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-dump 2 all atom 100 moving-lj1.lammpstrj
+dump 2 all atom 100 moving-tilt1.lammpstrj
 
 min_style cg
 minimize 1e-4 1e-4 1000 10000
@@ -53,35 +53,18 @@ min_style cg
 minimize 1e-4 1e-4 1000 10000
 
 run 6000
-undump 2
-
-dump 1 all atom 100 moving-lj2.lammpstrj
-
-reset_timestep 0  # So that force starts to be applied when t=0
 
 print  "$(step), $(time)"
 
 group movingLayer dynamic all region layer every 1
 
-# From the solution to x'' + x = 0, with bc x(0)=0 and x'(0)=A*w
-# x(t) = A*sin(w*t)
-# x'(t) = v(t) = A*w*cos(w*t)
-# x''(t) = a(t) = F(t)/m = -A*w^2*cos(w*t)
-# Setting an initial velocity is necessary to keep droplet in place
-
-variable amp equal 2
-variable freq equal 0.1
-variable omega equal 2*PI*v_freq
-variable oscillation equal -v_amp*v_omega^2*sin(v_omega*time)
-variable velocity equal v_amp*v_omega*cos(v_omega*time)
-
 run 0 # Necessary to add atoms to the dynamic group 'move'
 
-velocity movingLayer set 0 v_velocity 0 sum yes
+# velocity movingLayer set 0 0.01 0 sum yes
 
-fix f1 movingLayer addforce 0 v_oscillation 0
+fix f1 movingLayer addforce 0 -.005 0
+fix f2 all addforce 0 .005 -.005
 
-fix extra all print 10 "$(v_oscillation),$(v_velocity), $(time)"
 
 run 60000
 
