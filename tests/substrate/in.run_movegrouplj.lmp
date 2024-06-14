@@ -9,7 +9,7 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes cutoff 2.0
 
-region        box  block -20 20 -20 20 0 30 units box
+region        box  block -20 20 -60 60 0 30 units box
 create_box    1    box
 
 mass 1 1
@@ -19,7 +19,7 @@ region        layer   block  INF INF INF INF 2 4.5
 
 variable Radius equal 6
 
-region        drop   sphere 0 0 9 v_Radius
+region        drop   sphere 0 0 9.5 v_Radius
 create_atoms  1 random $(round(6.9*4/3*PI*v_Radius^3)) 2021 drop
 
 ###########################################################
@@ -47,7 +47,7 @@ timestep 0.01
 run 1000
 
 fix wallhi all wall/harmonic zhi 29 100 0.5 1.0 units box
-fix walllo all wall/lj93 zlo 3 5.0 0.5 1.0 units box
+fix walllo all wall/lj93 zlo 3 4.0 0.5 1.0 units box
 
 min_style cg
 minimize 1e-4 1e-4 1000 10000
@@ -72,8 +72,8 @@ group movingLayer dynamic all region layer every 1
 variable amp equal 2
 variable freq equal 0.1
 variable omega equal 2*PI*v_freq
-variable oscillation equal -v_amp*v_omega^2*sin(v_omega*time)
-variable velocity equal v_amp*v_omega*cos(v_omega*time)
+variable oscillation equal -v_amp*v_omega^2*cos(v_omega*time)
+variable velocity equal v_amp*v_omega*sin(v_omega*time)
 
 run 0 # Necessary to add atoms to the dynamic group 'move'
 
@@ -81,7 +81,7 @@ velocity movingLayer set 0 v_velocity 0 sum yes
 
 fix f1 movingLayer addforce 0 v_oscillation 0
 
-fix extra all print 10 "$(v_oscillation),$(v_velocity), $(time)"
+# fix extra all print 10 "$(v_oscillation),$(v_velocity), $(time)"
 
 run 60000
 
