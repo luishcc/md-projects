@@ -33,7 +33,7 @@ comm_modify         vel yes
 
 
 compute             cluster all cluster/atom 1
-dump cluster       all custom 100 dump.cl c_cluster
+dump cluster       all custom 100 dump.cl id type x y z c_cluster
 
 
 rerun                thread.lammpstrj dump x y z
