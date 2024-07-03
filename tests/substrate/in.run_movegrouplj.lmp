@@ -17,9 +17,9 @@ mass 1 1
 region        layer   block  INF INF INF INF 2 4.5 
 
 
-variable Radius equal 6
+variable Radius equal 8
 
-region        drop   sphere 0 0 9.5 v_Radius
+region        drop   sphere 0 0 $(v_Radius + 3.5) v_Radius
 create_atoms  1 random $(round(6.9*4/3*PI*v_Radius^3)) 2021 drop
 
 ###########################################################
@@ -55,13 +55,12 @@ minimize 1e-4 1e-4 1000 10000
 run 6000
 undump 2
 
-dump 1 all atom 100 moving-lj2.lammpstrj
-
-reset_timestep 0  # So that force starts to be applied when t=0
 
 print  "$(step), $(time)"
 
-group movingLayer dynamic all region layer every 1
+group movingLayer dynamic all region layer every 10
+run 0 # Necessary to add atoms to the dynamic group 'move'
+
 
 # From the solution to x'' + x = 0, with bc x(0)=0 and x'(0)=A*w
 # x(t) = A*sin(w*t)
@@ -69,21 +68,25 @@ group movingLayer dynamic all region layer every 1
 # x''(t) = a(t) = F(t)/m = -A*w^2*cos(w*t)
 # Setting an initial velocity is necessary to keep droplet in place
 
-variable amp equal 2
-variable freq equal 0.1
+variable amp equal 1000
+variable freq equal 0.01
 variable omega equal 2*PI*v_freq
 variable oscillation equal -v_amp*v_omega^2*cos(v_omega*time)
 variable velocity equal v_amp*v_omega*sin(v_omega*time)
 
-run 0 # Necessary to add atoms to the dynamic group 'move'
+dump 1 all atom 100 moving-lj2.lammpstrj
+
+reset_timestep 0  # So that force starts to be applied when t=0
 
 velocity movingLayer set 0 v_velocity 0 sum yes
 
 fix f1 movingLayer addforce 0 v_oscillation 0
 
+# fix mom all momentum 100 linear 1 1 1
+
 # fix extra all print 10 "$(v_oscillation),$(v_velocity), $(time)"
 
-run 60000
+run 100000
 
 
 
