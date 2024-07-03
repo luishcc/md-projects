@@ -17,7 +17,7 @@ mass 1 1
 region        layer   block  INF INF INF INF 2 4.5 
 
 
-variable Radius equal 8
+variable Radius equal 12
 
 region        drop   sphere 0 0 $(v_Radius + 3.5) v_Radius
 create_atoms  1 random $(round(6.9*4/3*PI*v_Radius^3)) 2021 drop
@@ -52,7 +52,7 @@ fix walllo all wall/lj93 zlo 3 4.0 0.5 1.0 units box
 min_style cg
 minimize 1e-4 1e-4 1000 10000
 
-run 6000
+run 10000
 undump 2
 
 
@@ -68,8 +68,8 @@ run 0 # Necessary to add atoms to the dynamic group 'move'
 # x''(t) = a(t) = F(t)/m = -A*w^2*cos(w*t)
 # Setting an initial velocity is necessary to keep droplet in place
 
-variable amp equal 1000
-variable freq equal 0.01
+variable amp equal 50
+variable freq equal 0.02
 variable omega equal 2*PI*v_freq
 variable oscillation equal -v_amp*v_omega^2*cos(v_omega*time)
 variable velocity equal v_amp*v_omega*sin(v_omega*time)
@@ -79,6 +79,7 @@ dump 1 all atom 100 moving-lj2.lammpstrj
 reset_timestep 0  # So that force starts to be applied when t=0
 
 velocity movingLayer set 0 v_velocity 0 sum yes
+velocity all zero linear
 
 fix f1 movingLayer addforce 0 v_oscillation 0
 
