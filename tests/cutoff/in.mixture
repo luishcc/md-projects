@@ -1,0 +1,55 @@
+log mixture.log
+
+units		lj
+atom_style	mdpd
+dimension	3
+boundary p p p
+
+neighbor	0.5 bin
+neigh_modify	every 1 delay 0 check yes
+comm_modify vel yes cutoff 2.5
+
+
+variable length equal 5
+variable molFrac1 equal 0.42
+variable molFrac2 equal $(1 - v_molFrac1)
+
+variable density equal 5.2
+variable Ntotal equal $(round(v_density*v_length^3))
+
+region       box   block 0 $(v_length) 0 $(v_length) 0 $(v_length) units box
+create_box          2 box
+
+
+create_atoms  1 random $(round(v_Ntotal*v_molFrac1)) 2021 box
+create_atoms  2 random $(round(v_Ntotal*v_molFrac2)) 2022 box
+
+mass		* 1.0
+
+velocity	all create 1 87287 mom yes
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689 
+pair_coeff  1  1   mdpd/rhosum  0.75
+pair_coeff  1  2   mdpd/rhosum  0.65
+pair_coeff  2  2   mdpd/rhosum  0.55
+
+variable prefactor equal "15/(2*PI)"
+
+pair_coeff  1  1   mdpd  -40.0  $(25*v_prefactor/0.75^4)  4.5  1.0  0.75
+pair_coeff  1  2   mdpd  -30.0  $(25*v_prefactor/0.7^4)  4.5  1.0  0.7
+pair_coeff  2  2   mdpd  -40.0  $(25*v_prefactor/0.65^4)  4.5  1.0  0.65
+
+dump		1 all custom 1000 dump.mixture id type x y z vx vy vz fx fy fz
+
+min_style cg
+minimize 0 0 1000 10000
+
+fix         2 all mvv/dpd 0.65 
+
+compute edpd all pair mdpd
+thermo_style	custom step temp press etotal c_edpd 
+thermo		200
+
+timestep	0.01
+run 1000000
+
