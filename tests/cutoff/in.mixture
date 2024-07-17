@@ -11,10 +11,10 @@ comm_modify vel yes cutoff 2.5
 
 
 variable length equal 5
-variable molFrac1 equal 0.42
+variable molFrac1 equal 0.5
 variable molFrac2 equal $(1 - v_molFrac1)
 
-variable density equal 5.2
+variable density equal 6.9
 variable Ntotal equal $(round(v_density*v_length^3))
 
 region       box   block 0 $(v_length) 0 $(v_length) 0 $(v_length) units box
@@ -33,23 +33,31 @@ pair_coeff  1  1   mdpd/rhosum  0.75
 pair_coeff  1  2   mdpd/rhosum  0.65
 pair_coeff  2  2   mdpd/rhosum  0.55
 
-variable prefactor equal "15/(2*PI)"
+variable prefactor equal "15/(PI)"
+variable B equal 1.65
 
-pair_coeff  1  1   mdpd  -40.0  $(25*v_prefactor/0.75^4)  4.5  1.0  0.75
-pair_coeff  1  2   mdpd  -30.0  $(25*v_prefactor/0.7^4)  4.5  1.0  0.7
-pair_coeff  2  2   mdpd  -40.0  $(25*v_prefactor/0.65^4)  4.5  1.0  0.65
+pair_coeff  1  1   mdpd  -40.0  $(v_B*v_prefactor/0.75^4)  4.5  1.0  0.75
+pair_coeff  1  2   mdpd  -40.0  $(v_B*v_prefactor/0.675^4)  4.5  0.9  0.675
+pair_coeff  2  2   mdpd  -40.0  $(v_B*v_prefactor/0.6^4)  4.5  0.8 0.6
 
-dump		1 all custom 1000 dump.mixture id type x y z vx vy vz fx fy fz
+# pair_coeff  1  1   mdpd  -40.0  $(v_B*v_prefactor/0.75^4)  4.5  1.0  0.75
+# pair_coeff  1  2   mdpd  -40.0  $(v_B*v_prefactor/0.675^4)  4.5  1.0  0.675
+# pair_coeff  2  2   mdpd  -40.0  $(v_B*v_prefactor/0.6^4)  4.5  1.0 0.6
+
+dump		1 all custom 100 dump.mixture id type x y z vx vy vz fx fy fz
 
 min_style cg
 minimize 0 0 1000 10000
 
-fix         2 all mvv/dpd 0.65 
+# fix         2 all mvv/dpd 0.65 
+
+fix 1 all npt temp 1 1 1.0 iso 5.0 5.0 10
+# fix         2 all mvv/dpd 0.65 
 
 compute edpd all pair mdpd
 thermo_style	custom step temp press etotal c_edpd 
 thermo		200
 
 timestep	0.01
-run 1000000
+run 100000
 
