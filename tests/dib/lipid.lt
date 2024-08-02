@@ -1,0 +1,83 @@
+lipid {
+
+  write_once("In Init") {
+    units           lj
+    atom_style      hybrid angle charge
+    bond_style      harmonic
+    angle_style     harmonic
+
+    dihedral_style  none
+    improper_style  none
+
+    pair_style  hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+  }
+
+  DPPC {
+    write("Data Atoms") {
+      $atom:h1   @atom:h1    0.00  0.00  0.00 $mol:. 1
+      $atom:h2   @atom:h2    0.00  0.00  0.00 $mol:. 1
+      $atom:g1   @atom:g     0.00  0.00  0.00 $mol:. 1
+      $atom:g2   @atom:g     0.00  0.00  0.00 $mol:. 1
+      $atom:t1   @atom:c1    0.00  0.00  0.00 $mol:. 1
+      $atom:t2   @atom:c1    0.00  0.00  0.00 $mol:. 1
+      $atom:t3   @atom:c1    0.00  0.00  0.00 $mol:. 1
+      $atom:t4   @atom:c1    0.00  0.00  0.00 $mol:. 1
+      $atom:t5   @atom:c1    0.00  0.00  0.00 $mol:. 1
+      $atom:t6   @atom:c1    0.00  0.00  0.00 $mol:. 1
+      $atom:t7   @atom:c1    0.00  0.00  0.00 $mol:. 1
+      $atom:t8   @atom:c1    0.00  0.00  0.00 $mol:. 1
+    }
+    
+    write("Data Bonds") {
+      $bond:b1   @bond:hh  $atom:h1 $atom:h2
+      $bond:b2   @bond:hg  $atom:h2 $atom:g1
+      
+      $bond:b3   @bond:backbone  $atom:g1 $atom:t1
+      $bond:b4   @bond:backbone2  $atom:t1 $atom:t2            
+      $bond:b5   @bond:backbone3  $atom:t2 $atom:t3                  
+      $bond:b6   @bond:backbone4  $atom:t3 $atom:t4            
+
+      $bond:b7   @bond:gg  $atom:g1 $atom:g2
+      $bond:b8   @bond:backbone  $atom:g2 $atom:t5
+      $bond:b9   @bond:backbone2  $atom:t5 $atom:t6
+      $bond:b10  @bond:backbone3  $atom:t6 $atom:t7
+      $bond:b11  @bond:backbone4  $atom:t7 $atom:t8            
+    }
+    
+    write("Data Angles") {
+      $angle:a1   @angle:lin  $atom:h1   $atom:h2   $atom:g1
+      $angle:a2   @angle:lin  $atom:h2   $atom:g1  $atom:t1         
+      $angle:a3   @angle:lin  $atom:g1   $atom:t1  $atom:t2         
+      $angle:a4   @angle:lin  $atom:t1   $atom:t2  $atom:t3         
+      $angle:a5   @angle:lin  $atom:t2   $atom:t3  $atom:t4         
+      
+      $angle:a6   @angle:bend  $atom:h2   $atom:g1  $atom:g2         
+      $angle:a7   @angle:bend  $atom:g1   $atom:g2  $atom:t5         
+      $angle:a8   @angle:lin  $atom:g2   $atom:t5  $atom:t6         
+      $angle:a9   @angle:lin  $atom:t5   $atom:t6  $atom:t7
+      $angle:a10  @angle:lin  $atom:t6   $atom:t7  $atom:t8                  
+    }
+    
+    write_once("Data Masses") {
+      @atom:h1  1
+      @atom:h2  1
+      @atom:g   1
+      @atom:c1  1
+    }
+
+    write_once("In Settings") {
+      bond_coeff   @bond:gg   harmonic     150 0.5
+      bond_coeff   @bond:hg   harmonic     150 0.5
+      bond_coeff   @bond:hh   harmonic     150 0.5
+      bond_coeff   @bond:backbone   harmonic     150 0.5
+      bond_coeff   @bond:backbone2   harmonic     150 0.5
+      bond_coeff   @bond:backbone3   harmonic     150 0.5
+      bond_coeff   @bond:backbone4   harmonic     150 0.5
+      
+      angle_coeff   @angle:lin   harmonic     5 180
+      angle_coeff   @angle:bend   harmonic    5 120
+    }
+
+  } 
+
+} 
