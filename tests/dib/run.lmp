@@ -14,12 +14,12 @@ comm_modify mode single cutoff 2.0 vel yes
 bond_style harmonic
 angle_style harmonic
 
-read_data system.data  extra/atom/types 1
+read_data system2.data  extra/atom/types 1
 
-region water1 sphere 0 9 0 7 units box
-region water2 sphere 0 -9 0 7 units box
-create_atoms 5 random 10000 2022 water1
-create_atoms 5 random 10000 2022 water2
+region water1 sphere 0 13 0 10 units box
+region water2 sphere 0 -13 0 10 units box
+create_atoms 5 random $(round(4/3*6.9*PI*10^3)) 2022 water1
+create_atoms 5 random $(round(4/3*6.9*PI*10^3)) 2023 water2
 mass 5 1
 
 
@@ -59,7 +59,7 @@ pair_coeff  5  5   mdpd  -50  25.0  4.5  1.0  0.75
 ###########################################################
 ###########################################################
 
-dump 2 all atom 100 bilayer.lammpstrj
+dump 2 all atom 100 bilayer2.lammpstrj
 dump_modify 2 scale no
 
 min_style cg
@@ -73,9 +73,24 @@ thermo_modify       temp mythermo
 thermo_modify       flush yes
 
 timestep 0.01
-run 40000
+run 60000
 
-unfix mvv
+
+# group  water1 region  water1
+# group  water2 region  water2
+
+# fix push1 water1 addforce 0 -0.5 0 
+# fix push2 water2 addforce 0 0.5 0 
+
+# run 1000
+
+# unfix push1
+# unfix push2
+
+# run 100000
+
+
+# unfix mvv
 
 # write_data layer-tt.data
 

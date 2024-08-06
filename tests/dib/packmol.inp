@@ -8,25 +8,25 @@ seed 1212
 
 nloop0 30
 
-output system.xyz
+output system2.xyz
 filetype xyz
 
 # inner shell APL = 1 (MDPD units)
 structure lipid.xyz
-  number 1200
+  number 2300
   atoms 1
-    inside sphere 0 9 0 7
+    inside sphere 0 13 0 10
   end atoms
   atoms 12
-    outside sphere 0 9 0 9
+    outside sphere 0 13 0 12
 end structure
 
 # inner shell APL = 1 (MDPD units)
 structure lipid.xyz
-  number 1200
+  number 2300
   atoms 1
-    inside sphere 0 -9 0 7
+    inside sphere 0 -13 0 10
   end atoms
   atoms 12
-    outside sphere 0 -9 0 9
+    outside sphere 0 -13 0 12
 end structure
