@@ -77,8 +77,8 @@ renderer = OSPRayRenderer(
 #     renderer=renderer)
 
 vp.render_anim(
-    size=(2560,1440), 
-    filename="dib-big.mp4", 
+    size=(1920,1080), 
+    filename="dib-big2.mp4", 
     background=(0,0,0),
-    fps = 50, 
+    fps = 60, 
     renderer=renderer)
