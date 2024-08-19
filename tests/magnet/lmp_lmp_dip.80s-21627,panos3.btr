@@ -1,0 +1,12 @@
+
+lmp_lmp_dip:21627 terminated with signal 11 at PC=7fb4051836cb SP=7ffefa3dcc10.  Backtrace:
+/home/luishcc/programs/lammps/build/liblammps_lmp_dip.so.0(_ZN9LAMMPS_NS8PairMDPD7computeEii+0x76b)[0x7fb4051836cb]
+/home/luishcc/programs/lammps/build/liblammps_lmp_dip.so.0(_ZN9LAMMPS_NS10PairHybrid7computeEii+0x3fb)[0x7fb40506abeb]
+/home/luishcc/programs/lammps/build/liblammps_lmp_dip.so.0(_ZN9LAMMPS_NS3Min5setupEi+0x3b3)[0x7fb404feffe3]
+/home/luishcc/programs/lammps/build/liblammps_lmp_dip.so.0(_ZN9LAMMPS_NS8Minimize7commandEiPPc+0x1cf)[0x7fb404ff78bf]
+/home/luishcc/programs/lammps/build/liblammps_lmp_dip.so.0(_ZN9LAMMPS_NS5Input15execute_commandEv+0xc12)[0x7fb404f8fd92]
+/home/luishcc/programs/lammps/build/liblammps_lmp_dip.so.0(_ZN9LAMMPS_NS5Input4fileEv+0x167)[0x7fb404f90237]
+lmp_lmp_dip(+0x126c)[0x55e5d3e5826c]
+/lib/x86_64-linux-gnu/libc.so.6(+0x29d90)[0x7fb401c29d90]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80)[0x7fb401c29e40]
+lmp_lmp_dip(+0x1355)[0x55e5d3e58355]
