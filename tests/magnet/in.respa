@@ -15,10 +15,10 @@ variable WaveLength equal 2*PI*v_Radius*v_WaveNumber
 print ${WaveLength}
 
 
-# variable file equal is_file(data.cylinder)
+# variable file equal is_file(cylinder.data)
 
 # if $(v_file) then 
-read_data data.cylinder 
+read_data cylinder.data
 # jump SELF skip
 
 # region     box     block -5 5 -5 5 0 ${WaveLength} units box
@@ -52,7 +52,7 @@ pair_coeff	2  2 lj/sf/dipole/sf 0.1 .6
 # min_style cg
 # minimize 0 0 10000 100000
 
-# write_data data.cylinder
+# write_data cylinder.data
 
 dump		1 all custom 100 dump.respa id type x y z mux muy muz fx fy fz
 
