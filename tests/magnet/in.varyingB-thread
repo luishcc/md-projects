@@ -37,12 +37,14 @@ pair_coeff  1  2   mdpd  -70  25  4.5  1.0  0.75
 pair_coeff  2  2   mdpd  -50  25  4.5  1.0  0.75
 
 # pair_coeff	1  2 lj/sf/dipole/sf 10 0.6
-pair_coeff	2  2 lj/sf/dipole/sf 1 .6
+pair_coeff	2  2 lj/sf/dipole/sf 1 .890899
 
 dump		1 all custom 100 dump.varying-thread id type x y z mux muy muz fx fy fz
 
 min_style cg
 minimize 0 0 10000 100000
+
+run_style respa 2 10 hybrid 2 2 1 
 
 fix		1 all nve/sphere  update dipole
 # fix         2 all mvv/dpd 0.65 
@@ -50,10 +52,10 @@ fix		1 all nve/sphere  update dipole
 thermo_style	custom step temp press
 thermo		200
 
-timestep	0.0001
+timestep	0.001
 run 1000
 
-timestep	0.001
+timestep	0.01
 run 1000
 
 ##################################################
@@ -99,7 +101,7 @@ fix fieldforce mnp addforce v_dipfx v_dipfy v_dipfz
 ##################################################
 
 
-timestep	0.001
+timestep	0.01
 run 100000
 
 
