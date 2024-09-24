@@ -1,4 +1,16 @@
 import numpy as np
+import matplotlib as mpl
+
+dpi = 600
+side = 7
+rc_fonts = {
+    "font.family": "serif",
+    "font.size": 12,
+    'figure.figsize': (1.5*side, .8*side),
+    "text.usetex": True
+    }
+mpl.rcParams.update(rc_fonts)
+
 import matplotlib.pyplot as plt
 from scipy.optimize import fsolve
 
@@ -40,32 +52,56 @@ print(density)
 
 # exit()
 
-mu = [7.22, 10.76, 18.31, 33.9, 64.01]
+# mu = [7.22, 10.76, 18.31, 33.9, 64.01]
 
-guess1 = 6
-guess2 = 6
-for a, m in zip(np.linspace(-50, -90, 5), mu):
-  func1 = lambda x: eos_warren(a, 25, x)
-  func2 = lambda x: eos_jamali(a, 25, x)
-  guess1 = fsolve(func1, guess1)
-  guess2 = fsolve(func2, guess2)
-  st1 = sigma_fit(a,25,guess1)
-  st2 = sigma_fit(a,25,guess2)
-  print('density:         ', guess1, guess2)
-  print('surface tension: ', st1, st2)
-  print('Oh:              ', oh_number(guess1, m, st1, 6), oh_number(guess2, m, st2, 6))
+# guess1 = 6
+# guess2 = 6
+# for a, m in zip(np.linspace(-50, -90, 5), mu):
+#   func1 = lambda x: eos_warren(a, 25, x)
+#   func2 = lambda x: eos_jamali(a, 25, x)
+#   guess1 = fsolve(func1, guess1)
+#   guess2 = fsolve(func2, guess2)
+#   st1 = sigma_fit(a,25,guess1)
+#   st2 = sigma_fit(a,25,guess2)
+#   print('density:         ', guess1, guess2)
+#   print('surface tension: ', st1, st2)
+#   print('Oh:              ', oh_number(guess1, m, st1, 6), oh_number(guess2, m, st2, 6))
 
 # exit()
 
-density = np.linspace(1, 11, 100)
-plt.figure()
-for a in np.linspace(-80, -80, 1):
-  plt.plot(density, [eos_warren(a,25,r) for r in density], 'k-', label = a)
-  plt.plot(density, [eos_jamali(a,25,r) for r in density], 'b--', label = a)
-  plt.plot(density, [eos_jamali(a,25,r, paper=False) for r in density], 'r.', label = a)
+density = np.linspace(0, 15, 100)
+
+fig, (ax, ax1) = plt.subplots(1,2, sharey=True)
+
+fig.subplots_adjust(wspace=.1)
+
+marker = ['k^', 'bs', 'go', 'y+']
+i = 0
+for a in np.linspace(-40, -70, 2):
+  for b in np.linspace(20, 35, 2):
+    # plt.plot(density, [eos_warren(a,25,r) for r in density], 'k-', label = a)
+    ax.plot(density, [eos_jamali(a,b,r, rd=0.75) for r in density], marker[i], 
+             label = rf'A={a}, B={b}', markerfacecolor='none')
+    ax1.plot(density, [eos_jamali(a,b,r, rd=0.65) for r in density], marker[i], 
+             label = rf'A={a}, B={b}', markerfacecolor='none')
+    i+=1
+    # plt.plot(density, [eos_jamali(a,25,r, paper=False) for r in density], 'r-.', label = a)
+
+ax.set_ylim(-300, 400)
+ax1.set_ylim(-300, 400)
+
+ax.set_xlabel(r'$\rho$')
+ax1.set_xlabel(r'$\rho$')
+
+ax.set_ylabel(r'$p$')
+
+ax.legend(loc='lower right', frameon=False)
+ax.plot([min(density), max(density)], [0, 0], 'k--')
+ax.annotate(r'$r_d=0.75$', xy=(2, -200), fontsize=11)
+
+ax1.legend(loc='upper left', frameon=False)
+ax1.plot([min(density), max(density)], [0, 0], 'k--')
+ax1.annotate(r'$r_d=0.65$', xy=(2, 150), fontsize=11)
 
 
-
-plt.legend(loc='upper left')
-plt.plot([min(density), max(density)], [0, 0], 'k--')
 plt.show()
