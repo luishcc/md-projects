@@ -1,0 +1,111 @@
+units lj
+dimension 3
+boundary p p p
+
+processors 2 1 *
+
+atom_style hybrid angle mdpd
+
+neighbor 0.3 bin
+neigh_modify  every 1  check yes
+
+comm_modify mode single cutoff 2.0 vel yes
+
+bond_style harmonic
+angle_style harmonic
+
+read_data system2.data  extra/atom/types 1
+
+region water1 sphere 0 13 0 10 units box
+region water2 sphere 0 -13 0 10 units box
+create_atoms 5 random $(round(4/3*6.9*PI*10^3)) 2022 water1
+create_atoms 5 random $(round(4/3*6.9*PI*10^3)) 2023 water2
+mass 5 1
+
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 3514
+pair_coeff  *  *   mdpd/rhosum  0.75
+
+bond_coeff * 150 0.5
+bond_coeff 2 150 0.5
+angle_coeff 1 5 180                           				
+angle_coeff 2 5 120   
+
+# 1 - H1
+# 2 - H2
+# 3 - G
+# 4 - C
+# 5 - W
+
+#########
+# Test H bead
+pair_coeff  1*2  1*2   mdpd  -30  25.0  4.5  1.0  0.75
+pair_coeff  1*2  3   mdpd  -40  25.0  4.5  1.0  0.75
+pair_coeff  1*2  4   mdpd  -26  25.0  4.5  1.0  0.75
+pair_coeff  1*2  5   mdpd  -50  25.0  4.5  1.0  0.75
+##########
+
+pair_coeff  3  3   mdpd  -34  25.0  4.5  1.0  0.75
+pair_coeff  3  4   mdpd  -26  25.0  4.5  1.0  0.75
+pair_coeff  3  5   mdpd  -43  25.0  4.5  1.0  0.75
+
+pair_coeff  4  4   mdpd  -26  25.0  4.5  1.0  0.75
+pair_coeff  4  5   mdpd  -26  25.0  4.5  1.0  0.75
+
+pair_coeff  5  5   mdpd  -50  25.0  4.5  1.0  0.75
+###########################################################
+###########################################################
+
+dump 2 all atom 100 bilayer2.lammpstrj
+dump_modify 2 scale no
+
+min_style cg
+minimize 1e-4 1e-4 1000 10000
+
+fix         mvv     all mvv/dpd 0.65
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+timestep 0.01
+run 60000
+
+
+# group  water1 region  water1
+# group  water2 region  water2
+
+# fix push1 water1 addforce 0 -0.5 0 
+# fix push2 water2 addforce 0 0.5 0 
+
+# run 1000
+
+# unfix push1
+# unfix push2
+
+# run 100000
+
+
+# unfix mvv
+
+# write_data layer-tt.data
+
+##########################################################
+## TEST NPT RUN
+
+# fix fxnpt all npt temp 1.0 1.0 30000.0 couple xy aniso 1.0 1.0 1000.0 drag 1
+# dump dmAll all atom 100 bilayer-tt-2.lammpstrj
+# dump_modify dmAll scale no
+
+
+# run      30000
+# unfix    fxnpt
+# undump   dmAll
+
+# dump dmAll all custom 100 bilayer-tt-3.lammpstrj id type x y z mol
+# fix         mvv     all mvv/dpd 0.65
+# run      30000
