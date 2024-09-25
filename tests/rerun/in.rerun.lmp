@@ -47,5 +47,6 @@ dump force all custom 100 dump.force-re id fx fy fz
 dump vel all custom 100 dump.vel-re id vx vy vz
 
 
-rerun thread.lammpstrj dump x y z 
+rerun thread.lammpstrj skip 200000 dump x y z 
 
+write_data 

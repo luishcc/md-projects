@@ -34,12 +34,13 @@ thermo              100
 thermo_modify       temp mythermo
 thermo_modify       flush yes
 
-velocity            all create 1.0 2093 loop local dist gaussian
+# velocity            all create 1.0 2093 loop local dist gaussian
 comm_modify         vel yes
-fix         mvv     all mvv/dpd 0.65
+# fix         mvv     all mvv/dpd 0.65
 
 timestep            0.01
 
-dump        mydump  all atom 100 sim.lammpstrj
+dump        mydump  all atom 100 sim2.lammpstrj
 
-run                 10000
+rerun sim.lammpstrj skip 10 dump x y z 
+write_data new.data
