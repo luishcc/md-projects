@@ -294,8 +294,8 @@ dpi = 1600
 side = 7
 rc_fonts = {
     "font.family": "serif",
-    "font.size": 12,
-    'figure.figsize': (0.8*side, 0.7*side),
+    "font.size": 15,
+    'figure.figsize': (1.1*side, .6*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
@@ -308,10 +308,7 @@ from matplotlib import container
 
 fig, axs = plt.subplots(ncols=1, nrows=1)
 fig2, axs2 = plt.subplots(ncols=1, nrows=1)
-# gs = axs[0, 0].get_gridspec()
-# for ax in axs[0, :]:
-#     ax.remove()
-# axbig = fig.add_subplot(gs[0, :])
+
 
 fig.subplots_adjust(hspace=.4)
 # fig.subplots_adjust(wspace=.4)
@@ -319,11 +316,10 @@ fig.subplots_adjust(hspace=.4)
 # fig.tight_layout()
 
 ax1 = axs
-# ax1 = axs[1]
 ax2 = axs2
 
 ax22 = plt.axes([0,0,1,1])
-ip = InsetPosition(ax2, [0.55,0.5,0.4,0.45])
+ip = InsetPosition(ax2, [0.5,0.4,0.45,0.5])
 ax22.set_axes_locator(ip)
 
 ##########################################
@@ -351,7 +347,6 @@ Rr = [2,4,6]
 A=[40,50,60,70,80,85,90]
 
 
-
 ratio=48
 qq = {}
 qqinv = {}
@@ -365,10 +360,7 @@ for r in Rr:
         try:
             with open(file, 'r') as fd:
                 fd.readline()
-                line = fd.readline().split(',')
-                # qq[r].append(float(line[0]) * 2 * np.pi * r*scale_r[r])
-                # qqinv[r].append(1/(float(line[0]) * r*scale_r[r]))
-                # qq_var[r].append(float(line[1]) * ( 2 * np.pi * r*scale_r[r])**2)
+                line = fd.readline().split(',')                
                 qq[r].append(float(line[0]) * 2 * np.pi * radii_r[r][i])
                 qqinv[r].append(1/(float(line[0]) * radii_r[r][i]))
                 qq_var[r].append(float(line[1]) * ( 2 * np.pi * radii_r[r][i])**2)
@@ -393,13 +385,19 @@ def pred4(x):
 
 
 ax1.errorbar(qq[6], bbb, xerr = 2*np.sqrt(np.array(qq_var[6])/20),markerfacecolor='none',
-fmt='o',ecolor = 'blue', capsize= 2, capthick=1,color='blue', label=r'$R_0=6$')
+fmt='none',ecolor = 'blue', capsize=5, capthick=2,color='blue')
+ax1.scatter(qq[6], bbb, c='none',
+marker='o', edgecolor = 'blue', s=60, label=r'$R_0=6$', linewidth=2)
 
 ax1.errorbar(qq[2], bbb2, xerr = 2*np.sqrt(np.array(qq_var[2])/20),markerfacecolor='none',
-fmt='s',ecolor = 'red', capsize= 2, capthick=1,color='red', label=r'$R_0=2$')
+fmt='none',ecolor = 'red', capsize= 5, capthick=2,color='red')
+ax1.scatter(qq[2], bbb2, c='none',
+marker='s', edgecolor = 'red', s=60, label=r'$R_0=2$', linewidth=2)
 
-ax1.errorbar(qq[4], bbb4, xerr = 2*np.sqrt(np.array(qq_var[4])/20),markerfacecolor='none',
-fmt='x',ecolor = 'green', capsize= 2, capthick=1,color='green', label=r'$R_0=4$')
+ax1.errorbar(qq[4], bbb4, xerr = 2*np.sqrt(np.array(qq_var[4])/20),
+fmt='none',ecolor = 'green', capsize=5, capthick=2,color='green')
+ax1.scatter(qq[4], bbb4, c='none',
+marker='^', edgecolor = 'green', s=60, label=r'$R_0=4$', linewidth=2)
 
 all_bbb = bbb + bbb2 + bbb4
 all_qq = qq[6] + qq[2] + qq[4]
@@ -438,13 +436,15 @@ print(pars4, stdevs4)
 dv = abs(qq[6][-1]-qq[6][0])
 pdv = 1.2 * dv
 x = np.linspace(wwave[0]+1.*pdv, wwave[-1]-pdv, 100)
-ax1.plot(x, pred4(x), 'k--', label='Theory')
+ax1.plot(x, pred4(x), 'k--', label='Theory',
+         linewidth=2.5)
 
-ax1.plot(x, fpow(x, *pars2), 'b-.', label=r'$R_D/R_0 \sim \chi^{-0.62}$ (Fit)')
-# ax1.plot(x, fexp(x, *pars), 'g--', label='exp')
-# ax1.plot(x, fexp2(x, *pars4), 'k--', label='Power Law2')
+ax1.plot(x, fpow(x, *pars2), 'b-.', 
+         label=r'$R_D/R_0 \sim x^{-0.62}$ (Fit)',
+         linewidth=2.5)
 
-ax1.set_xlabel('$\chi$')
+
+ax1.set_xlabel('$x$')
 ax1.set_ylabel('$R_D/R_0$')
 ax1.set_xlim(0.17, 0.7 )
 ax1.set_ylim(1.8, 3.11)
@@ -452,33 +452,9 @@ ax1.set_ylim(1.8, 3.11)
 from matplotlib import container
 handles, labels = ax1.get_legend_handles_labels()
 handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-first_legend = ax1.legend(handles[:2], labels[:2], loc='lower left', ncol=1, frameon=False)
+first_legend = ax1.legend(handles[3:], labels[3:], loc='lower left', ncol=1, frameon=False)
 ax1.add_artist(first_legend)
-ax1.legend(handles[2:], labels[2:], loc='upper right', ncol=1, frameon=False)
-
-
-# import pandas as pd
-#
-# R = 6
-# ratio = 48
-# A = -50
-# snap = 100
-#
-#
-# ax1.errorbar(wave, bb, xerr = np.sqrt(q_var)*2*np.pi*4.8, markerfacecolor='none',
-# fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
-# dv = abs(wave[-1]-wave[0])
-# pdv = 0.3 * dv
-# x = np.linspace(wave[0]+pdv, wave[-1]-pdv, 100)
-# ax1.plot(x, pred4(x), 'k--', label='Theory')
-# ax1.set_xlabel('$\chi$')
-# ax1.set_ylabel('$R_D$')
-# from matplotlib import container
-# handles, labels = ax1.get_legend_handles_labels()
-# handles = [h[0] if isinstance(h, container.ErrorbarContainer) else h for h in handles]
-# ax1.legend(handles, labels, loc='lower left', ncol=1, frameon=False)
-
-
+ax1.legend(handles[:3], labels[:3], loc='upper right', ncol=1, frameon=False)
 
 
 ##########################################
@@ -488,12 +464,14 @@ ax1.legend(handles[2:], labels[2:], loc='upper right', ncol=1, frameon=False)
 # ax2.plot(a2, b_fit2, 'k--', label='Quadratic fit')
 # ax2.plot(a2, fexp(a2, *pars), 'b--', label='exp fit')
 # ax2.loglog(a2, flog(a2, *pars3), 'k--', label='Log Fit')
-ax2.plot(a2, fpow(a2, *pars2), 'k--', label='Power Law')
+ax2.plot(a2, fpow(a2, *pars2), 'k--', label='Power Law', linewidth=2)
 # ax2.plot(a, b, 'ko', label='Simulation')
 # ax2.errorbar(a, b, yerr = np.sqrt(b_var),
 # fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation')
 ax2.errorbar(a, b, yerr = 2*np.sqrt(np.array(b_var)/20),
-fmt='o',ecolor = 'black', capsize= 2, capthick=1,color='black', label='Simulation', markerfacecolor='none')
+    fmt='none',ecolor = 'black', capsize= 4, capthick=2,color='black')
+ax2.scatter(a, b, marker='o', edgecolor = 'black', 
+    c = 'none', linewidth=2, s=60, label='Simulation')
 ax2.set_ylabel('$N_{satellite}/N_{total}$')
 ax2.set_xlabel(xlabel)
 
@@ -504,18 +482,19 @@ ax2.legend(handles, labels, loc=(.13, .75), ncol=1, frameon=False)
 from matplotlib.patches import Polygon
 
 ax22.set_ylim(1e-2, 7e-1)
-ax22.loglog(a2, fpow(a2, *pars2), 'k--', label='Power Law')
-ax22.scatter(a, b, marker='o',color = 'black', facecolors='none', label='Simulation')
+ax22.loglog(a2, fpow(a2, *pars2), 'k--', label='Power Law', linewidth=2)
+ax22.scatter(a, b, marker='o',color = 'black', facecolors='none', 
+             label='Simulation', linewidth=2)
 t1 = Polygon([[.022, .03], [.022, .06], [.06, .03]], facecolor='none', edgecolor='black')
 ax22.add_patch(t1)
-ax22.annotate(r'$0.72\pm0.04$', xy=(.0036, 0.035), fontsize=11)
+ax22.annotate(r'$0.72\pm0.04$', xy=(.0036, 0.035), fontsize=15)
 
 
 
-# fig.savefig('fig9.pdf', bbox_inches='tight', dpi=dpi )
-fig2.savefig('fig8.pdf', bbox_inches='tight', dpi=dpi )
+# fig.savefig('ch3size.pdf', bbox_inches='tight', dpi=dpi )
+fig2.savefig('ch3sat.pdf', bbox_inches='tight', dpi=dpi )
 
 
 
 
-plt.show()
+# plt.show()
