@@ -2,15 +2,6 @@ import numpy as np
 
 import matplotlib as mpl
 
-dpi = 1600
-side = 7
-rc_fonts = {
-    "font.family": "serif",
-    "font.size": 12,
-    'figure.figsize': (0.8*side, 0.5*side),
-    "text.usetex": True
-    }
-mpl.rcParams.update(rc_fonts)
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition,
@@ -22,7 +13,7 @@ def func(x):
     a = 1/(2+b)
     return np.sqrt(a)
 
-oh = np.linspace(0.1, 2.30, 10000)
+oh = np.linspace(0.1, 2.60, 10000)
 x = np.zeros(len(oh))
 
 x = func(oh)
@@ -106,7 +97,7 @@ ax.plot(oh, x, label='Theory', linewidth=2.5, color='k', linestyle='--' )
 ax.set_ylabel('$x$')
 ax.set_xlabel(r'Oh')
 ax.set_ylim(0.22, 0.69)
-ax.set_xlim(0.06, 2.31)
+ax.set_xlim(0.06, 2.5)
 
 
 print(oh_r, q, q_var)
