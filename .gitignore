@@ -7,6 +7,7 @@ restart.*
 data/
 *.profile
 bash.out
+angle.txt
 
 *.csv
 *.pdf
