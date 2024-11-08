@@ -8,6 +8,9 @@ data/
 *.profile
 bash.out
 angle.txt
+angle2.txt
+height.txt
+area.txt
 
 *.csv
 *.pdf

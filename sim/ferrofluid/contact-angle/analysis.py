@@ -1,6 +1,5 @@
 import os
 import sys
-
 import numpy as np
 from scipy.interpolate import CubicSpline
 
@@ -9,7 +8,6 @@ from ovito.modifiers import *
 
 dir = sys.argv[1]
 print(dir)
-
 if os.path.isfile(f'{dir}/angle.txt'): 
     print('File already exists')
     exit()
@@ -20,6 +18,10 @@ dz = 1                     # bin size
 begin_frame = 100
 
 pipeline = import_file(file)
+num_frames = pipeline.source.num_frames
+if num_frames < 300:
+    print('Not Enough frames')
+    exit()
 
 pipeline.modifiers.append(ClusterAnalysisModifier(
     cutoff = 0.9, sort_by_size = True))
@@ -27,9 +29,7 @@ pipeline.modifiers.append(ExpressionSelectionModifier(
     expression = 'Cluster != 1'))
 pipeline.modifiers.append(DeleteSelectedModifier())
 
-num_frames = pipeline.source.num_frames
-
-result = np.zeros(16)-1
+result = np.zeros(20)-1
 for frame in range(begin_frame, num_frames):
     print(frame, end='\r')
     data = pipeline.compute(frame)
@@ -75,12 +75,18 @@ cs = CubicSpline(xx,function)
 value = np.arctan2(1,cs(0,1))*180/np.pi
 print('Angle is ', value)
 
-if frame < 290:
-    print('Enough frames')
-    exit()
+try:
+    with open(f'{dir}/angle.txt', 'x') as fd:
+        fd.write(str(value))
+except: pass
 
-with open(f'{dir}/angle.txt', 'x') as fd:
-    fd.write(str(value))
+value = np.arctan2(1,cs(1,1))*180/np.pi
+try:
+    with open(f'{dir}/angle2.txt', 'x') as fd:
+        fd.write(str(value))
+except: pass
+
+
 
 
 

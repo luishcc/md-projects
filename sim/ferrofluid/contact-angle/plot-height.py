@@ -13,16 +13,8 @@ rc_fonts = {
     }
 mpl.rcParams.update(rc_fonts)
 
-print(sys.argv)
-try:
-    arg = int(sys.argv[1])
-except:
-    arg = 1
-    
-if arg==1:
-    filename = 'angle.txt'
-elif arg==2:
-    filename = 'angle2.txt'
+
+filename = 'height.txt'
     
 
 cons = np.linspace(0.05, 0.15, int((0.15-0.05)/0.05+1))
@@ -43,7 +35,8 @@ import random
 for i, con in enumerate(cons):
     color = colors[i]
     for j, wall in enumerate(walls):
-        line = []
+        height = []
+        std = []
         marker = markers[j]
         style = linestyles[i]
         for dip in dips:
@@ -53,19 +46,22 @@ for i, con in enumerate(cons):
              #   line.append(random.randrange(20, 120, 3))
                 continue
             with open(file, 'r') as fd:
-                line.append(180-float(fd.readline().split()[0]))
+                height.append(float(fd.readline().split()[0]))
+                std.append(float(fd.readline().split()[0]))
 	
-        ax.plot(dips[:len(line)], line, color=color,
+        ax.plot(dips[:len(height)], height, color=color,
                 linestyle=style, linewidth=1.2,
                 label=rf'${con*100:.0f}\%$')
-        ax.plot(dips[:len(line)], line, color=color, markersize=6,
+        ax.plot(dips[:len(height)], height, color=color, markersize=6,
                 linestyle='none', markeredgewidth=1,
                 marker=marker, markerfacecolor='none',
                 label=iniang[j])
+        # ax.errorbar(dips[:len(height)], height, yerr=std,
+        #         linestyle='none')
 
-ax.set_ylabel(r'$\theta$ [deg]')
+ax.set_ylabel(r'$h$ [$r_c$]')
 ax.set_xlabel(r'$\mu$')
-ax.set_ylim(40,180)
+ax.set_ylim(5,20)
 
 handles, labels = ax.get_legend_handles_labels()
 
@@ -73,7 +69,7 @@ han1 = [handles[i*2+1] for i in range(4)]
 lab1 = [labels[i*2+1] for i in range(4)]
 
 legend1 = plt.legend(han1, lab1, frameon=False, 
-      loc='upper right', ncol=2, handlelength=0,
+      loc='lower right', ncol=2, handlelength=0,
       title=r'$\epsilon_{wall}$', title_fontsize=11,
       columnspacing=1.2,
       fontsize=11)

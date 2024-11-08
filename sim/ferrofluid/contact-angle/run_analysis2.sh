@@ -7,7 +7,7 @@ MIN_CONCENTRATION=0.15
 MAX_CONCENTRATION=0.15
 CONCENTRATION_STEP=0.05
 
-MIN_DIPOLE=1.50
+MIN_DIPOLE=0.00
 MAX_DIPOLE=3.00
 DIPOLE_STEP=0.25
 
@@ -31,7 +31,7 @@ do
       fi
 
       echo "Running analysis on $DIR"
-      python3 analysis.py $DIR   
+      python3 height-area.py $DIR   
       echo
 
       
