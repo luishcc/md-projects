@@ -27,7 +27,7 @@ elif arg==2:
 
 cons = np.linspace(0.05, 0.15, int((0.15-0.05)/0.05+1))
 walls = np.linspace(2, 8, int((8-2)/2+1))
-dips = np.linspace(0, 3, int(3/0.25+1))
+dips = np.linspace(0, 4, int(4/0.25+1))
 
 fig, ax = plt.subplots(1,1)
 
