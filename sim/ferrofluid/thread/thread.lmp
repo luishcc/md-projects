@@ -9,26 +9,46 @@ neighbor	0.5 bin
 neigh_modify	every 1 delay 0 check yes
 comm_modify vel yes cutoff 3.5
 
-variable Radius equal 3
-variable WaveNumber equal 2
-variable WaveLength equal 2*PI*v_Radius*v_WaveNumber
+# time to break 
+# Field amp 10 2ndrop 2 radius 4 dip 3 - 34600 nobreak
+# Field amp 0 2ndrop 2 radius 4 dip 0 - 10700
+# Field amp 100 2ndrop 2 radius 4 dip 3 - 3000
+
+# Field amp 50 2ndrop 1 radius 4 dip 3 - 3400 nobreak
+# Field amp 30 2ndrop 1 radius 4 dip 3 - 3800 nobreak
+# Field amp 20 2ndrop 1 radius 4 dip 3 - 4400 nobreak
+# Field amp 15 2ndrop 1 radius 4 dip 3 - 18000 nobreak
+# Field amp 10 2ndrop 1 radius 4 dip 3 - 54000 nobreak
+
+variable Radius equal 4
+
+variable con index 0.1
+variable dip index 3
+variable DIR index dir
+
+variable WaveNumber equal 0.6
+variable NDrops equal 4
+variable Field2NDrops equal 1
+variable WaveLength equal 2*PI*v_Radius/v_WaveNumber*v_NDrops
 print ${WaveLength}
 
-region     box     block -18 18 -18 18 0 ${WaveLength} units box
-create_box          2 box
+region box     block -18 18 -18 18 0 ${WaveLength} units box
+create_box 2 box
 
-region     cylinder     cylinder z 0 0 v_Radius INF INF
+region cylinder cylinder z 0 0 v_Radius INF INF
 
-create_atoms  1 random $(round(6.1*PI*v_Radius^2*v_WaveLength)) 2021 cylinder
-create_atoms  2 random $(round(6.1*PI*v_Radius^2*v_WaveLength*0.1)) 2022 cylinder
+create_atoms  1 random $(round(6.9*PI*v_Radius^2*v_WaveLength*(1-v_con))) 2021 cylinder
+create_atoms  2 random $(round(6.9*PI*v_Radius^2*v_WaveLength*v_con)) 2022 cylinder
 
 group mnp type 2
 mass		* 1.0
 
 velocity all create 1 1 dist gaussian mom yes 
 
-set		group mnp dipole/random 98934 1
+if "$(v_dip>0.001)" then &
+  "set group mnp dipole/random 98934 $(v_dip)"
 
+#############################################################
 pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689 lj/sf/dipole/sf 1 3.0
 
 pair_coeff  *  *   mdpd/rhosum  0.75
@@ -38,8 +58,10 @@ pair_coeff  2  2   mdpd  -50  25  4.5  1.0  0.75
 
 # pair_coeff	1  2 lj/sf/dipole/sf 10 0.6
 pair_coeff	2  2 lj/sf/dipole/sf 1 .890899
+#############################################################
 
-dump		1 all custom 100 dump.varying-thread id type x y z mux muy muz fx fy fz
+# log ${DIR}/angle.log
+dump		1 all custom 100 sim.lammpstrj id type x y z mux muy muz 
 
 min_style cg
 minimize 0 0 10000 100000
@@ -62,8 +84,8 @@ run 1000
 ##################################################
 # Magnetic field definition 
 
-variable Amp equal 10
-variable alpha equal 2*PI/(zhi-zlo)*2
+variable Amp equal 15
+variable alpha equal 2*PI/(zhi-zlo)*v_Field2NDrops
 
 variable Bx atom 0
 variable By atom 0
@@ -73,11 +95,11 @@ variable Bz atom v_Amp*sin(v_alpha*z)
 
 variable dxBx atom 0
 variable dyBx atom 0
-variable dzBx atom  0
+variable dzBx atom 0
 
 variable dxBy atom 0
 variable dyBy atom 0
-variable dzBy atom  0
+variable dzBy atom 0
 
 variable dxBz atom 0
 variable dyBz atom 0
