@@ -93,7 +93,7 @@ set group mnp dipole v_dfx v_dfy v_dfz
 ##################################################
 # Magnetic field definition 
 
-variable Amp equal 10
+variable Amp equal 5
 variable alpha equal 2*PI/(zhi-zlo)*2
 
 variable Bx atom v_Amp*x
@@ -116,11 +116,12 @@ variable dzBy atom  0
 
 variable dxBz atom 0
 variable dyBz atom 0
-variable dzBz atom v_Amp*v_alpha*cos(v_alpha*z)
+# variable dzBz atom v_Amp*v_alpha*cos(v_alpha*z)
+variable dzBz atom 0
 
 # Apply force due to gradient 
 
-compute mu all property/atom mux muy muz
+# compute mu all property/atom mux muy muz
 
 variable dipfx atom c_mu[1]*v_dxBx+c_mu[2]*v_dyBx+c_mu[3]*v_dzBx
 variable dipfy atom c_mu[1]*v_dxBy+c_mu[2]*v_dyBy+c_mu[3]*v_dzBy

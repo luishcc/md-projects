@@ -8,7 +8,7 @@ from ovito.vis import *
 
 
 ovito.scene.load('hydrophilic-presentation.ovito')
-ovito.scene.load('hydrophobic-presentation.ovito')
+# ovito.scene.load('hydrophobic-presentation.ovito')
 pipeline = ovito.scene.pipelines[0]
 
 data = pipeline.compute(0)
@@ -42,7 +42,7 @@ renderer = OSPRayRenderer(
 
 vp.render_anim(
     size=(1920,1080), 
-    filename="hydrophobic.mp4", 
+    filename="hydrophilic.mp4", 
     range=(0,200),
     background=(0,0,0),
     fps = 30, 
