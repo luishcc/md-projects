@@ -105,11 +105,11 @@ thermo		100
 # Magnetic field definition 
 
 variable Amp index 0
-variable alpha equal 2*PI/(zhi-zlo)*v_FieldNDrops
+variable alpha equal 2*PI/(zhi-zlo)*v_FieldNDrops/2
 
 variable Bx atom 0
 variable By atom 0
-variable Bz atom v_Amp*cos(v_alpha*z+PI)+v_Amp
+variable Bz atom v_Amp*sin(v_alpha*z)
 
 # Gradient of the Field
 
@@ -123,7 +123,7 @@ variable dzBy atom 0
 
 variable dxBz atom 0
 variable dyBz atom 0
-variable dzBz atom -v_Amp*v_alpha*sin(v_alpha*z+PI)
+variable dzBz atom v_Amp*v_alpha*cos(v_alpha*z)
 
 # Apply field to magnetic particles (group mnp)
 
@@ -144,7 +144,7 @@ fix fieldforce mnp addforce v_dipfx v_dipfy v_dipfz
 
 
 timestep	0.01
-run 20000
+run 40000
 
 write_data ${DIR}/final.data
 

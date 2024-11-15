@@ -11,6 +11,7 @@ angle.txt
 angle2.txt
 height.txt
 area.txt
+breaktime.txt
 
 *.csv
 *.pdf
