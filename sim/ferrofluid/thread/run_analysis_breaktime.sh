@@ -7,8 +7,8 @@ MIN_amp=5
 MAX_amp=25
 amp_STEP=5
 
-MIN_NS=1
-MAX_NS=5
+MIN_NS=6
+MAX_NS=10
 NS_STEP=1
 
 for amp in $(seq ${MIN_amp} ${amp_STEP} ${MAX_amp})
@@ -24,6 +24,11 @@ do
 
       if [ ! -d "$DIR" ]; then
         echo "$DIR does not exist."
+        continue
+      fi
+      
+      if [ -f "$DIR/breaktime.txt" ]; then
+        echo "$DIR/breaktime.txt already exists."
         continue
       fi
 

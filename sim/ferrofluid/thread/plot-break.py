@@ -33,14 +33,15 @@ results = np.zeros((len(amp), len(ndrops)))
 stds = np.zeros((len(amp), len(ndrops)))
 for i, a in enumerate(amp):
     for j, nd in enumerate(ndrops):
-        temp_res = np.zeros(5)
-        for k in range(5):
+        temp_res = []
+        for k in range(10):
             file = f'{a:.0f}/{nd:.0f}/{k+1:.0f}/{filename}'
             print(file)
             if not os.path.isfile(file):
                 continue
             with open(file, 'r') as fd:
-                temp_res[k] = float(fd.readline().split()[0])
+                temp_res.append(float(fd.readline().split()[0]))
+        temp_res = np.array(temp_res)
         results[i,j] = temp_res.mean()
         stds[i,j] = temp_res.std()
 
@@ -58,7 +59,9 @@ for i, nd in enumerate(ndrops):
             linestyle='none', markeredgewidth=1,
             marker=marker, markerfacecolor='none')
     ax.errorbar(amp, results[:,i], yerr=stds[:,i],
-            linestyle='none')
+            linestyle='none', ecolor = color, 
+            color=color, capsize= 2, capthick=1)
+
 
 ax.set_ylabel(r'$t_{break}$')
 ax.set_xlabel(r'$H_0$')
@@ -87,8 +90,8 @@ ax.grid(True)
 ax.add_artist(legend1)
 # ax.add_artist(legend2)
 
-# savename = filename.split('.')[0]
+savename = filename.split('.')[0]
 fig.tight_layout()
-# fig.savefig(f'{savename}.pdf', dpi=dpi)
-plt.show()        
+fig.savefig(f'{savename}.pdf', dpi=dpi)
+# plt.show()        
 
