@@ -73,7 +73,7 @@ legend1 = plt.legend(han1, lab1, frameon=False,
       title=r'$\epsilon_{wall}$', title_fontsize=11,
       columnspacing=1.2,
       fontsize=11)
-ax.grid(True)
+# ax.grid(True)
 
 han2 = [handles[i*8] for i in range(3)]
 lab2 = [labels[i*8] for i in range(3)]
@@ -88,6 +88,6 @@ ax.add_artist(legend2)
 
 savename = filename.split('.')[0]
 fig.tight_layout()
-fig.savefig(f'{savename}.pdf', dpi=dpi)
+fig.savefig(f'{savename}.png', dpi=dpi, transparent=True)
 #plt.show()        
 
