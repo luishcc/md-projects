@@ -13,19 +13,16 @@ rc_fonts = {
     }
 mpl.rcParams.update(rc_fonts)
 
-
 filename = 'breaktime.txt'
     
-amp = np.array([5,10,15,20,25])
-ndrops = np.array([2,4,8,16])
-
-
+amp = np.array([1,3,5,10,15,20,25])
+ndrops = np.array([1,2,4,8,12,16])
 
 fig, ax = plt.subplots(1,1)
 
-colors = ['black', 'blue', 'green', 'gray']
-markers = ['o', '^', 's', 'x']
-linestyles = ['-', '--', '-.', '--']
+colors = [ 'indigo', 'black', 'blue', 'green', 'brown','gray']
+markers = [ 'p', 'o', '^', 's', 'd', 'x']
+linestyles = ['-', '--', '-.', '--','--', '-.']
 iniang = [r'$47^{\circ}$', r'$75^{\circ}$', r'$100^{\circ}$', r'$120^{\circ}$' ]
 iniang = [2,4,6,8]
 
@@ -36,7 +33,7 @@ for i, a in enumerate(amp):
         temp_res = []
         for k in range(10):
             file = f'{a:.0f}/{nd:.0f}/{k+1:.0f}/{filename}'
-            print(file)
+            # print(file)
             if not os.path.isfile(file):
                 continue
             with open(file, 'r') as fd:
@@ -45,39 +42,58 @@ for i, a in enumerate(amp):
         results[i,j] = temp_res.mean()
         stds[i,j] = temp_res.std()
 
+free = []
+for k in range(10):
+    file = f'0/free/{k+1:.0f}/{filename}'
+    if not os.path.isfile(file):
+        continue
+    with open(file, 'r') as fd:
+        free.append(float(fd.readline().split()[0]))
+free = np.array(free)
 
 for i, nd in enumerate(ndrops):
-    print(i)
+    # print(i)
     color = colors[i]
     marker = markers[i]
     style = linestyles[i]
 	
     ax.plot(amp, results[:,i], color=color,
             linestyle=style, linewidth=1.2,
-            label=rf'${nd:.0f}$')
-    ax.plot(amp, results[:,i], color=color, markersize=6,
-            linestyle='none', markeredgewidth=1,
-            marker=marker, markerfacecolor='none')
+            label=rf'${nd:.0f}$',  markersize=6,
+            markeredgewidth=1, marker=marker, 
+            markerfacecolor='none')
+    # ax.plot(amp, results[:,i], color=color, markersize=6,
+    #         linestyle='none', markeredgewidth=1,
+    #         marker=marker, markerfacecolor='none')
     ax.errorbar(amp, results[:,i], yerr=stds[:,i],
             linestyle='none', ecolor = color, 
             color=color, capsize= 2, capthick=1)
 
+ax.plot([0,50], [free.mean()]*2, 'r-', linewidth=1.2)
+ax.fill_between([0,50], [free.mean()-free.std()]*2, 
+                [free.mean()+free.std()]*2, color='red', alpha = 0.3)
 
 ax.set_ylabel(r'$t_{break}$')
 ax.set_xlabel(r'$H_0$')
-# ax.set_ylim(5,20)
+# ax.set_ylim(5,60)
+ax.set_xlim(0,26)
+
+ax.annotate(r'Natural breakup', xy=(12, 96), xytext=(10, 125), fontsize=10, 
+            arrowprops=dict(facecolor='black', mutation_scale=20,
+                            headlength=8, headwidth=4,
+                            width=.8))
 
 handles, labels = ax.get_legend_handles_labels()
 
-han1 = [handles[i] for i in range(4)]
-lab1 = [labels[i] for i in range(4)]
+han1 = [handles[i] for i in range(6)]
+lab1 = [labels[i] for i in range(6)]
 
 legend1 = plt.legend(han1, lab1, frameon=False, 
-      loc='upper right', ncol=2, handlelength=1.7,
-      title=r'$N_{drops}$', title_fontsize=11,
-      columnspacing=1.2,
+      loc='upper right', ncol=2, handlelength=0,
+      title=r'$N_{d}$', title_fontsize=11,
+      columnspacing=1,
       fontsize=11)
-ax.grid(True)
+# ax.grid(True)
 
 # han2 = [handles[i*8] for i in range(3)]
 # lab2 = [labels[i*8] for i in range(3)]
