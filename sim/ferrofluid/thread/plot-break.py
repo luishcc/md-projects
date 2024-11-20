@@ -51,6 +51,20 @@ for k in range(10):
         free.append(float(fd.readline().split()[0]))
 free = np.array(free)
 
+uniform = []
+uniform_std = []
+h0 = [1,3,5,10]
+for i in h0:
+    temp = []
+    for k in range(5):
+        file = f'type2/{i}/{k+1:.0f}/{filename}'
+        if not os.path.isfile(file):
+            continue
+        with open(file, 'r') as fd:
+            temp.append(float(fd.readline().split()[0]))
+    uniform.append(np.mean(temp))
+    uniform_std.append(np.std(temp))
+
 for i, nd in enumerate(ndrops):
     # print(i)
     color = colors[i]
@@ -69,9 +83,16 @@ for i, nd in enumerate(ndrops):
             linestyle='none', ecolor = color, 
             color=color, capsize= 2, capthick=1)
 
+
+# ax.errorbar(h0, uniform, yerr=uniform_std,
+#             linestyle='--', ecolor ='black', 
+#             marker='P',
+#             color='black', capsize= 2, capthick=1)
+
+
 ax.plot([0,50], [free.mean()]*2, 'r-', linewidth=1.2)
 ax.fill_between([0,50], [free.mean()-free.std()]*2, 
-                [free.mean()+free.std()]*2, color='red', alpha = 0.3)
+                [free.mean()+free.std()]*2, color='red', alpha = 0.2)
 
 ax.set_ylabel(r'$t_{break}$')
 ax.set_xlabel(r'$H_0$')

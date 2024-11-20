@@ -12,9 +12,9 @@ MAX_NS=5
 NS_STEP=1
 
 N_CPU=4   # For each simulation
-N_MAX=2   # N_MAX * N_CPU < 16 (maximum number of cores on office machine)
+N_MAX=3   # N_MAX * N_CPU < 16 (maximum number of cores on office machine)
 
-for amp in 1 3 5 10 15 20 25
+for amp in 5 15 3 10 20 
 #for amp in $(seq ${MIN_amp} ${amp_STEP} ${MAX_amp})
 do
   mkdir $amp

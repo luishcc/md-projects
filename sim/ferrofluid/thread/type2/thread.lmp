@@ -11,27 +11,6 @@ neighbor	0.5 bin
 neigh_modify	every 1 delay 0 check yes
 comm_modify vel yes cutoff 3.5
 
-# time to break :
-
-# con 0.1:
-# Field amp 10 2ndrop 2 radius 4 dip 3 - 34600 nobreak
-# Field amp 0 2ndrop 2 radius 4 dip 0 - 10700
-# Field amp 100 2ndrop 2 radius 4 dip 3 - 3000
-
-# Field amp 100 2ndrop 1 radius 4 dip 3 - 3000 
-# Field amp 50 2ndrop 1 radius 4 dip 3 - 3400 
-# Field amp 30 2ndrop 1 radius 4 dip 3 - 3800 
-# Field amp 20 2ndrop 1 radius 4 dip 3 - 4400 
-# Field amp 18 2ndrop 1 radius 4 dip 3 - 2400  no pre field run
-# Field amp 15 2ndrop 1 radius 4 dip 3 - 18000 
-# Field amp 10 2ndrop 1 radius 4 dip 3 - 54000 nobreak
-# Field amp 10 2ndrop 1 radius 4 dip 3 - 34000 nobreak no pre field run
-
-# Field amp 0 2ndrop 1 radius 6 dip 0 - 32700
-
-# con 0.15:
-# 
-#
 
 
 variable Radius equal 4
@@ -109,7 +88,7 @@ variable alpha equal 2*PI/(zhi-zlo)*v_FieldNDrops/2
 
 variable Bx atom 0
 variable By atom 0
-variable Bz atom v_Amp*sin(v_alpha*z)
+variable Bz atom v_Amp
 
 # Gradient of the Field
 
@@ -123,7 +102,7 @@ variable dzBy atom 0
 
 variable dxBz atom 0
 variable dyBz atom 0
-variable dzBz atom v_Amp*v_alpha*cos(v_alpha*z)
+variable dzBz atom 0
 
 # Apply field to magnetic particles (group mnp)
 
@@ -131,13 +110,13 @@ fix field mnp efield v_Bx v_By v_Bz
 
 # Apply force due to gradient 
 
-compute mu all property/atom mux muy muz
+# compute mu all property/atom mux muy muz
 
-variable dipfx atom c_mu[1]*v_dxBx+c_mu[2]*v_dyBx+c_mu[3]*v_dzBx
-variable dipfy atom c_mu[1]*v_dxBy+c_mu[2]*v_dyBy+c_mu[3]*v_dzBy
-variable dipfz atom c_mu[1]*v_dxBz+c_mu[2]*v_dyBz+c_mu[3]*v_dzBz
+# variable dipfx atom c_mu[1]*v_dxBx+c_mu[2]*v_dyBx+c_mu[3]*v_dzBx
+# variable dipfy atom c_mu[1]*v_dxBy+c_mu[2]*v_dyBy+c_mu[3]*v_dzBy
+# variable dipfz atom c_mu[1]*v_dxBz+c_mu[2]*v_dyBz+c_mu[3]*v_dzBz
 
-fix fieldforce mnp addforce v_dipfx v_dipfy v_dipfz
+# fix fieldforce mnp addforce v_dipfx v_dipfy v_dipfz
 
 ##################################################
 ##################################################
