@@ -84,10 +84,10 @@ for i, nd in enumerate(ndrops):
             color=color, capsize= 2, capthick=1)
 
 
-# ax.errorbar(h0, uniform, yerr=uniform_std,
-#             linestyle='--', ecolor ='black', 
-#             marker='P',
-#             color='black', capsize= 2, capthick=1)
+ax.errorbar(h0, uniform, yerr=uniform_std,
+            linestyle='--', ecolor ='black', 
+            marker='P',
+            color='black', capsize= 2, capthick=1)
 
 
 ax.plot([0,50], [free.mean()]*2, 'r-', linewidth=1.2)
@@ -129,7 +129,7 @@ ax.add_artist(legend1)
 
 savename = filename.split('.')[0]
 fig.tight_layout()
-# fig.savefig(f'{savename}.png', dpi=dpi, transparent=True)
+fig.savefig(f'{savename}3.png', dpi=dpi, transparent=True)
 fig.savefig(f'{savename}.pdf', dpi=dpi)
 # plt.show()        
 
