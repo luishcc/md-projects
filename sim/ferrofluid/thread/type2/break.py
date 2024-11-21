@@ -17,7 +17,7 @@ begin_frame = 100
 
 pipeline = import_file(file)
 num_frames = pipeline.source.num_frames
-if num_frames < 200:
+if num_frames < 400:
     print('Not Enough frames')
     exit()
 

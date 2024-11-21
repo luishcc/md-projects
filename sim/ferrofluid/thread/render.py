@@ -9,7 +9,8 @@ from ovito.vis import *
 
 # ovito.scene.load('break-presentation.ovito')
 # ovito.scene.load('break-2.ovito')
-ovito.scene.load('break-4.ovito')
+# ovito.scene.load('break-4.ovito')
+ovito.scene.load('break-1.ovito')
 # ovito.scene.load('break-8.ovito')
 pipeline = ovito.scene.pipelines[0]
 
@@ -44,7 +45,7 @@ renderer = OSPRayRenderer(
 
 vp.render_anim(
     size=(1920,300), 
-    filename="break-4.mp4", 
+    filename="break-1.mp4", 
     range=(0,150),
     background=(0,0,0),
     fps = 25, 

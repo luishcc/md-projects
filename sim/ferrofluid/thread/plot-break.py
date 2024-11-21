@@ -129,6 +129,7 @@ ax.add_artist(legend1)
 
 savename = filename.split('.')[0]
 fig.tight_layout()
+# fig.savefig(f'{savename}.png', dpi=dpi, transparent=True)
 fig.savefig(f'{savename}.pdf', dpi=dpi)
 # plt.show()        
 
