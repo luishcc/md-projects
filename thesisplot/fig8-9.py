@@ -440,11 +440,11 @@ ax1.plot(x, pred4(x), 'k--', label='Theory',
          linewidth=2.5)
 
 ax1.plot(x, fpow(x, *pars2), 'b-.', 
-         label=r'$R_D/R_0 \sim x^{-0.62}$ (Fit)',
+         label=r'$R_D/R_0 \sim \chi^{-0.62}$ (Fit)',
          linewidth=2.5)
 
 
-ax1.set_xlabel('$x$')
+ax1.set_xlabel('$\chi$')
 ax1.set_ylabel('$R_D/R_0$')
 ax1.set_xlim(0.17, 0.7 )
 ax1.set_ylim(1.8, 3.11)
@@ -491,10 +491,10 @@ ax22.annotate(r'$0.72\pm0.04$', xy=(.0036, 0.035), fontsize=15)
 
 
 
-# fig.savefig('ch3size.pdf', bbox_inches='tight', dpi=dpi )
-fig2.savefig('ch3sat.pdf', bbox_inches='tight', dpi=dpi )
+fig.savefig('ch3size.pdf', bbox_inches='tight', dpi=dpi )
+# fig2.savefig('ch3sat.pdf', bbox_inches='tight', dpi=dpi )
 
 
 
 
-# plt.show()
+plt.show()

@@ -40,7 +40,7 @@ ax.plot(x, growth_rate(x,.1), 'r-.', linewidth=lw, label=f'Oh=0.1')
 ax.plot(x, growth_rate(x,1), 'g', linestyle='dotted', linewidth=lw, label=f'Oh=1.0')
 ax.plot(x, grow_lin(x), 'k-', linewidth=lw, label=f'Inviscid')
 
-ax.set_xlabel(r'$x$')
+ax.set_xlabel(r'$\chi$')
 ax.set_ylabel(r'$\omega / \omega_0$')
 ax.legend(loc='upper left', frameon=False)
 

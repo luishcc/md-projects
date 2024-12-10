@@ -94,7 +94,7 @@ q_var[2] = [(i*21)/20 for i, j in zip(q_var[2],q[2])]
 
 ax.plot(oh, x, label='Theory', linewidth=2.5, color='k', linestyle='--' )
 
-ax.set_ylabel('$x$')
+ax.set_ylabel('$\chi$')
 ax.set_xlabel(r'Oh')
 ax.set_ylim(0.22, 0.69)
 ax.set_xlim(0.06, 2.5)

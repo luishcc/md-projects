@@ -187,8 +187,8 @@ ax1.legend(loc='upper right', ncol=3, handletextpad=.2, columnspacing=1, frameon
 
 # ax1.set_ylim(0,16)
 ax1.set_xlim(0.,4.5)
-ax1.set_xlabel(r'$x $')
-ax1.set_ylabel(r'$\hat{G}(r,x)$')
+ax1.set_xlabel(r'$\chi$')
+ax1.set_ylabel(r'$\hat{G}(r,\chi)$')
 
 # ax2.set_ylim(0.3,0.8)
 ax2.set_xlim(0,6)
@@ -199,7 +199,7 @@ ax2.set_ylabel(r'$G(r,\delta_z)$')
 red = np.array([6,8,10]) * 2*np.pi *0.88
 # red = [1,1,1]
 
-ax.set_ylabel(r'$x$')
+ax.set_ylabel(r'$\chi$')
 
 R = [6, 8, 10]
 R = [6]
@@ -276,7 +276,7 @@ ax1.text(
         fontsize=20, va='bottom', fontfamily='serif')
 
 
-plt.savefig('ch3fig4.pdf', bbox_inches='tight', dpi=dpi )
+plt.savefig('ch3fig5.pdf', bbox_inches='tight', dpi=dpi )
 
 plt.show()
 
