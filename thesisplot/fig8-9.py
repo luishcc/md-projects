@@ -403,7 +403,7 @@ all_bbb = bbb + bbb2 + bbb4
 all_qq = qq[6] + qq[2] + qq[4]
 
 # pars, cov = curve_fit(f=fexp, xdata=all_qq, ydata=all_bbb, p0=[0, 0], bounds=(-np.inf, np.inf))
-# pars2, cov2 = curve_fit(f=fpow, xdata=all_qq, ydata=all_bbb, p0=[0, 0], bounds=(-np.inf, np.inf))
+pars2, cov2 = curve_fit(f=fpow, xdata=all_qq, ydata=all_bbb, p0=[0, 0], bounds=(-np.inf, np.inf))
 # pars3, cov3 = curve_fit(f=flog, xdata=all_qq, ydata=all_bbb, maxfev=10000)
 # pars4, cov4 = curve_fit(f=fexp2, xdata=all_qq, ydata=all_bbb, maxfev=100000)
 
