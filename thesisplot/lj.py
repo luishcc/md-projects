@@ -49,14 +49,14 @@ ax.set_ylim(-10,10)
 ax.plot(x, lj(x, 0.5, 8), 'k-', linewidth=2)
 
 sigma = 0.5  # Assuming sigma is known from the LJ function
-ax.annotate(r"$\sigma$", xy=(sigma, 0), xytext=(sigma + 0.15, 2.5),
+ax.annotate(r"$\sigma_{ij}$", xy=(sigma, 0), xytext=(sigma + 0.15, 2.5),
             arrowprops=dict(arrowstyle="->", color="black"))
 
 # Add measuring arrows for epsilon
 epsilon_depth = -8  # Assuming epsilon is known from the LJ function
 ax.annotate("", xy=(0.3, epsilon_depth), xytext=(0.3, 0),
             arrowprops=dict(arrowstyle="<->", color="black"))
-ax.text(0.34, epsilon_depth / 2, r"$\epsilon$", va="center", ha="left", color="black")
+ax.text(0.34, epsilon_depth / 2, r"$\epsilon_{ij}$", va="center", ha="left", color="black")
 
 fig.savefig('app-lj.pdf', dpi=dpi, bbox_inches='tight')
 
