@@ -30,15 +30,15 @@ velocity	all create 1 87287 mom yes
 
 pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689 
 pair_coeff  1  1   mdpd/rhosum  0.75
-pair_coeff  1  2   mdpd/rhosum  0.65
-pair_coeff  2  2   mdpd/rhosum  0.55
+pair_coeff  1  2   mdpd/rhosum  0.70
+pair_coeff  2  2   mdpd/rhosum  0.65
 
 variable prefactor equal "15/(PI)"
 variable B equal 1.65
 
 pair_coeff  1  1   mdpd  $(-50/1^4)  $(v_B*v_prefactor/0.75^4)  4.5  1.0  0.75
 pair_coeff  1  2   mdpd  $(-50/1^4)  $(v_B*v_prefactor/0.65^4)  4.5  1.0  0.65
-pair_coeff  2  2   mdpd  $(-50/1^4)  $(v_B*v_prefactor/0.55^4)  4.5  1.0  0.55
+pair_coeff  2  2   mdpd  $(-50*0.75/1^4)  $(v_B*v_prefactor/0.55^4)  4.5  1.0  0.55
 
 
 dump		1 all custom 100 dump.mixture id type x y z vx vy vz fx fy fz
@@ -48,13 +48,13 @@ minimize 0 0 1000 10000
 
 # fix         2 all mvv/dpd 0.65 
 
-fix 1 all npt temp 1 1 1.0 iso 5.0 5.0 10
+fix 1 all nph iso 0.0 0.0 1 drag 1
 # fix         2 all mvv/dpd 0.65 
 
-compute edpd all pair mdpd
-thermo_style	custom step temp press etotal c_edpd 
+# compute edpd all pair mdpd
+# thermo_style	custom step temp press etotal c_edpd 
 thermo		200
 
 timestep	0.01
-run 100000
+run 1000000
 
