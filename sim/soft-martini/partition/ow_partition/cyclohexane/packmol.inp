@@ -1,0 +1,20 @@
+
+tolerance 0.2
+#discale 1.5
+
+#movebadrandom
+
+nloop0 30
+
+output system.xyz
+filetype xyz
+
+structure cyclo.xyz
+  number 250
+  inside box -12 -6 -6 -5 6 6
+end structure
+
+structure cyclo.xyz
+  number 250
+  inside box 5 -6 -6 12 6 6
+end structure

@@ -37,8 +37,8 @@ variable prefactor equal "15/(PI)"
 variable B equal 1.65
 
 pair_coeff  1  1   mdpd  $(-50/1^4)  $(v_B*v_prefactor/0.75^4)  4.5  1.0  0.75
-pair_coeff  1  2   mdpd  $(-50/1^4)  $(v_B*v_prefactor/0.65^4)  4.5  1.0  0.65
-pair_coeff  2  2   mdpd  $(-50*0.75/1^4)  $(v_B*v_prefactor/0.55^4)  4.5  1.0  0.55
+pair_coeff  1  2   mdpd  $(-50/1^4)  $(v_B*v_prefactor/0.70^4)  4.5  1.0  0.70
+pair_coeff  2  2   mdpd  $(-50*.75/1^4)  $(v_B*v_prefactor/0.65^4)  4.5  1.0  0.65
 
 
 dump		1 all custom 100 dump.mixture id type x y z vx vy vz fx fy fz

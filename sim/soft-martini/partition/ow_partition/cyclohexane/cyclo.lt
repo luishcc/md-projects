@@ -1,0 +1,41 @@
+cyclo {
+
+  write_once("In Init") {
+    units           lj
+    atom_style      hybrid angle charge
+    bond_style      harmonic
+    angle_style     harmonic
+
+    dihedral_style  none
+    improper_style  none
+
+    pair_style  hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 9872598
+  }
+
+  Cyclohexane {
+    write("Data Atoms") {
+      $atom:t1   @atom:p1    0.00  0.00   0.00 $mol:. 1
+      $atom:t2   @atom:p1    0.25  0.433  0.00 $mol:. 1
+      $atom:t3   @atom:p1    0.50  0.00   0.00 $mol:. 1
+    }
+    write("Data Bonds") {
+      $bond:b1   @bond:backbone  $atom:t1 $atom:t2
+      $bond:b2   @bond:backbone  $atom:t2 $atom:t3
+      $bond:b3   @bond:backbone  $atom:t3 $atom:t1
+    }
+    write("Data Angles") {
+      $angle:a2   @angle:a1  $atom:t1   $atom:t2   $atom:t3
+      $angle:a1   @angle:a1  $atom:t2   $atom:t3   $atom:t1
+    }
+    write_once("Data Masses") {
+      @atom:p1  1
+    }
+
+    write_once("In Settings") {
+      bond_coeff   @bond:backbone   harmonic     116.847 7.5
+      angle_coeff   @angle:a1       harmonic     116.847 7.5
+    }
+
+  } 
+
+} 

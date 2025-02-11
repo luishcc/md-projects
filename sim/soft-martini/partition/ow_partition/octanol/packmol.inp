@@ -1,0 +1,15 @@
+
+tolerance 0.2
+#discale 1.5
+
+#movebadrandom
+
+nloop0 30
+
+output octanol.xyz
+filetype xyz
+
+structure dimer.xyz
+  number 10000
+  inside box -7 -7 -7 7 7 7
+end structure
