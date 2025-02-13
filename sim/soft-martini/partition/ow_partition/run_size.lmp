@@ -37,25 +37,20 @@ create_atoms 3 random 1500 2021 bbox2
 # Pair, Bond and Angle Coefficients
 
 pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 3514
-pair_coeff  *  *   mdpd/rhosum  0.75
 
-bond_style harmonic
+pair_coeff  1*3  1*3   mdpd/rhosum  0.75
+pair_coeff  1*3  4   mdpd/rhosum  0.70
+pair_coeff  4  4   mdpd/rhosum  0.65
+
 bond_coeff 1 150 0.5
-
 angle_coeff 1 5 60
 
-# #H1
-# pair_coeff  1  4   mdpd  -26  25.0  4.5  1.0  0.75
-# pair_coeff  2  4   mdpd  -43  25.0  4.5  1.0  0.75
-# pair_coeff  3  4   mdpd  -50  25.0  4.5  1.0  0.75
-# pair_coeff  4  4   mdpd  -20  25.0  4.5  1.0  0.75
 
-# #G
-pair_coeff  1  4   mdpd  -26  25.0  4.5  1.0  0.75
-pair_coeff  2  4   mdpd  -34  25.0  4.5  1.0  0.75
-pair_coeff  3  4   mdpd  -43  25.0  4.5  1.0  0.75
-pair_coeff  4  4   mdpd  -34  25.0  4.5  1.0  0.75
-
+# # sC
+pair_coeff  1  4   mdpd  -26  25.0  4.5  1.0  0.70
+pair_coeff  2  4   mdpd  -28  25.0  4.5  1.0  0.70
+pair_coeff  3  4   mdpd  -28  25.0  4.5  1.0  0.70
+pair_coeff  4  4   mdpd  $(-26*.75)  $(25*(.75/.65)^4)  4.5  1.0  0.65
 #####################################################
 #####################################################
 # By surface tension of octane for 1 1 interaction 
@@ -64,6 +59,7 @@ pair_coeff  4  4   mdpd  -34  25.0  4.5  1.0  0.75
 # 1 - C
 # 2 - G
 # 3 - W
+# 4 - sC
 
 pair_coeff  1  1   mdpd  -26  25.0  4.5  1.0  0.75
 pair_coeff  1  2   mdpd  -26  25.0  4.5  1.0  0.75
@@ -73,12 +69,18 @@ pair_coeff  1  3   mdpd  -26  25.0  4.5  1.0  0.75
 pair_coeff  2  3   mdpd  -43  25.0  4.5  1.0  0.75
 pair_coeff  3  3   mdpd  -50  25.0  4.5  1.0  0.75
 
-
+write_data cyclo_system_full.data
+dump 2 all atom 200 partition_wo_cychx.lammpstrj
 
 min_style cg
 minimize 1e-2 1e-2 100 1000
 
 fix         mvv     all mvv/dpd 0.65
+run 1000
+unfix mvv
+
+fix fxnpt all nph iso 0 0 10.0 
+
 
 compute             mythermo all temp
 thermo              100
@@ -92,10 +94,6 @@ thermo_modify       flush yes
 timestep 0.01
 
 # restart  10000 restart.1 restart.0
-
-dump 2 all atom 200 partition_wo_cychx.lammpstrj
-dump_modify 2 scale no
-
 
 run 200000
 
