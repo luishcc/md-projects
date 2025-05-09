@@ -10,7 +10,7 @@ comm_modify mode single cutoff 2.5 vel yes
 atom_style hybrid angle mdpd charge
 
 
-region     box      block 0 10 0 10 0 10
+region     box      block 0 11 0 11 0 11
 create_box 4 box bond/types 1 angle/types 1 &
 	extra/special/per/atom 3 &
 	extra/bond/per/atom 2 &
@@ -21,7 +21,7 @@ molecule 1 sds.txt
 
 create_atoms     0 random 1000 123456 box mol 1 123456
 create_atoms     3 random 1000 123457 box
-create_atoms     4 random 4000 123458 box
+create_atoms     4 random 2692 123458 box
 
 mass * 1
 
