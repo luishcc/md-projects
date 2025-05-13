@@ -1,0 +1,79 @@
+;  GROMACS topology file for SDS_0.50_fixed (force field Martini_2007.ffx+ )
+
+[ defaults ]
+; nbfunc   comb-rule  gen-pairs   fudgeLJ   fudgeQQ
+1           2         no          1         1.000000  
+
+[ atomtypes ]
+;name     mass      charge    ptype      V(nm)    W(kJ/mol)
+P4        72          0.000     A      0.47        4.99988   
+C1        56          0.000     A      0.47        3.49782   
+Qa        96          0.000     A      0.47        4.99988   
+Qd        23          0.000     A      0.47        4.99988   
+
+[ nonbond_params ]
+;  i        j     func  V(nm)    W(kJ/mol)
+P4        C1        1  0.47        1.99995   
+P4        Qa        1  0.47        5.59819   
+P4        Qd        1  0.47        5.59819   
+C1        Qa        1  0.62        1.99995   
+C1        Qd        1  0.62        1.99995   
+Qa        Qd        1  0.47        5.59819   
+
+[ bondtypes ]
+; i     j    func    b0(nm)    kb(kJ/mol/nm2)
+C1      C1      1    0.47        1249.46   
+C1      Qa      1    0.47        1249.46   
+
+[ angletypes ]
+; i     j     k    func   th0(deg)     cth(kJ/mol)
+C1      C1      C1      2    179.9         24.9892 
+C1      C1      Qa      2    179.9         24.9892 
+
+[ moleculetype ]
+; Name    nrexcl
+P4  1
+
+[ atoms ]
+; nr   type    resnr     residu      atom    cgnr      charge    mass   typeB  chargeB  massB
+1       P4        1    P4            P41      1     0.00000000   72     ;   qtot    0
+
+[ moleculetype ]
+; Name    nrexcl
+C13Qa  1
+
+[ atoms ]
+; nr   type    resnr     residu      atom    cgnr      charge    mass   typeB  chargeB  massB
+1       C1        1    C13Qa         C11      2     0.00000000   56     ;   qtot    0
+2       C1        1    C13Qa         C12      3     0.00000000   56     ;   qtot    0
+3       C1        1    C13Qa         C13      4     0.00000000   56     ;   qtot    0
+4       Qa        1    C13Qa         Qa1      5     -1.00000000  96     ;   qtot    0
+
+[ bonds ]
+; ai  aj  funct
+1      2      1     ; C1 C1
+2      3      1     ; C1 C1
+3      4      1     ; C1 Qa
+
+[ angles ]
+; ai  aj  ak  funct
+1     2     3     2   ; C1 C1 C1
+2     3     4     2   ; C1 C1 Qa
+
+[ moleculetype ]
+; Name    nrexcl
+Qd  1
+
+[ atoms ]
+; nr   type    resnr     residu      atom    cgnr      charge    mass   typeB  chargeB  massB
+1       Qd        1    Qd            Qd1      6     1.00000000   23     ;   qtot    0
+
+[ system ]
+; name
+SDS_0.50_fixed
+
+[ molecules ]
+; Compound    #mols
+P4              797   
+C13Qa           200   
+Qd              200   
