@@ -10,7 +10,24 @@ angle_style cosine/squared
 special_bonds lj/coul 0 1 1
 
 
-region     box      block 0 100 0 100 0 100
+# region     box      block 0 87 0 87 0 87
+# create_box 4 box bond/types 1 angle/types 1 &
+# 	extra/special/per/atom 3 &
+# 	extra/bond/per/atom 2 &
+# 	extra/angle/per/atom 2
+
+
+# molecule 1 sds.txt
+# # 1 - Qa (SDS-H)
+# # 2 - C1
+# # 3 - Qd (Na)
+# # 4 - W
+
+# create_atoms     0 random 1000 12345 box mol 1 12
+# create_atoms     3 random 1000 13447 box
+# create_atoms     4 random 333 1338 box
+
+region     box      block 0 55 0 55 0 55
 create_box 4 box bond/types 1 angle/types 1 &
 	extra/special/per/atom 3 &
 	extra/bond/per/atom 2 &
@@ -23,9 +40,9 @@ molecule 1 sds.txt
 # 3 - Qd (Na)
 # 4 - W
 
-create_atoms     0 random 1000 122345 box mol 1 123
-create_atoms     3 random 1000 123447 box
-create_atoms     4 random 3889 12338 box
+create_atoms     0 random 200 12345 box mol 1 12
+create_atoms     3 random 200 13447 box
+create_atoms     4 random 67 1338 box
 
 mass 1 96
 mass 2 56
@@ -73,10 +90,10 @@ angle_coeff 1 5.97 180
 
 
 write_data initial.data
-dump        mydump  all atom 1000 sds.lammpstrj
+dump        mydump  all atom 2000 sds.lammpstrj
 
 
-velocity all create 300 12 dist gaussian 
+velocity all create 300 66 dist gaussian 
 velocity all zero linear
 
 min_style cg
@@ -85,17 +102,19 @@ write_data initial.data
 
 thermo              100
 
-fix      fxnvt all nvt temp 300.0 400.0 1000.0 tchain 1
-timestep        10.0
-run      100000
-unfix    fxnvt
+timestep        20.0
 
-fix fxnpt all npt temp 400.0 300.0 10000.0  iso 1.0 1.0 1000.0 drag 0.5 mtk yes
+# fix      fxnvt all nvt temp 300.0 400.0 2000.0 tchain 1
+# run      100000
+# unfix    fxnvt
+
+fix fxnpt all npt temp 300.0 300.0 20000.0 iso 1 1 2000.0  mtk yes
 run      200000
 unfix    fxnpt
 
-fix         mvv     all npt temp 300 300 20000 iso 1 1 2000 mtk yes
-timestep            20
+fix   vscale    all temp/rescale 1000 300 300 10 1
+fix   mvv       all nph iso 1 1 2000 mtk yes
+# fix         mvv     all npt temp 300 300 20000 iso 1 1 2000 mtk yes
 run                 10000000
 
 write_data end.data

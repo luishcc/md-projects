@@ -10,7 +10,7 @@ angle_style cosine/squared
 special_bonds lj/coul 0 1 1
 
 
-region     box      block 0 100 0 100 0 100
+region     box      block 0 120 0 120 0 120
 create_box 4 box bond/types 1 angle/types 1 &
 	extra/special/per/atom 3 &
 	extra/bond/per/atom 2 &
@@ -23,9 +23,9 @@ molecule 1 sds.txt
 # 3 - Qd (Na)
 # 4 - W
 
-create_atoms     0 random 1000 122345 box mol 1 123
-create_atoms     3 random 1000 123447 box
-create_atoms     4 random 3889 12338 box
+create_atoms     0 random 1000 12235 box mol 1 1243
+create_atoms     3 random 1000 12347 box
+create_atoms     4 random 11000 12338 box
 
 mass 1 96
 mass 2 56
@@ -73,10 +73,10 @@ angle_coeff 1 5.97 180
 
 
 write_data initial.data
-dump        mydump  all atom 1000 sds.lammpstrj
+dump        mydump  all atom 10000 sds.lammpstrj
 
 
-velocity all create 300 12 dist gaussian 
+velocity all create 300 13 dist gaussian 
 velocity all zero linear
 
 min_style cg
@@ -85,16 +85,16 @@ write_data initial.data
 
 thermo              100
 
-fix      fxnvt all nvt temp 300.0 400.0 1000.0 tchain 1
+fix      fxnvt all nvt temp 400.0 400.0 2000.0 tchain 1
 timestep        10.0
-run      100000
+run      10000
 unfix    fxnvt
 
-fix fxnpt all npt temp 400.0 300.0 10000.0  iso 1.0 1.0 1000.0 drag 0.5 mtk yes
-run      200000
+fix fxnpt all npt temp 400.0 300.0 10000.0  iso 1.0 1.0 1000.0 drag 1 mtk yes
+run      100000
 unfix    fxnpt
 
-fix         mvv     all npt temp 300 300 20000 iso 1 1 2000 mtk yes
+fix         mvv     all npt temp 300 300 10000 iso 1 1 1000 mtk yes
 timestep            20
 run                 10000000
 
