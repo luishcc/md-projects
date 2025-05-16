@@ -9,7 +9,7 @@ neighbor 0.5 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes cutoff 3.5
 
-variable Radius equal 8
+variable Radius equal 5
 variable con index 0.1
 variable wall index 2
 variable dip index 3
@@ -53,7 +53,7 @@ pair_coeff	2  2 lj/sf/dipole/sf 1 .890899
 
 # log ${DIR}/angle.log
 # dump		1 all custom 200 ${DIR}/sim.lammpstrj id type x y z mux muy muz 
-dump		1 all custom 200 sim.lammpstrj id type x y z mux muy muz 
+dump		1 all custom 200 sim11.lammpstrj id type x y z mux muy muz 
 
 fix wallhi all wall/harmonic zhi EDGE 100 1.5 2.0 units box
 fix walllo all wall/lj93 zlo EDGE $(v_wall) 0.5 1.0 units box 
@@ -93,7 +93,7 @@ set group mnp dipole v_dfx v_dfy v_dfz
 ##################################################
 # Magnetic field definition 
 
-variable Amp equal 5
+variable Amp equal 3
 variable alpha equal 2*PI/(zhi-zlo)*2
 
 variable Bx atom v_Amp*x
@@ -138,5 +138,5 @@ run 1000
 timestep	0.01
 run 40000
 
-write_data initial-hydrophobic.data
+write_data initial-hydrophobic11.data
 

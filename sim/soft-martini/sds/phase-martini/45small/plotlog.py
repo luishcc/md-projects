@@ -53,7 +53,7 @@ ax[1].set_ylim(-500,500)
 ax[1].set_ylabel('Pressure [bar]')
 
 ax[2].plot(time, eng, 'ko')
-ax[2].set_ylim(-6000,-4000)
+ax[2].set_ylim(-9600,-8200)
 ax[2].set_ylabel('Total Energy [kcal/mol]')
 ax[2].set_xlabel('Time [ns]')
 

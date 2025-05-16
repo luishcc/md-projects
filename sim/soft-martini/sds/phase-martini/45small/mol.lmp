@@ -1,4 +1,4 @@
-log log3.lammps
+log log1.lammps
 units real
 dimension 3
 boundary p p p
@@ -11,24 +11,7 @@ angle_style cosine/squared
 special_bonds lj/coul 0 1 1
 
 
-# region     box      block 0 87 0 87 0 87
-# create_box 4 box bond/types 1 angle/types 1 &
-# 	extra/special/per/atom 3 &
-# 	extra/bond/per/atom 2 &
-# 	extra/angle/per/atom 2
-
-
-# molecule 1 sds.txt
-# # 1 - Qa (SDS-H)
-# # 2 - C1
-# # 3 - Qd (Na)
-# # 4 - W
-
-# create_atoms     0 random 1000 12345 box mol 1 12
-# create_atoms     3 random 1000 13447 box
-# create_atoms     4 random 333 1338 box
-
-region     box      block 0 55 0 55 0 55
+region     box      block 0 63 0 63 0 63
 create_box 4 box bond/types 1 angle/types 1 &
 	extra/special/per/atom 3 &
 	extra/bond/per/atom 2 &
@@ -41,22 +24,21 @@ molecule 1 sds.txt
 # 3 - Qd (Na)
 # 4 - W
 
-create_atoms     0 random 200 12345 box mol 1 12
-create_atoms     3 random 200 13447 box
-create_atoms     4 random 67 1338 box
+create_atoms     0 random 200 123 box mol 1 1234
+create_atoms     3 random 200 1344 box
+create_atoms     4 random 797 1334 box
 
 mass 1 96
 mass 2 56
 mass 3 23
 mass 4 72
 
-pair_style lj/gromacs/coul/gromacs 9 12 0.000001 12
-# pair_style lj/cut/coul/long 12
+# pair_style lj/gromacs/coul/gromacs 9 12 0.000001 12
+pair_style lj/cut/coul/long 12
 pair_modify shift yes
 
-# kspace_style pppm 1.0e-5
-# kspace_modify order 4 
-
+kspace_style pppm 1.0e-5
+kspace_modify order 4 
 dielectric 80
 
 set type 1 charge  -1
@@ -92,7 +74,7 @@ angle_coeff 1 5.97 180
 
 
 write_data initial.data
-dump        mydump  all atom 2000 sds3.lammpstrj
+dump        mydump  all atom 5000 sds.lammpstrj
 
 
 velocity all create 300 66 dist gaussian 
@@ -106,21 +88,20 @@ thermo              100
 
 timestep        20.0
 
+# fix      fxnvt all nvt temp 300.0 400.0 2000.0 tchain 1
+# run      100000
+# unfix    fxnvt
+
 
 fix fxnpt all npt temp 300 300 $(100*dt) iso 1 1 $(1000*dt)  mtk yes 
 run      200000
 unfix    fxnpt
 
 
-# fix      fxnvt all nvt temp 300.0 300.0 2000.0 tchain 1
-# run      200000
-# unfix    fxnvt
-
-
-fix mom all momentum 100 linear 1 1 1
+fix mom all momentum 1000 linear 1 1 1
 # fix   vscale    all temp/rescale 1000 300 300 10 1
-# fix   mvv       all nph iso 1 1 20000 mtk yes
+# fix   mvv       all nph iso 1 1 2000 mtk yes
 fix fxnpt2 all npt temp 300 300 $(100*dt) iso 1 1 $(1000*dt) mtk yes
-run                 800000
+run                 1500000
 
 write_data end.data
