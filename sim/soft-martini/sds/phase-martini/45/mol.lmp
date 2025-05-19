@@ -10,7 +10,7 @@ angle_style cosine/squared
 special_bonds lj/coul 0 1 1
 
 
-region     box      block 0 100 0 100 0 100
+region     box      block 0 95 0 95 0 95
 create_box 4 box bond/types 1 angle/types 1 &
 	extra/special/per/atom 3 &
 	extra/bond/per/atom 2 &
@@ -23,9 +23,9 @@ molecule 1 sds.txt
 # 3 - Qd (Na)
 # 4 - W
 
-create_atoms     0 random 1000 122345 box mol 1 123
-create_atoms     3 random 1000 123447 box
-create_atoms     4 random 3889 12338 box
+create_atoms     0 random 1000 12345 box mol 1 123456
+create_atoms     3 random 1000 1234 box
+create_atoms     4 random 3889 123 box
 
 mass 1 96
 mass 2 56
@@ -37,7 +37,8 @@ pair_style lj/cut/coul/long 12
 pair_modify shift yes
 
 kspace_style pppm 1.0e-5
-kspace_modify order 4 mesh 20 20 20
+kspace_modify order 4 
+
 dielectric 80
 
 set type 1 charge  -1
@@ -71,12 +72,10 @@ pair_coeff 4 4   1.19 4.7
 bond_coeff 1 2.98 4.7
 angle_coeff 1 5.97 180
 
-
 write_data initial.data
-dump        mydump  all atom 1000 sds.lammpstrj
+dump        mydump  all atom 5000 sds.lammpstrj
 
-
-velocity all create 300 12 dist gaussian 
+velocity all create 300 60 dist gaussian 
 velocity all zero linear
 
 min_style cg
@@ -85,17 +84,18 @@ write_data initial.data
 
 thermo              100
 
-fix      fxnvt all nvt temp 300.0 400.0 1000.0 tchain 1
-timestep        10.0
-run      100000
-unfix    fxnvt
+fix fxnvt all nvt temp 300.0 400.0 $(100*dt) tchain 1
+timestep 10
+run 200000
+unfix fxnvt
 
-fix fxnpt all npt temp 400.0 300.0 10000.0  iso 1.0 1.0 1000.0 drag 0.5 mtk yes
-run      200000
-unfix    fxnpt
+fix fxnpt all npt temp 400.0 300.0 $(100*dt) iso 1 1 $(1000*dt) drag 1 mtk yes
+run 500000
+unfix fxnpt
 
-fix         mvv     all npt temp 300 300 20000 iso 1 1 2000 mtk yes
-timestep            20
-run                 10000000
+fix mom all momentum 1000 linear 1 1 1
+fix fxnptrun all npt temp 300 300 $(100*dt) iso 1 1 $(1000*dt) mtk yes
+timestep 20
+run 10000000
 
 write_data end.data
