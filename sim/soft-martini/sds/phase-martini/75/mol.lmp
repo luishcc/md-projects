@@ -1,4 +1,4 @@
-log log1.lammps
+log log1-mass.lammps
 units real
 dimension 3
 boundary p p p
@@ -26,7 +26,8 @@ molecule 1 sds.txt
 
 create_atoms     0 random 1000 123458 box mol 1 128
 create_atoms     3 random 1000 134478 box
-create_atoms     4 random 333 13348 box
+# create_atoms     4 random 333 13348 box
+create_atoms     4 random 905 13348 box
 
 mass 1 96
 mass 2 56
@@ -44,20 +45,6 @@ set type 1 charge  -1
 set type 3 charge  1
 pair_coeff 1*3 1*3 coul/long
 
-## In kJ/mol and Angstrom
-# pair_coeff 1 1   5.0 4.7
-# pair_coeff 1 2   2.0 6.2
-# pair_coeff 1 3   5.6 4.7
-# pair_coeff 1 4   5.6 4.7
-# pair_coeff 2 2   3.5 4.7
-# pair_coeff 2 3   2.0 6.2
-# pair_coeff 2 4   2.0 4.7
-# pair_coeff 3 3   5.0 4.7
-# pair_coeff 3 4   5.6 4.7
-# pair_coeff 4 4   5.0 4.7
-# bond_coeff 1 1250 4.7
-# angle_coeff 1 25 180
-
 # In kcal/mol and Angstrom
 pair_coeff 1 1 lj/gromacs  1.19 4.7
 pair_coeff 1 2 lj/gromacs  0.48 6.2
@@ -74,11 +61,11 @@ bond_coeff 1 2.98 4.7
 angle_coeff 1 5.97 180
 
 
-write_data initial.data
-dump        mydump  all atom 5000 sds.lammpstrj
+write_data initial-mass.data
+dump        mydump  all atom 5000 sds-mass.lammpstrj
 
 
-velocity all create 300 666 dist gaussian 
+velocity all create 450 666 dist gaussian 
 velocity all zero linear
 
 min_style cg
@@ -89,8 +76,16 @@ timestep 20
 
 fix mom all momentum 1000 linear 1 1 1
 
+fix fxnpt1 all npt temp 450 450 $(100*dt) iso 1 1 $(1000*dt) mtk yes
+run 1000000
+unfix fxnpt1
+
+fix fxnpt1 all npt temp 450 300 $(100*dt) iso 1 1 $(1000*dt) mtk yes
+run 1000000
+unfix fxnpt1
+
 fix fxnpt1 all npt temp 300 300 $(100*dt) iso 1 1 $(1000*dt) mtk yes
 run 1000000
 unfix fxnpt1
 
-write_data end.data
+write_data end-mass.data
