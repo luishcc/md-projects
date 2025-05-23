@@ -72,7 +72,7 @@ bond_coeff 1 2.98 4.7
 angle_coeff 1 5.97 180
 
 
-write_data initial.data
+#write_data initial.data
 dump        mydump  all atom 1000 sds.lammpstrj
 
 velocity all create 300 12 dist gaussian 
