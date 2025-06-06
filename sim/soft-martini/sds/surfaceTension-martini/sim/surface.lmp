@@ -1,0 +1,98 @@
+units real
+dimension 3
+boundary p p p
+neighbor 0.3 bin
+neigh_modify every 1 check yes
+
+processors * * 1
+
+atom_style full
+bond_style harmonic
+angle_style cosine/squared
+special_bonds lj/coul 0 1 1
+
+
+variable sc index 1.4
+
+read_data ../data/$(v_sc:%.1f)/system.data extra/atom/types 2
+
+log $(v_sc:%.1f)/sc_$(v_sc:%.1f).log
+
+variable nmol equal atoms/4
+
+region     slab      block -85 85 -85 85 -85 85
+create_atoms        3 random $(v_nmol) 2020 slab
+create_atoms        4 random $(round(lx*ly*170*8.4/1000)) 2021 slab
+
+mass 1 96
+mass 2 56
+mass 3 23
+mass 4 72
+
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style hybrid/overlay lj/gromacs 9 12 coul/long 12
+
+kspace_style pppm 1.0e-5
+kspace_modify order 4 
+
+dielectric 80
+
+set type 1 charge  -1
+set type 3 charge  1
+pair_coeff 1*3 1*3 coul/long
+
+# In kcal/mol and Angstrom
+pair_coeff 1 1 lj/gromacs  1.19 4.7
+pair_coeff 1 2 lj/gromacs  0.48 6.2
+pair_coeff 1 3 lj/gromacs  1.33 4.7
+pair_coeff 1 4 lj/gromacs  1.33 4.7
+pair_coeff 2 2 lj/gromacs  0.84 4.7
+pair_coeff 2 3 lj/gromacs  0.48 6.2
+pair_coeff 2 4 lj/gromacs  0.48 4.7
+pair_coeff 3 3 lj/gromacs  1.19 4.7
+pair_coeff 3 4 lj/gromacs  1.33 4.7
+pair_coeff 4 4 lj/gromacs  1.19 4.7
+
+bond_coeff 1 2.98 4.7
+angle_coeff 1 5.97 180
+
+###########################################################
+
+
+dump        mydump  all atom 25000 $(v_sc:%.1f)/sim_$(v_sc:%.1f).lammpstrj
+dump_modify mydump scale no
+
+
+velocity all create 300 220 dist gaussian 
+velocity all zero linear
+
+min_style cg
+minimize 0 0 10000 100000
+
+
+fix fxnvt all nvt temp 300.0 300.0 $(100*dt)
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+# thermo_modify	 lost ignore lost/bond ignore
+
+timestep            20
+run                 100000
+
+compute             myP all pressure mythermo
+
+variable surfT equal "((zhi-zlo)*0.5) * (pzz - (pxx + pyy)*0.5) * 0.0101325 " # Converted to mN/m
+
+fix 1 all ave/time 100 90 10000 v_surfT file $(v_sc:%.1f)/gamma_$(v_sc:%.1f).profile
+
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+thermo_style custom step temp v_surfT pxx pyy pzz etotal
+
+run                 1000000

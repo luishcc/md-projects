@@ -38,7 +38,7 @@ gamma_lst = []
 sc_lst =  []
 std_lst = []
 
-for entry in os.scandir('sim'):
+for entry in os.scandir('surfaceTension-mdpd/sim'):
     if not entry.is_dir():
         continue
     try:
@@ -67,8 +67,9 @@ std_lst = [const_conv*i for i in std_lst]
 
 fig, ax = plt.subplots(1,1)
 
+
 ax.errorbar([0]+sc_lst, [72]+gamma_lst, yerr = [std_lst[0]*0.9]+std_lst, fmt='o',
-ecolor = 'black', capsize= 2, capthick=1,color='black', label=r'$\gamma$')
+ecolor = 'black', capsize= 2, capthick=1,color='black', label=r'MDPD')
 
 # ax.plot([0]+sc_lst, [72]+gamma_lst, 'ko-', label='$\gamma$')
 ax.set_xlabel(r'C [$N_t/A_s$]')
@@ -96,8 +97,37 @@ ax.set_ylim(20, 75)
 # axx.annotate('CMC', xy=(1.85, 1.3), xytext=(2.3, 1.5),
 #             arrowprops=dict(facecolor='black', shrink=0.05))
 
-# lines, labels = ax.get_legend_handles_labels()
-# ax.legend(lines, labels, loc='center left', frameon=False)
+
+
+gamma_lst = []
+sc_lst =  []
+std_lst = []
+
+for entry in os.scandir('surfaceTension-martini/sim'):
+    if not entry.is_dir():
+        continue
+    try:
+        sc = float(entry.name)
+        gamma, std = run_avg('/'.join([entry.path, f'gamma_{sc}.profile']))
+        gamma_lst.append(gamma)
+        sc_lst.append(sc)
+        std_lst.append(std)
+    except FileNotFoundError:
+        print(f'gamma_{sc}.profile not found, skipping')
+        continue
+
+zip_lst = zip(sc_lst, gamma_lst, std_lst)
+sort_lst = sorted(zip_lst)
+tuples = zip(*sort_lst)
+sc_lst, gamma_lst, std_lst  = [list(tuple) for tuple in tuples]
+
+
+ax.errorbar(sc_lst, gamma_lst, yerr = std_lst, fmt='s',
+ecolor = 'blue', capsize= 2, capthick=1,color='blue', label=r'MD')
+
+
+lines, labels = ax.get_legend_handles_labels()
+ax.legend(lines, labels, loc='upper right', frameon=False)
 
 plt.tight_layout()
 # plt.savefig('cmc.pdf', dpi=dpi)

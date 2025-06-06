@@ -53,7 +53,7 @@ pair_coeff	2  2 lj/sf/dipole/sf 1 .890899
 
 # log ${DIR}/angle.log
 # dump		1 all custom 200 ${DIR}/sim.lammpstrj id type x y z mux muy muz 
-dump		1 all custom 200 sim11.lammpstrj id type x y z mux muy muz 
+dump		1 all custom 200 sim12.lammpstrj id type x y z mux muy muz 
 
 fix wallhi all wall/harmonic zhi EDGE 100 1.5 2.0 units box
 fix walllo all wall/lj93 zlo EDGE $(v_wall) 0.5 1.0 units box 

@@ -24,7 +24,7 @@ def run_avg(file):
         while True:
             line = fd.readline()
             try:
-                a = float(line.split()[1])
+                a = float(line.split()[1])#*2
             except:
                 break
             sum += a
@@ -59,22 +59,21 @@ sort_lst = sorted(zip_lst)
 tuples = zip(*sort_lst)
 sc_lst, gamma_lst, std_lst  = [list(tuple) for tuple in tuples]
 
-const_conv = 300*1.380649/8.42**2 #KbT/rc^2 --> mN/m
-
-gamma_lst = [const_conv*i for i in gamma_lst]
-std_lst = [const_conv*i for i in std_lst]
+#gamma_lst = [(72/12.4)*i for i in gamma_lst]
+#std_lst = [(72/12.4)*i for i in std_lst]
 
 
 fig, ax = plt.subplots(1,1)
 
-ax.errorbar([0]+sc_lst, [72]+gamma_lst, yerr = [std_lst[0]*0.9]+std_lst, fmt='o',
+
+ax.errorbar(sc_lst, gamma_lst, yerr = std_lst, fmt='o',
 ecolor = 'black', capsize= 2, capthick=1,color='black', label=r'$\gamma$')
 
 # ax.plot([0]+sc_lst, [72]+gamma_lst, 'ko-', label='$\gamma$')
 ax.set_xlabel(r'C [$N_t/A_s$]')
-ax.set_xlim(-.1,1.9)
+ax.set_xlim(-.1,1.3)
 ax.set_ylabel(r'$\gamma$ [mN/m]')
-ax.set_ylim(20, 75)
+ax.set_ylim(20, 40)
 
 # ax.annotate('CMC', xy=(1.75, 21), xytext=(0.8, 21),
 #             arrowprops=dict(facecolor='black', shrink=0.05))

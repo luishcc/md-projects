@@ -3,12 +3,12 @@
 # Use . as the decimal separator
 export LC_NUMERIC=en_US.UTF-8
 
-MIN_CONCENTRATION=1.6
-MAX_CONCENTRATION=1.8
+MIN_CONCENTRATION=0.3
+MAX_CONCENTRATION=0.7
 CONCENTRATION_STEP=0.2
 
 N_CPU=4   # For each simulation
-N_MAX=2  # N_MAX * N_CPU < 16 (maximum number of cores on office machine)
+N_MAX=3  # N_MAX * N_CPU < 16 (maximum number of cores on office machine)
 
 for con in $(seq ${MIN_CONCENTRATION} ${CONCENTRATION_STEP} ${MAX_CONCENTRATION})
 do

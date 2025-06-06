@@ -35,6 +35,7 @@ def run_avg(file):
     return  avg, std
 
 gamma_lst = []
+con_lst = []
 sc_lst =  []
 std_lst = []
 
@@ -50,19 +51,18 @@ for entry in os.scandir('sim'):
     except FileNotFoundError:
         print(f'gamma_{sc}.profile not found, skipping')
         continue
+    with open(f'{entry.path}/sc.dat', 'r') as fd:
+        con = float(fd.readline())
+    con_lst.append(con)
 
 
-
-
-zip_lst = zip(sc_lst, gamma_lst, std_lst)
+zip_lst = zip(sc_lst, gamma_lst, std_lst, con_lst)
 sort_lst = sorted(zip_lst)
 tuples = zip(*sort_lst)
-sc_lst, gamma_lst, std_lst  = [list(tuple) for tuple in tuples]
+sc_lst, gamma_lst, std_lst, con_lst = [list(tuple) for tuple in tuples]
 
-const_conv = 300*1.380649/8.42**2 #KbT/rc^2 --> mN/m
-
-gamma_lst = [const_conv*i for i in gamma_lst]
-std_lst = [const_conv*i for i in std_lst]
+gamma_lst = [(72/7.62)*i for i in gamma_lst]
+std_lst = [(72/7.62)*i for i in std_lst]
 
 
 fig, ax = plt.subplots(1,1)
@@ -72,7 +72,6 @@ ecolor = 'black', capsize= 2, capthick=1,color='black', label=r'$\gamma$')
 
 # ax.plot([0]+sc_lst, [72]+gamma_lst, 'ko-', label='$\gamma$')
 ax.set_xlabel(r'C [$N_t/A_s$]')
-ax.set_xlim(-.1,1.9)
 ax.set_ylabel(r'$\gamma$ [mN/m]')
 ax.set_ylim(20, 75)
 
@@ -80,27 +79,28 @@ ax.set_ylim(20, 75)
 #             arrowprops=dict(facecolor='black', shrink=0.05))
 
 
-# axx = ax.twinx()
+axx = ax.twinx()
 
 # from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition)
 # axx = plt.axes([0,0,1,1])
 # ip = InsetPosition(axx, [0.18,0.18,0.8,0.8])
 # axx.set_axes_locator(ip)
 
-# ax.plot([1.8, 1.8], [18, 80], 'r--')
+ax.plot([1.8, 1.8], [18, 80], 'r--')
 
 
-# axx.plot(sc_lst, con_lst, 'k^', markerfacecolor='none', label=r'$\Gamma$')
-# axx.set_xlabel(r'$C$ [$N_t/A_s$]')
-# axx.set_ylabel(r'$\Gamma$ [$N_s/A_s$]')
-# axx.annotate('CMC', xy=(1.85, 1.3), xytext=(2.3, 1.5),
-#             arrowprops=dict(facecolor='black', shrink=0.05))
+axx.plot(sc_lst, con_lst, 'k^', markerfacecolor='none', label=r'$\Gamma$')
+axx.set_xlabel(r'$C$ [$N_t/A_s$]')
+axx.set_ylabel(r'$\Gamma$ [$N_s/A_s$]')
+axx.annotate('CMC', xy=(1.85, 1.3), xytext=(2.3, 1.5),
+            arrowprops=dict(facecolor='black', shrink=0.05))
 
-# lines, labels = ax.get_legend_handles_labels()
-# ax.legend(lines, labels, loc='center left', frameon=False)
+lines, labels = ax.get_legend_handles_labels()
+lines2, labels2 = axx.get_legend_handles_labels()
+ax.legend(lines + lines2, labels + labels2, loc='center right', frameon=False)
 
 plt.tight_layout()
-# plt.savefig('cmc.pdf', dpi=dpi)
+plt.savefig('cmc.pdf', dpi=dpi)
 plt.show()
 
 

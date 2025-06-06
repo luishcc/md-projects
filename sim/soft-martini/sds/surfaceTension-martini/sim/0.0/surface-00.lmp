@@ -1,0 +1,67 @@
+units real
+dimension 3
+boundary p p p
+neighbor 0.3 bin
+neigh_modify every 1 check yes
+
+processors * * 1
+
+atom_style full
+
+
+region     box      block -85 85 -85 85 -300 300
+create_box 1 box
+
+
+region     slab      block -85 85 -85 85 -85 85
+create_atoms        1 random $(round(lx*ly*170*8.4/1000)) 2021 slab
+
+mass 1 72
+
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style lj/gromacs 9 12 
+
+
+# In kcal/mol and Angstrom
+pair_coeff 1 1 1.19 4.7
+
+###########################################################
+
+
+dump        mydump  all atom 10000 00.lammpstrj
+dump_modify mydump scale no
+
+
+velocity all create 300 220 dist gaussian 
+velocity all zero linear
+
+min_style cg
+minimize 0 0 10000 100000
+
+
+fix fxnvt all nvt temp 300.0 300.0 $(100*dt)
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+
+
+timestep            20
+run                 100000
+
+compute             myP all pressure mythermo
+
+variable surfT equal "((zhi-zlo)*0.5) * (pzz - (pxx + pyy)*0.5) * 0.0101325" # Converted to mN/m
+
+fix 1 all ave/time 100 90 10000 v_surfT file gamma_0.0.profile
+
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+thermo_style custom step temp v_surfT pxx pyy pzz etotal
+
+run                 1000000
