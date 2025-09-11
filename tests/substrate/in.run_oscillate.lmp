@@ -9,7 +9,7 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes cutoff 2.0
 
-region        box  block -20 20 -20 20 0 30 units box
+region        box  block -20 20 -30 30 0 30 units box
 create_box    1    box
 
 mass 1 1
@@ -32,7 +32,6 @@ compute             mythermo all temp
 # thermo_modify       temp mythermo
 # thermo_modify       flush yes
 
-dump 1 all atom 100 oscillate.lammpstrj
 
 min_style cg
 minimize 1e-4 1e-4 1000 10000
@@ -40,8 +39,18 @@ minimize 1e-4 1e-4 1000 10000
 timestep 0.01
 run 1000
 
-variable oscillation equal -.1*sin(2*3.1415/30*(time-11))
-variable velo equal .1/(2*PI)*30*cos(2*3.1415/30*(time-11))
+
+reset_timestep 0 time 0
+dump 1 all atom 100 oscillate.lammpstrj
+
+thermo 100
+
+variable amp equal 10
+variable freq equal 0.02
+variable omega equal 2*PI*v_freq
+variable oscillation equal -v_amp*v_omega^2*sin(v_omega*(time))
+variable velo equal v_amp*v_omega*cos(v_omega*(time))
+
 
 velocity all set 0 v_velo 0 sum yes
 
@@ -49,7 +58,7 @@ fix gravity all addforce 0 v_oscillation 0
 
 fix         mvv     all mvv/dpd 0.65
 
-fix extra all print 1 "$(v_oscillation),$(v_velo) $(step)"
+# fix extra all print 1 "$(v_oscillation),$(v_velo) $(step)"
 
 run 12000
 
