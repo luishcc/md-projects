@@ -1,0 +1,97 @@
+units lj
+dimension 3
+boundary p p p
+
+processors * * 1
+
+atom_style hybrid angle mdpd charge
+
+
+neighbor 0.3 bin
+neigh_modify every 1 delay 0 check yes
+
+comm_modify mode single cutoff 2.5 vel yes
+
+variable sc index 1.0
+
+#read_data ../data/$(v_sc:%.1f)/system.data extra/atom/types 2
+
+region box block -10 10 -10 10 -35 35 units box
+create_box 3 box
+
+log $(v_sc:%.1f)/sc_$(v_sc:%.1f).log
+
+
+region     slab      block -10 10 -10 10 -10 10
+
+create_atoms        1 random $(round(lx*ly*20*6.8)) 2021 slab
+create_atoms        2 random $(v_sc*2900) 2020 slab
+create_atoms        3 random $(v_sc*2900) 2019 slab
+
+mass * 1
+
+
+###########################################################
+# Pair, Bond and Angle Coefficients
+
+pair_style hybrid/overlay mdpd/rhosum mdpd 1.0 1.0 65689 coul/long 2.0
+pair_coeff  *  *   mdpd/rhosum  0.75
+
+# dielectric 80
+
+kspace_style pppm 1.0e-5
+kspace_modify order 4 mesh 16 16 16
+
+set type 2 charge  -1
+set type 3 charge  1
+pair_coeff  2*3  2*3 coul/long 
+
+# 1 - Qa (SDS-H)
+# 2 - C1
+# 3 - Qd (Na)
+# 4 - W
+
+variable gamma equal 4.5 # 4.5
+
+
+pair_coeff  1  1   mdpd  -50.0  25.0  $(v_gamma)  1.0  0.75
+pair_coeff  1  2*3   mdpd  -50.0  25.0  $(v_gamma)  1.0  0.75
+pair_coeff  2*3  2*3   mdpd  -30.0  25.0  $(v_gamma)  1.0  0.75
+
+
+###########################################################
+
+
+dump        mydump  all atom 1000 $(v_sc:%.1f)/sim_$(v_sc:%.1f).lammpstrj
+dump_modify mydump scale no
+
+
+velocity all create 1.0 220 dist gaussian 
+velocity all zero linear
+
+min_style cg
+minimize 0 0 10000 100000
+
+fix         mvv     all mvv/dpd 0.65
+
+compute             mythermo all temp
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+# thermo_modify	 lost ignore lost/bond ignore
+
+timestep            0.01
+run                 100000
+
+compute             myP all pressure mythermo
+
+variable surfT equal "((zhi-zlo)*0.5) * (pzz - (pxx + pyy)*0.5)"
+
+fix 1 all ave/time 100 90 10000 v_surfT file $(v_sc:%.1f)/gamma_$(v_sc:%.1f).profile
+
+thermo              100
+thermo_modify       temp mythermo
+thermo_modify       flush yes
+thermo_style custom step temp v_surfT pxx pyy pzz
+
+run                 1000000
