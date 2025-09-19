@@ -56,26 +56,26 @@ bond_coeff 1 2.98 4.7
 angle_coeff 1 5.97 180
 
 
-dump        mydump  all atom 5000 sds-continue3.lammpstrj
+dump        mydump  all atom 10000 sds-continue3.lammpstrj
 
 thermo              100
 timestep 20
 
 fix mom all momentum 1000 linear 1 1 1
 
-fix fxnpt1 all npt temp 300 250 $(100*dt) iso 1 1 $(1000*dt) mtk yes
-run 100000
-unfix fxnpt1
+#fix fxnpt1 all npt temp 300 250 $(100*dt) iso 1 1 $(1000*dt) mtk yes
+#run 100000
+#unfix fxnpt1
 
-fix fxnpt2 all npt temp 250 250 $(100*dt) iso 1 1 $(1000*dt) mtk yes
-run 4000000
-unfix fxnpt2
+#fix fxnpt2 all npt temp 250 250 $(100*dt) iso 1 1 $(1000*dt) mtk yes
+#run 4000000
+#unfix fxnpt2
 
 # fix fxnpt2 all npt temp 450 300 $(100*dt) iso 1 1 $(1000*dt) mtk yes
 # run 2000000
 # unfix fxnpt2
 
-# fix fxnptrun all npt temp 300 300 $(100*dt) iso 1 1 $(1000*dt) mtk yes
-# run 1000000
+fix fxnptrun all npt temp 300 300 $(100*dt) iso 1 1 $(1000*dt) mtk yes
+run 500000
 
 write_data end-cont3.data

@@ -64,7 +64,7 @@ def update(frame):
     ax[1].set_ylabel('Pressure [bar]')
 
     ax[2].plot(time, eng, 'ko')
-    ax[2].set_ylim(-80000, -60000)
+    ax[2].set_ylim(-60000, -50000)
     ax[2].set_ylabel('Total Energy [kcal/mol]')
     ax[2].set_xlabel('Time [ns]')
     fig.canvas.draw()
