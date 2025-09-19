@@ -25,9 +25,9 @@ molecule 1 sds.txt
 # create_atoms     3 random 200 1234 box
 # create_atoms     4 random 3000 12458 box
 
-create_atoms     0 random 1000 2345 box mol 1 12345
-create_atoms     3 random 1000 1234 box
-create_atoms     4 random 14000 12458 box
+create_atoms     0 random 1000 2346 box mol 1 12345
+create_atoms     3 random 1000 123 box
+create_atoms     4 random 14000 1258 box
 
 mass * 1
 
@@ -80,7 +80,7 @@ angle_coeff 1 5 180
 
 
 write_data initial.data
-dump        mydump  all atom 1000 sds.lammpstrj
+dump        mydump  all atom 2000 sds.lammpstrj
 
 
 velocity all create 1.0 220 dist gaussian 

@@ -10,8 +10,8 @@ comm_modify vel yes
 atom_style hybrid angle mdpd charge
 
 
-# region     box      block 0 10 0 10 0 10
-region     box      block 0 5.7 0 5.7 0 5.7
+region     box      block 0 11 0 11 0 11
+# region     box      block 0 5.7 0 5.7 0 5.7
 
 create_box 4 box bond/types 1 angle/types 1 &
 	extra/special/per/atom 3 &
@@ -21,13 +21,13 @@ create_box 4 box bond/types 1 angle/types 1 &
 
 molecule 1 sds.txt
 
-create_atoms     0 random 200 2345 box mol 1 12345
-create_atoms     3 random 200 1234 box
-create_atoms     4 random 75 12458 box
+# create_atoms     0 random 200 23451 box mol 1 12345
+# create_atoms     3 random 200 12341 box
+# create_atoms     4 random 220 124581 box
 
-# create_atoms     0 random 1000 2345 box mol 1 12345
-# create_atoms     3 random 1000 1234 box
-# create_atoms     4 random 440 12458 box
+create_atoms     0 random 1000 2345 box mol 1 12345
+create_atoms     3 random 1000 1234 box
+create_atoms     4 random 1100 12458 box
 
 mass * 1
 
@@ -80,7 +80,7 @@ angle_coeff 1 5 180
 
 
 write_data initial.data
-dump        mydump  all atom 1000 sds.lammpstrj
+dump        mydump  all atom 2000 sds.lammpstrj
 
 
 velocity all create 1.0 220 dist gaussian 
@@ -95,8 +95,12 @@ timestep            0.01
 
 # fix mom all momentum 1000 linear 1 1 1
 
-# fix fxnpt all npt temp 1.2 1.2 $(100*dt) tchain 1 iso 0.1 0.1 $(1000*dt) drag 1 mtk yes
-# run 500000
+# fix fxnpt all npt temp 1.2 1.2 $(100*dt) tchain 1 iso 0.01 0.01 $(1000*dt) drag 1 mtk yes
+# run 200000
+# unfix fxnpt
+
+# fix fxnpt all npt temp 1.2 1.0 $(100*dt) tchain 1 iso 0.01 0.01 $(1000*dt) drag 1 mtk yes
+# run 200000
 # unfix fxnpt
 
 
@@ -116,13 +120,11 @@ timestep            0.01
 # pair_coeff  4  4   mdpd  -50.0  25.0  $(v_gamma)  1.0  0.75
 
 
-# fix fxnpt all npt temp 1.2 1.0 $(100*dt) tchain 1 iso 0 0 $(1000*dt) drag 1 mtk yes
-# run 20000
-# unfix fxnpt
-
-# fix fxnpt all npt temp 1.0 1.0 $(100*dt) tchain 1 iso 0 0 $(1000*dt)mtk yes
-# fix         mvv     all mvv/dpd 0.65
 fix         mvv     all nph iso 0.01 0.01 $(1000*dt)
+run                 100000
+unfix mvv
+
+fix         mvv     all mvv/dpd 0.65
 run                 1000000
 
 write_data end.data
