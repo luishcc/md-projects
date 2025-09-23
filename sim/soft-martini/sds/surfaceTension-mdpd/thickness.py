@@ -27,7 +27,7 @@ for entry in os.scandir('sim'):
         fd.readline()
         line = fd.readline()
         line = line.split(' ')
-        con = float(line[1])
+        con = float(line[1])*8.42
     con_lst.append(con)
 
 

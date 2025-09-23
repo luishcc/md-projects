@@ -62,7 +62,7 @@ pair_coeff  2*3  2*3   mdpd  -30.0  25.0  $(v_gamma)  1.0  0.75
 ###########################################################
 
 
-dump        mydump  all atom 1000 $(v_sc:%.1f)/sim_$(v_sc:%.1f).lammpstrj
+dump        mydump  all atom 5000 $(v_sc:%.1f)/sim_$(v_sc:%.1f).lammpstrj
 dump_modify mydump scale no
 
 

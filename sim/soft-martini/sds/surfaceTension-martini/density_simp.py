@@ -70,8 +70,8 @@ dpi = 1600
 side = 7
 rc_fonts = {
     "font.family": "serif",
-    "font.size": 12,
-    'figure.figsize': (.8*side, 0.6*side),
+    "font.size": 13,
+    'figure.figsize': (.7*side, 0.6*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
@@ -98,8 +98,13 @@ print(pars)
 stdevs = np.sqrt(np.diag(cov))
 
 
-z = np.linspace(-lz/2,lz/2,num)
+z = np.linspace(-lz/2,lz/2,num)/10
 
+
+data = data * 4*18/6.022*10000  # Martini units to Kg/m3
+# data = np.roll(data, 3, axis=0)
+
+# data = data * 997/6.8  # MDPD units to Kg/m3
 
 # exit()
 
@@ -112,15 +117,15 @@ ax.plot(z, data[:,2], 'g-s', label='C1', markerfacecolor='none')
 ax.plot(z, data[:,0], 'k-', label='Total', markerfacecolor='none')
 
 maxd = data.max()
-ax.plot([pars[0]]*2, [0,maxd], 'k-.')
-ax.plot([pars[0]-pars[1]*0.5]*2, [0,maxd], 'k--')
-ax.plot([pars[0]+pars[1]*0.5]*2, [0,maxd], 'k--')
+ax.plot([pars[0]/10]*2, [0,maxd], 'k-.')
+ax.plot([pars[0]/10-pars[1]/10*0.5]*2, [0,maxd], 'k--')
+ax.plot([pars[0]/10+pars[1]/10*0.5]*2, [0,maxd], 'k--')
 
 # ax.set_xlim(-20, 20)
-ax.set_xlim(50, 120)
+ax.set_xlim(6, 11)
 # ax.set_ylim(-0.02, 7.0)
-ax.set_ylabel(r'$\rho$ $[N/V]$')
-ax.set_xlabel(r'$z$ [$r_c$]')
+ax.set_ylabel(r'$\rho$ [kg/m$^3$]')
+ax.set_xlabel(r'$z$ [\AA]')
 
 # ax.text(pars[0],6.5, fr'$R_0$')
 # ax.text(pars[0],6.5, fr'$\delta_0$')
@@ -128,5 +133,5 @@ ax.set_xlabel(r'$z$ [$r_c$]')
 ax.legend(frameon=False, loc='center left')
 
 plt.tight_layout()
-# plt.savefig(f'dense-{sc}.pdf', dpi=dpi)
+plt.savefig(f'dense-{sc}.pdf', dpi=dpi)
 plt.show()
