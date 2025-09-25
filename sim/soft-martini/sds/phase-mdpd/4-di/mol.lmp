@@ -39,7 +39,7 @@ pair_coeff  *  *   mdpd/rhosum  0.75
 # ghost yes is necessary for computational stuff
 
 # dielectric 80
-# dielectric 15
+dielectric 15
 
 kspace_style pppm 1.0e-5
 kspace_modify order 4 mesh 16 16 16
