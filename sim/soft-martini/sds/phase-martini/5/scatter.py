@@ -8,7 +8,7 @@ from ovito.vis import *
 import numpy as np
 
 
-pipeline = import_file("sds.lammpstrj")
+pipeline = import_file("../5/sds.lammpstrj")
 data = pipeline.compute()
 
 volume = data.cell.volume
@@ -20,14 +20,14 @@ count_per_type = np.array([len(type_list[type_list==t+1]) for t in range(4)])
 xi = count_per_type/data.particles.count  # mol fractions
 density = data.particles.count/data.cell.volume
 
-start_frame = 500
+start_frame = 300
 end_frame = pipeline.num_frames
 num_frames = end_frame-start_frame
 
 num = 200
-# cutoff = 25
-cutoff = data.cell.matrix[0,0]/2 # Half sim box
-only_selected = False
+cutoff = 40
+# cutoff = data.cell.matrix[0,0]/2 # Half sim box
+only_selected = True
 
 if only_selected:
     types = [1,2,3]
@@ -54,8 +54,8 @@ rdf = data.tables['coordination-rdf[average]']
 r = rdf.xy().transpose()[0]
 g_array = rdf.y
 
-q_values = np.logspace(-3, 0, 1000)
-# q_values = np.arange(0.5, 10, 0.01)
+# q_values = np.logspace(-2, 0, 1000)
+q_values = np.linspace(0.008, 0.7, 100)
 Iq = np.zeros(len(q_values))
 
 
@@ -100,24 +100,51 @@ for i in range(len(types)):
                   np.trapezoid(integrand, r, axis=1)))
         id += 1
 
-norm = 0
-for i in range(len(types)):
-    norm += xi[i]*factors[i]
-    
-Iq /= norm**2
+# norm = 0
+# for i in range(len(types)):
+#     norm += xi[i]*factors[i]
+# Iq /= norm**2
+
+Iq /= max(Iq)
 
 import matplotlib.pyplot as plt
+
+
+
+# pipeline.modifiers.append(StructureFactorModifier(
+#     k_bins=num, k_min=0, k_max=6,
+#     only_selected=only_selected,
+#     mode=StructureFactorModifier.Mode.Debye,
+#     partial=False
+#     ))
+# data = pipeline.compute(600)
+# sf = data.tables['structure-factor'].xy().transpose()
+
+
+# pipeline.modifiers.append(StructureFactorModifier(
+#     k_bins=num, k_min=0, k_max=6,
+#     only_selected=only_selected,
+#     mode=StructureFactorModifier.Mode.Direct,
+#     partial=False
+#     ))
+# data = pipeline.compute(600)
+# sf2 = data.tables['structure-factor.2'].xy().transpose()
 
 
 fig, ax = plt.subplots(2,2)
 
 
-ax[0,0].loglog(q_values, Iq)
+ax[0,0].loglog(q_values, Iq, 'k-o', markerfacecolor='none')
 ax[1,0].plot(q_values, Iq)
 
 for i in range(num_pairs):
    ax[0,1].plot(r, g_array[:,i], label=rdf.y.component_names[i])
 ax[0,1].legend()
+
+# ax[1,1].loglog(sf[0]/(2*np.pi), sf[1])
+# ax[1,1].loglog(sf2[0]/(2*np.pi), sf2[1])
+ax[1,1].loglog(q_values, Iq)
+ax[1,1].set_xlim(0.01,1)
 
 # plt.plot(q_values, Iq)
 
