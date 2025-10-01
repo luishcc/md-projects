@@ -16,7 +16,7 @@ pipeline.modifiers.append(StructureFactorModifier(
     k_bins=num, k_min=0, k_max=6,
     only_selected=0,
     mode=StructureFactorModifier.Mode.Debye,
-    partial=True
+    partial=False
     ))
 # data = pipeline.compute(10)
 
@@ -26,7 +26,7 @@ for i in range(340, pipeline.num_frames):
     print(i)
     data = pipeline.compute(i)
     sf = data.tables['structure-factor'].xy()
-    result += sf.transpose()[5]
+    result += sf.transpose()[1]
     count+=1
 
 
@@ -35,7 +35,7 @@ import matplotlib.pyplot as plt
 
 fig, ax = plt.subplots(1,1)
 
-ax.loglog(sf.transpose()[0]/(2*np.pi), result/count)
-ax.set_ylim(0.1, 10)
-ax.set_xlim(0.01, 0.7)
+ax.plot(sf.transpose()[0]/(2*np.pi), result/count)
+# ax.set_ylim(0.1, 10)
+# ax.set_xlim(0.01, 0.7)
 plt.show()
