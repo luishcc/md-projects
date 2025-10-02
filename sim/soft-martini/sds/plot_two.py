@@ -13,6 +13,8 @@ rc_fonts = {
     }
 mpl.rcParams.update(rc_fonts)
 
+convert_surfcon = 1              # In MDPD units (N/rc^-2)
+convert_surfcon = 20**2/170**2   # From MDPD r_c^-2 to \AA^-2
 
 def run_avg(file):
     sum = 0
@@ -46,7 +48,7 @@ for entry in os.scandir('surfaceTension-mdpd/sim'):
         sc = float(entry.name)
         gamma, std = run_avg('/'.join([entry.path, f'gamma_{sc}.profile']))
         gamma_lst.append(gamma)
-        sc_lst.append(sc)
+        sc_lst.append(sc*convert_surfcon)
         std_lst.append(std)
         with open('/'.join([entry.path, f'interface.dat']), 'r') as fd:
             fd.readline()
@@ -77,8 +79,8 @@ ax.errorbar([0]+sc_lst, [72]+gamma_lst, yerr = [std_lst[0]*0.9]+std_lst, fmt='o'
 ecolor = 'black', capsize= 2, capthick=1,color='black', label=r'MDPD')
 
 # ax.plot([0]+sc_lst, [72]+gamma_lst, 'ko-', label='$\gamma$')
-ax.set_xlabel(r'C [$N_t/A_s$]')
-ax.set_xlim(-.1,1.9)
+ax.set_xlabel(r'C [\AA$^{-2}$]')
+# ax.set_xlim(-.1,1.9)
 ax.set_ylabel(r'$\gamma$ [mN/m]')
 ax.set_ylim(20, 75)
 
@@ -89,7 +91,7 @@ ax.set_ylim(20, 75)
 
 
 ax2.plot([0]+sc_lst, [0.53*8.42]+del_lst, 'ko', label=r'MDPD')
-ax2.set_xlabel(r'C [$N_t/A_s$]')
+ax2.set_xlabel(r'C [\AA$^{-2}$]')
 #ax2.set_xlim(-.1,1.9)
 ax2.set_ylabel(r'$\delta$ [\AA]')
 #ax2.set_ylim(20, 75)
@@ -108,7 +110,7 @@ for entry in os.scandir('surfaceTension-martini/sim'):
         sc = float(entry.name)
         gamma, std = run_avg('/'.join([entry.path, f'gamma_{sc}.profile']))
         gamma_lst.append(gamma)
-        sc_lst.append(sc)
+        sc_lst.append(sc*convert_surfcon)
         std_lst.append(std)
         with open('/'.join([entry.path, f'interface.dat']), 'r') as fd:
             fd.readline()
