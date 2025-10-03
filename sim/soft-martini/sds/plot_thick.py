@@ -7,14 +7,14 @@ dpi = 1600
 side = 7
 rc_fonts = {
     "font.family": "serif",
-    "font.size": 12,
+    "font.size": 14,
     'figure.figsize': (0.8*side, 0.6*side),
     "text.usetex": True
     }
 mpl.rcParams.update(rc_fonts)
 
 
-
+convert_surfcon = 20**2/170**2
 
 sc_lst =  []
 del_lst = []
@@ -31,7 +31,7 @@ for entry in os.scandir('surfaceTension-mdpd/sim'):
             con = float(line[1])*8.42
           
         del_lst.append(con)
-        sc_lst.append(sc)
+        sc_lst.append(sc*convert_surfcon)
 
     except FileNotFoundError:
         print(f'interface.dat not found, skipping')
@@ -55,7 +55,7 @@ fig, ax = plt.subplots(1,1)
 ax.plot(sc_lst, del_lst, 'ko', label=r'MDPD')
 
 # ax.plot([0]+sc_lst, [72]+gamma_lst, 'ko-', label='$\gamma$')
-ax.set_xlabel(r'C [$N_t/A_s$]')
+ax.set_xlabel(r'C [\AA$^{-2}$]')
 #ax.set_xlim(-.1,1.9)
 ax.set_ylabel(r'$\delta$ [\AA]')
 #ax.set_ylim(20, 75)
@@ -98,7 +98,7 @@ for entry in os.scandir('surfaceTension-martini/sim'):
             con = float(line[1])
             
         del_lst.append(con)
-        sc_lst.append(sc)
+        sc_lst.append(sc*convert_surfcon)
 
     except FileNotFoundError:
         print(f'interface.dat not found, skipping')

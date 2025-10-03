@@ -55,8 +55,6 @@ for entry in os.scandir('surfaceTension-mdpd/sim'):
         continue
 
 
-
-
 zip_lst = zip(sc_lst, gamma_lst, std_lst)
 sort_lst = sorted(zip_lst)
 tuples = zip(*sort_lst)
@@ -71,34 +69,16 @@ std_lst = [const_conv*i for i in std_lst]
 fig, ax = plt.subplots(1,1)
 
 
-ax.errorbar([0]+sc_lst, [72]+gamma_lst, yerr = [std_lst[0]*0.9]+std_lst, fmt='o',
-ecolor = 'black', capsize= 2, capthick=1,color='black', label=r'MDPD')
+ax.errorbar([0]+sc_lst, [72]+gamma_lst,
+            yerr = [std_lst[0]*0.9]+std_lst, fmt='o',
+            ecolor = 'black', capsize= 2, capthick=1,
+            color='black', label=r'MDPD')
 
 # ax.plot([0]+sc_lst, [72]+gamma_lst, 'ko-', label='$\gamma$')
 ax.set_xlabel(r'C [\AA$^{-2}$]')
 # ax.set_xlim(-.1,1.9)
 ax.set_ylabel(r'$\gamma$ [mN/m]')
 ax.set_ylim(20, 75)
-
-# ax.annotate('CMC', xy=(1.75, 21), xytext=(0.8, 21),
-#             arrowprops=dict(facecolor='black', shrink=0.05))
-
-
-# axx = ax.twinx()
-
-# from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition)
-# axx = plt.axes([0,0,1,1])
-# ip = InsetPosition(axx, [0.18,0.18,0.8,0.8])
-# axx.set_axes_locator(ip)
-
-# ax.plot([1.8, 1.8], [18, 80], 'r--')
-
-
-# axx.plot(sc_lst, con_lst, 'k^', markerfacecolor='none', label=r'$\Gamma$')
-# axx.set_xlabel(r'$C$ [$N_t/A_s$]')
-# axx.set_ylabel(r'$\Gamma$ [$N_s/A_s$]')
-# axx.annotate('CMC', xy=(1.85, 1.3), xytext=(2.3, 1.5),
-#             arrowprops=dict(facecolor='black', shrink=0.05))
 
 
 
@@ -129,22 +109,82 @@ ax.errorbar(sc_lst, gamma_lst, yerr = std_lst, fmt='s',
 ecolor = 'blue', capsize= 2, capthick=1,color='blue', label=r'MD')
 
 
+
+#####################
+
+c = []
+g = []
+with open('plot-data.csv', 'r') as fd:
+    fd.readline()
+    for line in fd:
+        c.append((np.log10(float(line.split(',')[0]))))
+        g.append(float(line.split(',')[1])/1000)
+
+
+# for i in range(1,5):
+#     c.append(min(c)**i)
+#     g.append(0.072-0.0001**i)
+
+c.append(-5)
+g.append(0.0718)
+
+c.append(-6)
+g.append(0.072)
+
+sorting = sorted(zip(c,g))
+c = []
+g = []
+for tuple in sorting:
+    c.append(tuple[0])
+    g.append(tuple[1])
+
+def fexp(x,a,b,c):
+    return -a*np.exp(x*b)+c
+
+# def fexp(x,a,b,c):
+#     return a*x**2+c*x+b
+
+# def fexp(x,a,b,c):
+#     return a*np.exp(b*x) + c
+
+def para(x, a, b, c):
+    return a*x**2 + b*x + c
+
+from scipy.optimize import curve_fit
+pars, cov = curve_fit(f=fexp, xdata=c, 
+                      ydata=g, p0=[1, 1, 0.072], bounds=(-np.inf, np.inf))
+
+kb = 1.380649e-23   # in J/K
+Na = 6.02214076e23  # in mol^-1
+Rg = kb*Na
+
+def para(x, a, b, c):
+    return a*x**2 + b*x + c 
+
+a1, a2, a3 = np.polyfit(c, g, 2)
+
+x = np.linspace(min(c)+0.5, max(c), 100000)
+y = para(x,a1,a2,a3)
+# y = fexp(x, *pars)
+
+
+grad = np.gradient(y, x, edge_order=2)
+# grad2 = -(1/(kb*300)) * grad * 1e-20
+grad2 = -(1/(kb*300)) * grad * 1e-20 /4
+
+ax.plot(grad2, y*1000-1, 'r--', label='Experimental')
+
+
+
+#####################
+
+
+
+
 lines, labels = ax.get_legend_handles_labels()
 ax.legend(lines, labels, loc='upper right', frameon=False)
 
 plt.tight_layout()
-plt.savefig('st.pdf', dpi=dpi)
+plt.savefig('st2.pdf', dpi=dpi)
 plt.show()
 
-
-# fig2, ax2 = plt.subplots(1,1)
-
-# ax2.plot(sc_lst, con_lst, 'ko-')
-
-# ax2.set_xlabel(r'$C$ [$N_t/A_s$]')
-# ax2.set_ylabel(r'$\Gamma$ [$N_s/A_s$]')
-
-# plt.tight_layout()
-# # plt.savefig('sc.pdf', dpi=dpi)
-
-# plt.show()
