@@ -113,7 +113,7 @@ fig, ax = plt.subplots(1,1)
 
 
 ax.plot(z, data[:,3], 'y-^', label='Qd', markerfacecolor='none')
-ax.plot(z, data[:,4], 'b-', label='W', markerfacecolor='none')
+ax.plot(z, data[:,4], 'b-', label='P4', markerfacecolor='none')
 ax.plot(z, data[:,1], 'r-o', label='Qa', markerfacecolor='none')
 ax.plot(z, data[:,2], 'g-s', label='C1', markerfacecolor='none')
 ax.plot(z, data[:,0], 'k-', label='Total', markerfacecolor='none')
