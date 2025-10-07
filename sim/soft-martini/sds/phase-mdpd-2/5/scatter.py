@@ -8,19 +8,7 @@ from ovito.vis import *
 import numpy as np
 
 
-# path = 'phase-mdpd/4'
-# path = 'phase-mdpd/25'
-# path = 'phase-martini/5'
-# path = 'phase-martini/25'
-path = 'phase-mdpd/4-di'
-
-convert = 8.42
-# convert = 1
-
-num = 300
-cutoff = 45.5/convert
-
-pipeline = import_file(f'{path}/sds.lammpstrj')
+pipeline = import_file("../4-di/sds.lammpstrj")
 data = pipeline.compute()
 
 volume = data.cell.volume
@@ -32,10 +20,12 @@ count_per_type = np.array([len(type_list[type_list==t+1]) for t in range(4)])
 xi = count_per_type/data.particles.count  # mol fractions
 density = data.particles.count/data.cell.volume
 
-start_frame = int(pipeline.num_frames/2)
+start_frame = pipeline.num_frames-3
 end_frame = pipeline.num_frames
 num_frames = end_frame-start_frame
 
+num = 200
+cutoff = 50/8.42
 # cutoff = data.cell.matrix[0,0]/2 # Half sim box
 only_selected = True
 
@@ -61,7 +51,7 @@ pipeline.modifiers.append(avg_mod)
 data = pipeline.compute()
 
 rdf = data.tables['coordination-rdf[average]']
-r = rdf.xy().transpose()[0]*convert
+r = rdf.xy().transpose()[0]*8.42
 g_array = rdf.y
 
 # q_values = np.logspace(-2, 0, 1000)
@@ -117,11 +107,8 @@ for i in range(len(types)):
 
 Iq /= max(Iq)
 
+import matplotlib.pyplot as plt
 
-# with open(f'{path}/scatter.dat', 'w') as fd:
-#     fd.write('q Sq\n')
-#     for q, sq in zip(q_values, Iq):
-#         fd.write(f'{q} {sq}\n')
 
 
 # pipeline.modifiers.append(StructureFactorModifier(
@@ -144,21 +131,21 @@ Iq /= max(Iq)
 # sf2 = data.tables['structure-factor.2'].xy().transpose()
 
 
-import matplotlib.pyplot as plt
+fig, ax = plt.subplots(2,2)
 
-# fig, ax = plt.subplots(2,2)
 
-# ax[0,0].loglog(q_values, Iq, 'k-o', markerfacecolor='none')
-# ax[1,0].plot(q_values, Iq)
+ax[0,0].loglog(q_values, Iq, 'k-o', markerfacecolor='none')
+ax[1,0].plot(q_values, Iq)
 
-# for i in range(num_pairs):
-#    ax[0,1].plot(r, g_array[:,i], label=rdf.y.component_names[i])
-# ax[0,1].legend()
+for i in range(num_pairs):
+   ax[0,1].plot(r, g_array[:,i], label=rdf.y.component_names[i])
+ax[0,1].legend()
 
-# # ax[1,1].loglog(sf[0]/(2*np.pi), sf[1])
-# # ax[1,1].loglog(sf2[0]/(2*np.pi), sf2[1])
-# ax[1,1].loglog(q_values, Iq)
-# ax[1,1].set_xlim(0.01,1)
+# ax[1,1].loglog(sf[0]/(2*np.pi), sf[1])
+# ax[1,1].loglog(sf2[0]/(2*np.pi), sf2[1])
+ax[1,1].loglog(q_values, Iq)
+ax[1,1].set_xlim(0.01,1)
 
-plt.loglog(q_values, Iq, 'k-o', markerfacecolor='none')
+# plt.plot(q_values, Iq)
+
 plt.show()
