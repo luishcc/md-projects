@@ -9,17 +9,19 @@ neighbor 0.3 bin
 neigh_modify every 1 delay 0 check yes
 comm_modify vel yes cutoff 2.0
 
-region        box  block -20 20 -20 20 0 30 units box
+region        box  block -25 25 -25 25 0 30 units box
 create_box    2    box
 
 mass * 1
 
-variable R equal 4
-region        wall  cone z 0 0 15 0 0 15 side out
+variable R equal 8
+region        wall  cone z 0 0 15 2 EDGE EDGE side out
+# region wall cylinder z 0 0 8 EDGE EDGE side out
+
 # region        wall_out   block -3 5 INF INF INF INF side out
 
 
-region        drop   sphere -13.2 0 8 v_R
+region        drop   sphere -18.5 0 15 v_R
 
 create_atoms  1 random $(round(6.9*3.1415*v_R^3*4/3)) 2021 drop
 # create_atoms  2 random $(round(10.9*3.1415*v_R^3*4/3)) 2021 wall 
@@ -63,9 +65,9 @@ fix wall all wall/region wall lj93 3 1 2
 # fix wallhi all wall/lj93 zlo 3 2.0 0.5 1.0 units box
 
 timestep 0.01
-run 5000000
+run 5000
 
-velocity all set 0.1 NULL NULL sum yes
+# velocity all set 0.1 NULL NULL sum yes
 
 run 100000
 
